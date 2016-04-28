@@ -3,27 +3,27 @@ layout: post
 title: Machine Learning - Naive Bayes classifier
 categories: [general, setup, demo]
 tags: [demo, dbyll, dbtek, setup]
-fullview: true
+fullview: false
 comments: true
 ---
 
-**Naive Bayes classifier**는 머신러닝 알고리즘 중 분류 알고리즘으로 많이 사용되는 알고리즘이다.
+**Naive Bayes classifier** 는 머신러닝 알고리즘 중 분류 알고리즘으로 많이 사용되는 알고리즘이다.
 
 # 배경 지식
 
 ### Bayesian Theorem
+
 매개 변수 x, y가 있을때, 분류 1에 속할 확률이 P1(x, y)이고, 분류 2에 속할 확률이 P2(x, y)일 때,
 
     - P1(x, y) > P2(x, y) 이면, 이 값은 분류 1에 속한다.
     - P2(x, y) > P2(x, y) 이면, 이 값은 분류 2에 속한다.
-    - **Naive Bayes Algorithm**은 이 베이스의 정리를 이용하여, 분류하고자 하는 대상의 각 분류별 확률을 측정하여, 그 확률이 큰 쪽으로 분류하는 방법을 취한다.
+    - **Naive Bayes Algorithm** 은 이 베이스의 정리를 이용하여, 분류하고자 하는 대상의 각 분류별 확률을 측정하여, 그 확률이 큰 쪽으로 분류하는 방법을 취한다.
 
 예를 들어, 이메일에 대해서 스팸과 스팸이 아닌 분류가 있을때, 이메일에 들어가 있는 단어들 w1, ..., wN 매개 변수("쇼핑", "비아그라", "보험", ...)에 대해서,
 해당 이메일이 스팸일 확률과 스팸이 아닐 확률을 측정하여 확률이 높은 쪽으로 판단한다.
 
 ### 조건부 확률
-**Naive Bayes classifier**를 이해하기 위해서는 확률의 개념 중 조건부 확률이란 것을 이해해야 한다. 조건부 확률이란, 사건 A가 일어났을 때,
-사건 B가 일어날 확률, 즉 "사건 A에 대한 사건 B의 조건부 확률"이라고 하며, `P(B|A)`로 표현한다.
+**Naive Bayes classifier** 를 이해하기 위해서는 확률의 개념 중 조건부 확률이란 것을 이해해야 한다. 조건부 확률이란, 사건 A가 일어났을 때, 사건 B가 일어날 확률, 즉 "사건 A에 대한 사건 B의 조건부 확률"이라고 하며, `P(B|A)`로 표현한다.
 
 예를 들어, 한 학교의 학생이 남학생인 확률이 P(A)이고, 학생의 키가 170이상인 확률을 P(B)라고 했을때, 남학생 중에서 키가 170 이상인 확률은 B의
 조건부 확률이 되며 `P(B|A)`로 표현한다.
@@ -43,7 +43,7 @@ P(A∩B)를 통해 식을 정리하면,
 
 <br>
 
-# **Naive Bayes Algorithm**을 이용한 분류 예
+# **Naive Bayes Algorithm** 을 이용한 분류 예
 
 다음과 같이 5개의 학습 문서가 존재하고, 분류가 comedy, action 두 개가 존재한다고 하자.
 
@@ -107,7 +107,7 @@ P(comedy)는 전체 영화 5편 중에서 2편이 comedy이기 때문에 P(comed
 <br>
 
 # Laplace smoothing
-위의 **Naive Bayes Algorithm**을 사용할 때, 하나의 문제점은 학습 데이터에 없는 단어가 나오는 것이다. 즉 분류를 계산할 문서에 "cars"라는 단어가
+위의 **Naive Bayes Algorithm** 을 사용할 때, 하나의 문제점은 학습 데이터에 없는 단어가 나오는 것이다. 즉 분류를 계산할 문서에 "cars"라는 단어가
 있다고 하자. 이 경우 학습 데이터를 기반으로 계산하면 "cars"는 없는 데이터라서 `P(cars|comedy)`와 `P(cars|action)`은 모두 0이 되고, `P(comedy|word)`와
 `P(action|word)`도 결과적으로 모두 0이 되기 때문에 분류를 할 수 없다.
 
@@ -116,7 +116,7 @@ P(comedy)는 전체 영화 5편 중에서 2편이 comedy이기 때문에 P(comed
     - P(comedy|word) = (1/9) * (0/9) * (3/9) * (0/9:cars 단어가 나온 확률) * 2/5 = 0
     - P(action|word) = (2/11) * (2/11) * (1*11) * (0/9:cars 단어가 나온 확률) * 3/5 = 0
 
-이를 해결하기 위한 방법이 **Smoothing**이라는 기법으로, 새로운 단어가 나오더라도 해당 빈도에 +1을 해줌으로써 확률이 0이 되는 것을 막는다.
+이를 해결하기 위한 방법이 **Smoothing** 이라는 기법으로, 새로운 단어가 나오더라도 해당 빈도에 +1을 해줌으로써 확률이 0이 되는 것을 막는다.
 
 <br>
 

@@ -3,7 +3,7 @@ layout: post
 title: AngularJS - MVC 모델, 뷰, 컨트롤러
 categories: [general, setup, demo]
 tags: [demo, dbyll, dbtek, setup]
-fullview: true
+fullview: false
 comments: true
 ---
 

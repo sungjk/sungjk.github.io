@@ -3,7 +3,7 @@ layout: post
 title: Process와 Thread
 categories: [general, setup, demo]
 tags: [demo, dbyll, dbtek, setup]
-fullview: true
+fullview: false
 comments: true
 ---
 

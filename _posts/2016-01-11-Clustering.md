@@ -3,7 +3,7 @@ layout: post
 title: 군집화와 KMeans
 categories: [general, setup, demo]
 tags: [demo, dbyll, dbtek, setup]
-fullview: true
+fullview: false
 comments: true
 ---
 

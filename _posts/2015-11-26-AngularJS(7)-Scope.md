@@ -3,12 +3,12 @@ layout: post
 title: AngularJS - Scope(1)
 categories: [general, setup, demo]
 tags: [demo, dbyll, dbtek, setup]
-fullview: true
+fullview: false
 comments: true
 ---
 
 # $rootScope와 $scope
-앞에서 보았듯이 AngularJS에서 $scope는 중요한 역할을 한다. **양방향 데이터 바인딩의 핵심이자 뷰와 컨트롤러를 이어주는 징검다리**이기도 하다.
+앞에서 보았듯이 AngularJS에서 $scope는 중요한 역할을 한다. **양방향 데이터 바인딩의 핵심이자 뷰와 컨트롤러를 이어주는 징검다리** 이기도 하다.
 사실 $scope는 그저 단순한 자바스크립트 객체에 불과하다. 하지만 이 자바스크립트 객체는 연결된 DOM 요소에서 표현식이 계산되는 실행환경이며 뷰와
 컨트롤러에서 사용되는 데이터 data와 기능 function이 살아 숨쉬는 공간이다. $scope는 DOM 요소와 마찬가지로 계층적 구조를 가진다. 다음 목록은
 AngularJS 애플리케이션에서의 $scope의 특징을 보여준다.
@@ -26,7 +26,7 @@ AngularJS 애플리케이션에서의 $scope의 특징을 보여준다.
 <br>
 
 # $scope의 계층구조
-모든 AngularJS 애플리케이션은 하나의 **$rootScope**를 가진다. 이 $rootScope는 ng-app을 생성하며 ng-app이 선언된 DOM 요소가 최상위
+모든 AngularJS 애플리케이션은 하나의 **$rootScope** 를 가진다. 이 $rootScope는 ng-app을 생성하며 ng-app이 선언된 DOM 요소가 최상위
 노드가 되어 여러 자식 $scope를 가지게 된다. 즉, DOM과 같은 계층적 구조에서 최상위 계층에 $rootScope가 존재하는 것이다. 이는 어쩌면
 window와 같은 **전역 변수** 영역이라고 생각할 수도 있다. 또한 ng-controller나 ng-repeat과 같이 별도의 $scope를 생성하는 지시자는 각
 **지역변수** 영역을 가지고 있다고 생각할 수 있다. ng-controller를 계층적으로 가지는 예제 코드이다.

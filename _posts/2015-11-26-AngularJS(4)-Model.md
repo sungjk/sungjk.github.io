@@ -3,7 +3,7 @@ layout: post
 title: AngularJS - 모델 Model
 categories: [general, setup, demo]
 tags: [demo, dbyll, dbtek, setup]
-fullview: true
+fullview: false
 comments: true
 ---
 
