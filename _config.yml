@@ -5,16 +5,16 @@ paginate_path: "page:num"
 exclude: ["README.md"] # files to exclude
 highlighter: rouge
 markdown: kramdown
-disqus: a
-google_analytics: b
-title: c
+disqus: YAMIYAMI
+google_analytics: YAMIYAMI
+title: S.J.KIM
 
 defaults:
   -
     scope:
       path: "" # empty string for all files
     values:
-      title: d
+      title: YAMIYAMI
 
 description: Stylish Jekyll Theme
 author:
@@ -22,12 +22,12 @@ author:
   email: ajax0615@gmail.com
   github: SungjungKim
   twitter:
-  pinterest: asd123
+  pinterest:
   linkedin: sungjungkim
-  bio: YAMIYAMI!
-  email_md5: 
+  bio: YAMIYAMI
+  email_md5:
 
-rss_path: feed.xml
+# rss_path: feed.xml
 categories_path: categories.html
 tags_path: tags.html
 
