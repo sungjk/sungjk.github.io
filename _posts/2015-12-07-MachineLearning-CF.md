@@ -1,7 +1,12 @@
 ---
 layout: post
 title: Machine Learning - Certainty Factor(CF)
+categories: [general, setup, demo]
+tags: [demo, dbyll, dbtek, setup]
+fullview: true
+comments: true
 ---
+
 
 # 배경
 순수한 Bayes의 이론을 실제 적용하는 데 생기는 문제점을 극복하기 위한 방법의 하나로 확신 인자(Certainty Factor, CF)를 이용하는 법에 대해 다룬다.

@@ -1,6 +1,10 @@
 ---
 layout: post
 title: Machine Learning - Naive Bayes classifier
+categories: [general, setup, demo]
+tags: [demo, dbyll, dbtek, setup]
+fullview: true
+comments: true
 ---
 
 **Naive Bayes classifier**는 머신러닝 알고리즘 중 분류 알고리즘으로 많이 사용되는 알고리즘이다.

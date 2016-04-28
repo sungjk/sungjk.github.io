@@ -1,15 +1,20 @@
 ---
 layout: post
 title: Node.js 설치 및 개발 환경 구축하기
+categories: [general, setup, demo]
+tags: [demo, dbyll, dbtek, setup]
+fullview: true
+comments: true
 ---
+
 
 # nvm으로 Node.js 버전 관리
 
-Node에는 nvm이라는 Node Version Manager가 있다. 버전이 올라가거나 아니면 다른 버전의 노드를 사용하고 싶을 때 nvm을 통해서 설치 및 변경할 수 있다. 
+Node에는 nvm이라는 Node Version Manager가 있다. 버전이 올라가거나 아니면 다른 버전의 노드를 사용하고 싶을 때 nvm을 통해서 설치 및 변경할 수 있다.
 
 ### nvm을 설치
 
-`apt-get update` 
+`apt-get update`
 
 `apt-get install build-essential libssl-dev`
 
@@ -18,12 +23,12 @@ Node에는 nvm이라는 Node Version Manager가 있다. 버전이 올라가거�
 `curl https://raw.githubusercontent.com/creationix/nvm/v0.18.0/install.sh | bash`
 
 `~/.bashrc` 파일이 수정되므로 터미널(콘솔)을 종료하고 다시 로그인 한다.
- 
- 
+
+
 ### 사용 가능한 nodejs 버전 확인
 
 `nvm ls-remote` <br>
- 
+
 ```
 …
 v0.11.0
@@ -70,8 +75,8 @@ nvm으로 Node.js를 설치하면 가장 최근에 설치한 버전으로 사용
 `nvm ls`
 
  현재 로컬 PC에 설치 된 Node.js의 모든 버전을 확인할 수 있다.
- 
- 
+
+
 ### alias 지정(option)
 
 nvm에서는 설치된 버전들에 alias를 설정하는 기능도 제공는하데, 버전이 다른 프로젝트를 동시에 진행할 경우 프로젝트 또는 프로젝트 아이디 등으로 alias를 지정해주면 편하다.
