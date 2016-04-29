@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Big-O Cheat sheet
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [algorithm]
+tags: [algorith, bigo, compexity]
 fullview: false
 comments: true
 ---
