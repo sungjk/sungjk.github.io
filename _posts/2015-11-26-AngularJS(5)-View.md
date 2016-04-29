@@ -9,9 +9,8 @@ comments: true
 
 
 # 뷰
-AngularJS에서 뷰는 문서 객체 모델 Document Object Model 이다. 브라우저에서 HTML 문서를 읽어서 DOM을 생성하는데 AngularJS에서는 이 DOM이
-뷰가 되는 것이다. 템플릿과 뷰를 혼동할 수 있는데 AngularJS에서는 HTML 문서가 템플릿이고 이 템플릿을 AngularJS가 읽어서 뷰를 생성한다. 뷰를
-생성하는 과정은 다음과 같다.
+
+AngularJS에서 뷰는 문서 객체 모델 Document Object Model 이다. 브라우저에서 HTML 문서를 읽어서 DOM을 생성하는데 AngularJS에서는 이 DOM이 뷰가 되는 것이다. 템플릿과 뷰를 혼동할 수 있는데 AngularJS에서는 HTML 문서가 템플릿이고 이 템플릿을 AngularJS가 읽어서 뷰를 생성한다. 뷰를 생성하는 과정은 다음과 같다.
 
 1. HTML로 작성한 템플릿을 브라우저가 읽는다.
 2. 브라우저는 문서 객체 모델 DOM 을 생성한다.

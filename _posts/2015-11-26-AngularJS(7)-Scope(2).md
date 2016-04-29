@@ -8,8 +8,8 @@ comments: true
 ---
 
 # Scope 타입
-지금까지 본 $scope 객체나 $rootScope 객체는 AngularJS 내부에서 정의하는 Scope 타입의 인스턴스다. 즉, 다음과 같이 별도의 생성자 함수가
-AngularJS 내부에 정의돼 있다.
+
+지금까지 본 $scope 객체나 $rootScope 객체는 AngularJS 내부에서 정의하는 Scope 타입의 인스턴스다. 즉, 다음과 같이 별도의 생성자 함수가 AngularJS 내부에 정의돼 있다.
 
     function Scope() { .... }
     Scope.prototype.$apply = function(){};
@@ -18,8 +18,7 @@ AngularJS 내부에 정의돼 있다.
     Scope.prototype.$new = function(){ ... };
     // ...
 
-AngularJS는 초기 부트스트랩 시 프레임워크 내부에서 $rootScope을 new Scope()과 같이 생성한 후 해당 $rootScope을 서비스로 제공한다.
-그리고 ng-controller나 웹 애플리케이션에서는 다음과 같이 $rootScope을 이용해 자식 $scope 객체들을 만들수 있다.
+AngularJS는 초기 부트스트랩 시 프레임워크 내부에서 $rootScope을 new Scope()과 같이 생성한 후 해당 $rootScope을 서비스로 제공한다. 그리고 ng-controller나 웹 애플리케이션에서는 다음과 같이 $rootScope을 이용해 자식 $scope 객체들을 만들수 있다.
 
     var $scope = $rootScope.$new();
 
