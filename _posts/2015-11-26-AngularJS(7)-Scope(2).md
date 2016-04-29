@@ -1,8 +1,8 @@
 ---
 layout: post
 title: AngularJS - Scope(2)
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [general, web]
+tags: [angularjs]
 fullview: false
 comments: true
 ---

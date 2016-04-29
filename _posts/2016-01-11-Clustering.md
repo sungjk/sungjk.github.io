@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 군집화와 KMeans
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [general, machine learning]
+tags: [machine learning, kmeans]
 fullview: false
 comments: true
 ---

@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Node.js 설치 및 개발 환경 구축하기
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [general, web]
+tags: [node.js]
 fullview: false
 comments: true
 ---

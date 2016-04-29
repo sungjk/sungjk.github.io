@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Machine Learning - Naive Bayes classifier
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [general, machine learning]
+tags: [machine learning, bayesian]
 fullview: false
 comments: true
 ---

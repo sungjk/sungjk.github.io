@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Machine Learning - Certainty Factor(CF)
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [general, machine learning]
+tags: [machine learning]
 fullview: false
 comments: true
 ---

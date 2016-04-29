@@ -1,8 +1,8 @@
 ---
 layout: post
 title: listen EADDRINUSE 에러 발생
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [general, web]
+tags: [node.js]
 fullview: false
 comments: true
 ---

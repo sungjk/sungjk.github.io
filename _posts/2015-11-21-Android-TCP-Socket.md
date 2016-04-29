@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Android TCP Socket
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [general, android]
+tags: [android, socket, tcp]
 fullview: false
 comments: true
 ---

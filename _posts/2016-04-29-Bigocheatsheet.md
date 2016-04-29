@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Big-O Cheat sheet
-categories: [algorithm]
-tags: [algorith, bigo, compexity]
+categories: [general, algorithm]
+tags: [algorithm, bigo, compexity]
 fullview: false
 comments: true
 ---

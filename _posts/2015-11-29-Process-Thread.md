@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Process와 Thread
-categories: [general, setup, demo]
-tags: [demo, dbyll, dbtek, setup]
+categories: [general, os]
+tags: [process, thread]
 fullview: false
 comments: true
 ---
