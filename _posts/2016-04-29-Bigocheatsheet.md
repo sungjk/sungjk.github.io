@@ -7,8 +7,6 @@ fullview: false
 comments: true
 ---
 
-# Big-O Cheat Sheet
-
 ![BigO_1](/img/2016/04/29/BigO_1.png "BigO_1")
 
 ![BigO_2](/img/2016/04/29/BigO_2.png "BigO_2")
