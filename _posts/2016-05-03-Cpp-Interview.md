@@ -9,11 +9,11 @@ comments: true
 
 ### What are the differences between C and C++?
 
-1) C++ is a kind of superset of C, most of C programs except few exceptions (See [this](http://www.geeksforgeeks.org/write-c-program-produce-different-result-c/) and [this](http://www.geeksforgeeks.org/write-c-program-wont-compiler-c/)) work in C++ as well.
-2) C is a procedural programming language, but C++ supports both procedural and Object Oriented programming.
-3) Since C++ supports object oriented programming, it supports features like function overloading, templates, inheritance, virtual functions, friend functions. These features are absent in C.
-4) C++ supports exception handling at language level, in C exception handling is done in traditional if-else style.
-5) C++ supports [references](http://www.geeksforgeeks.org/references-in-c/), C doesn’t.
+1) C++ is a kind of superset of C, most of C programs except few exceptions (See [this](http://www.geeksforgeeks.org/write-c-program-produce-different-result-c/) and [this](http://www.geeksforgeeks.org/write-c-program-wont-compiler-c/)) work in C++ as well.\n
+2) C is a procedural programming language, but C++ supports both procedural and Object Oriented programming.\n
+3) Since C++ supports object oriented programming, it supports features like function overloading, templates, inheritance, virtual functions, friend functions. These features are absent in C.\n
+4) C++ supports exception handling at language level, in C exception handling is done in traditional if-else style.\n
+5) C++ supports [references](http://www.geeksforgeeks.org/references-in-c/), C doesn’t.\n
 6) In C, scanf() and printf() are mainly used input/output. C++ mainly uses streams to perform input and output operations. cin is standard input stream and cout is standard output stream.
 There are many more differences, above is a list of main differences.
 
