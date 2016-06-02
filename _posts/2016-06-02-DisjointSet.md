@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 상호 배타적 집합(disjoint set)
+title: 상호 배타적 집합(Disjoint set)
 categories: [general, data structure]
 tags: [data structure]
 fullview: false
@@ -39,9 +39,9 @@ belongsTo[i] = i번 원소가 속하는 집합의 번호
 
 ```
 // 트리를 이용해 상호 배타적 집합을 구현
-struct NaiveDisjointSet {
+struct DisjointSet {
     vector<int> parent;
-    NaiveDisjointSet(int n) : parent(n) {
+    DisjointSet(int n) : parent(n) {
         for (int i = 0; i < n; ++i)
             parent[i] = i;
     }
