@@ -1,5 +1,3 @@
-# Spoqa development blog
-
 ## Requirements (for testing)
 
 - [Jekyll] 1.4.3+
