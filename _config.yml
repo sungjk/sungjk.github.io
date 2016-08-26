@@ -9,7 +9,7 @@ kramdown:
   hard_wrap: false
 
 home_url: "https://SungjungKim.github.io"
-representing_image: "/images/logo.PNG"
+representing_image: "/images/logo.png"
 
 sass:
     sass_dir: css
