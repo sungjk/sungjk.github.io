@@ -1,4 +1,4 @@
-highlighter: pygments
+highlighter: rouge
 paginate: 10
 markdown: kramdown
 host: 0.0.0.0
