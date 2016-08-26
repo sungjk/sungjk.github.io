@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: Node.js 설치 및 개발 환경 구축하기
-categories: [general, web]
-tags: [node.js]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: Node.js 설치 및 개발 환경 구축하기
+publish: true
 ---
 
 

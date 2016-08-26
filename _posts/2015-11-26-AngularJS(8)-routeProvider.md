@@ -1,12 +1,11 @@
 ---
-layout: post
+layout: entry
 title: AngularJS - routeProvider
-categories: [general, web]
-tags: [angularjs]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: AngularJS 사용 시 라우트 경로를 지정할 수 있는 routeProvider에 대한 설명입니다.
+publish: true
 ---
-
 
 # $routeProvider.when(라우트 경로, 라우트 연결 설정 객체)
 

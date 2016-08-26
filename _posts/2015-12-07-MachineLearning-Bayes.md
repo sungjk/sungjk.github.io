@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: Machine Learning - Naive Bayes classifier
-categories: [general, machine learning]
-tags: [machine learning, bayesian]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 머신러닝에서 많이 사용되는 분류 알고리즘인 Naive Bayes classifier에 대한 설명입니다.
+publish: true
 ---
 
 **Naive Bayes classifier** 는 머신러닝 알고리즘 중 분류 알고리즘으로 많이 사용되는 알고리즘이다.

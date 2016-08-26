@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: Machine Learning - Certainty Factor(CF)
-categories: [general, machine learning]
-tags: [machine learning]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: Certainty Factor(CF)에 대한 설명입니다.
+publish: true
 ---
 
 # 배경

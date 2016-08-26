@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: C++ Interview Questions
-categories: [general, computer science, cpp]
-tags: [cpp]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 구글 소프트웨어 엔지니어 면접 준비를 하면서 공부했던 자료입니다.
+publish: true
 ---
 
 ### What are the differences between C and C++?

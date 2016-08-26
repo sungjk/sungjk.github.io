@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: AngularJS - 컨트롤러 Controller
-categories: [general, web]
-tags: [angularjs]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: AngularJS의 MVC 패턴 중 컨트롤러(C)에 대한 설명입니다.
+publish: true
 ---
 
 # 컨트롤러

@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: AngularJS - 뷰 View
-categories: [general, web]
-tags: [angularjs]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: AngularJS의 MVC 패턴 중 뷰(V)에 대한 설명입니다.
+publish: true
 ---
 
 

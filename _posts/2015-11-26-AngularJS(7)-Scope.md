@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: AngularJS - Scope(1)
-categories: [general, web]
-tags: [angularjs]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: AngularJS 데이터 바인딩의 핵심인 Scope에 대한 설명입니다.
+publish: true
 ---
 
 # $rootScope와 $scope

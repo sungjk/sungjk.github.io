@@ -1,14 +1,13 @@
 ---
-layout: post
+layout: entry
 title: 프로세스 스케줄링(Process Scheduling)
-categories: [general, os]
-tags: [os, scheduling]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 스케줄링이 무엇이고, 프로세스의 상태 전이에 대한 설명입니다.
+publish: true
 ---
 
 스케줄링(Process Scheduling)이 무엇이고, 프로세스의 상태 전이에 대해서 간단히 알아보겠습니다.
-
 
 ## 스케줄링(Scheduling)
 

@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: Big-O Cheat sheet
-categories: [general, algorithm]
-tags: [algorithm, bigo, compexity]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: Big-O Cheat sheet
+publish: true
 ---
 
 ![BigO_1](/img/2016/04/29/BigO_1.png "BigO_1")

@@ -1,12 +1,11 @@
 ---
-layout: post
+layout: entry
 title: Android TCP Socket
-categories: [general, android]
-tags: [android, socket, tcp]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 안드로이드 TCP 소켓 프로그래밍 가이드입니다.
+publish: true
 ---
-
 
 ## Server
 서버의 기능은 클라이언트에서 오는 데이터를 받아들이는것이 핵심이다. 자신의 포트를 세팅하여 소켓을 여는 것부터 시작하여, 클라이언트에서 오는

@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: 함수 포인터(Function Pointer)
-categories: [general, cpp]
-tags: [cpp]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 함수 포인터(Function Pointer)에 대한 설명입니다.
+publish: true
 ---
 
 포인터(Pointer) 앞에 함수(Function)가 붙은 함수 포인터는 함수를 가리키는 포인터입니다. 함수에도 주소가 존재함을 알 수 있죠. 함수명은 함수의 시작 주소를 의미하고, 이 함수 포인터를 선언할 때에는 함수 시그니처(Signature)와 같도록 선언해야 합니다. 즉, 원형과 같도록 선언해야 한다는 말입니다.

@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: 비둘기집의 원리(Pigeonhole Principle)
-categories: [general, algorithm]
-tags: [algorithm]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 대답하기 힘든 질문을 대답하는 데 유용하게 쓰이는 비둘기집의 원리에 대한 설명입니다.
+publish: true
 ---
 
  머리숱이 적을수록 세금을 적게 부과하는 탈모자 위로 법안이 통과되었습니다. 서울의 모든 사람들이 전부 날밤을 새 가며 머리털 개수를 세어 세금 면제 서류를 제출했습니다. 이들 중 머리털 개수가 정확히 같은 두 사람이 과연 존재할까요?

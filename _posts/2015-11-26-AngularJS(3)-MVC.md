@@ -1,12 +1,11 @@
 ---
-layout: post
+layout: entry
 title: AngularJS - MVC 모델, 뷰, 컨트롤러
-categories: [general, web]
-tags: [angularjs]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: AngularJS의 MVC 패턴에 대한 설명입니다.
+publish: true
 ---
-
 
 AngularJS는 자바스크립트 MVC 프레임워크 중 하나다. 하지만 AngularJS는 Smalltalk-80 언어부터 시작된 전통적인 MVC 패턴을 구현하지 않고
 MVVM(Model-View-View-Model)과 비슷하게 독자적인 방식으로 MVC 패턴을 구현했다. 초기 AngularJS는 전통적인 MVC 패턴을 흡사하게 구현하여

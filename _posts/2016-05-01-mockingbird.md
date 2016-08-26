@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: 앵무새 죽이기(To kill a Mocking bird)
-categories: [general, book]
-tags: [book]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 하퍼 리의 앵무새 죽이기를 읽고 나서.
+publish: true
 ---
 
 하퍼 리가 ‘앵무새 죽이기’에서 다루는 주제 중 하나는 정의 그리고 심판과 관련된 문제다. 영국 식민주의의 굴레를 벗어나 미국을 건국한 국부들은 ‘독립 선언문’과 헌법에 <모든 인간은 평등하게 창조되었다>라는 그 유명한 문장을 적었다. 이 구절은 미국 민주주의의 초석과 다름없었다. 그런데 아쉽게도 여기서 말하는 <인간> 속에는 흑인을 비롯한 유색 인종은 말할 것도 없고 여성도 빠져 있었다. 그렇다면 <독립 선언문>이나 헌법에 기록된 평등 운운하는 구절은 빛 좋은 개살구에 지나지 않는 셈이다.

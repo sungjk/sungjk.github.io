@@ -7,11 +7,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Spoqa Tech Blog{% if page.title %} | {{ page.title }}{% endif %}</title>
+  <title>YAMIYAMI{% if page.title %} | {{ page.title }}{% endif %}</title>
   <link rel="canonical" href="{{ site.home_url }}{{ page.url }}">
   <meta property="og:title" content="{{ page.title }}">
   <meta property="og:url" content="{{ site.home_url }}{{ page.url }}">
-  <meta property="og:site_name" content="Spoqa 기술 블로그">
+  <meta property="og:site_name" content="YAMIYAMI">
   {% if page.url contains 'jobs' %}
   <meta property="og:type" content="blog">
   <meta property="og:description" content="스포카에서 상점을 위한 IT 서비스를 디자인하고 개발할 크리에이터를 찾고 있습니다.">
@@ -26,10 +26,10 @@
     {% assign base_path = '..' %}
   {% endif %}
   <link rel="canonical" href="{{ site.home_url }}/">
-  <meta property="og:title" content="Spoqa 기술 블로그">
+  <meta property="og:title" content="YAMIYAMI">
   <meta property="og:type" content="blog">
   <meta property="og:url" content="{{ site.home_url }}/">
-  <meta property="og:site_name" content="Spoqa 기술 블로그">
+  <meta property="og:site_name" content="YAMIYAMI">
   <meta property="og:description" content="몇가지 Code snippet과 설명등을 포함하여 매주 1회씩 스포카 팀이 배운 여러가지 기술들에 대해 소개합니다.">
   {% endif %}
   {% if page.representing_image %}
@@ -58,7 +58,7 @@
     ga('send', 'pageview');
   </script>
   <link rel="stylesheet" href="{{ base_path }}/css/styles.css">
-  <link href="{{ base_path }}/atom.xml" type="application/atom+xml" rel="alternate" title="Spoqa 기술 블로그">
+  <link href="{{ base_path }}/atom.xml" type="application/atom+xml" rel="alternate" title="YAMIYAMI">
   <link rel="shortcut icon" href="{{ base_path }}/images/favicon.ico">
   <style type="text/css">
 @media only screen and (max-width: 580px) {
@@ -73,7 +73,7 @@
     <div class="header">
       <div class="header-item">
         <div class="spoqa-logo-wrap">
-          <a class="spoqa-logo" href="{{ base_path }}/"><img src="{{ base_path }}/images/logo.png" alt="Spoqa logo"></a>
+          <a class="spoqa-logo" href="{{ base_path }}/"><img src="{{ base_path }}/images/logo.png" alt="YAMIYAMI logo"></a>
           <a class="blog-title" href="{{ base_path }}/">기술 블로그</a>
         </div>
         <div class="nav">
@@ -88,12 +88,8 @@
               {% if page.url != '/about.html' and page.url != '/jobs.html' %}
               selected
               {% endif %} menu-blog" href="{{ base_path }}/index.html">블로그</a></li>
-            <li><a class="menu-github" href="https://github.com/spoqa">GitHub</a></li>
+            <li><a class="menu-github" href="https://github.com/SungjungKim">GitHub</a></li>
             {% if site.trawler_mode %}
-            <li><a class="
-              {% if page.url == '/jobs.html' %}
-              selected
-              {% endif %} menu-job" href="/jobs.html">채용정보</a></li>
             {% endif %}
           </ul>
         </div>
@@ -115,8 +111,8 @@
     </div>
     <div class="footer">
       <div id="info">
-        <span>© <a href="http://dodopoint.com/">Spoqa</a> Inc. All rights reserved.</span>
-        <span>Powered by <a href="https://pages.github.com/">GitHub Pages</a>.</span>
+        <!-- <span>© <a href="http://dodopoint.com/">Spoqa</a> Inc. All rights reserved.</span>
+        <span>Powered by <a href="https://pages.github.com/">GitHub Pages</a>.</span> -->
       </div>
     </div>
   </div>
@@ -125,9 +121,6 @@
   <script>
     hljs.initHighlightingOnLoad();
     $(function() {
-      $('.hiring-banner').bind("click", function() {
-        location.href = '/jobs.html';
-      });
       $('.toggle').bind("touchstart", function() {
         $('.menu').toggle();
       })

@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: Google C++ Style Guide - Naming
-categories: [general, cpp]
-tags: [cpp]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 구글 C++ 네이밍 가이드 번역입니다.
+publish: true
 ---
 
 일관성을 위한 가장 중요한 규칙은 이름 규칙을 정하는 것이다. 이름 스타일을 통해 요소의 선언을 찾지 않고도 해당 요소가 타입인지, 변수인지, 함수인지, 상수인지, 혹은 매크로인지 바로 알 수 있다. 우리 머리 속의 패턴-매칭 엔진은 이러한 이름 규칙에 상당히 의존한다.

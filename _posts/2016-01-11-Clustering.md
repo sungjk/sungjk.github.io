@@ -1,12 +1,11 @@
 ---
-layout: post
+layout: entry
 title: 군집화와 KMeans
-categories: [general, machine learning]
-tags: [machine learning, kmeans]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 머신러닝 군집화에 사용되는 KMeans 알고리즘에 대한 설명입니다.
+publish: true
 ---
-
 
 대부분 군집화 알고리즘은 수평flat 군집화와 계층hierarchical 군집화라는 두 가지 종류로 나뉜다.
 

@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: Process와 Thread
-categories: [general, os]
-tags: [process, thread]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 프로세스와 쓰레드에 대한 설명입니다.
+publish: true
 ---
 
 

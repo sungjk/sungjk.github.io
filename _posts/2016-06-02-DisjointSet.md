@@ -1,10 +1,10 @@
 ---
-layout: post
+layout: entry
 title: 상호 배타적 집합(Disjoint set)
-categories: [general, data structure]
-tags: [data structure]
-fullview: false
-comments: true
+author: 김성중
+author-email: ajax0615@gmail.com
+description: 부분 집합을로 나눠진 원소들에 대한 정보를 저장하고 조작할 때 사용되는 Disjoint Set에 대한 설명입니다.
+publish: true
 ---
 
 어떤 파티에 n명의 사람들이 왔다고 합시다. 레크레이션 강사가 이 중 생일이 같은 사람들끼리 팀을 구성하라고 소리치자, 사람들은 얼른 움직이기 시작합니다. 처음에는 누가 자신과 생일이 같은지 모르기 때문에 모두 혼자 돌아다니지만, 생일이 같은 사람을 한 번 찾으면 이 둘은 팀을 이뤄 같이 움직입니다. 그리고 다른 팀과 생일이 같다는 것을 확인하면 곧장 두 팀은 합쳐지지요.
