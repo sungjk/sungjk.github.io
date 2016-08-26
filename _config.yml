@@ -1,40 +1,19 @@
-# visit https://github.com/mojombo/jekyll/wiki/Configuration for more settings
-
-paginate: 10 # pagination based on number of posts
-paginate_path: "page:num"
-exclude: ["README.md"] # files to exclude
-highlighter: rouge
+highlighter: pygments
+paginate: 10
 markdown: kramdown
-disqus: YAMIYAMI
-google_analytics: YAMIYAMI
-title: S.J.KIM
+host: 0.0.0.0
 
-defaults:
-  -
-    scope:
-      path: "" # empty string for all files
-    values:
-      title: YAMIYAMI
+subscribe_rss: /atom.xml
+kramdown:
+  input: GFM
+  hard_wrap: false
 
-description: Stylish Jekyll Theme
-author:
-  name: S.J.KIM
-  email: ajax0615@gmail.com
-  github: SungjungKim
-  twitter:
-  pinterest:
-  linkedin: sungjungkim
-  bio: YAMIYAMI
-  email_md5:
+home_url: "https://SungjungKim.github.io"
+representing_image: "/images/logo.png"
 
-# rss_path: feed.xml
-categories_path: categories.html
-tags_path: tags.html
+sass:
+    sass_dir: css
 
-# set it as url of an image
-# sidebar_background_image: https://www.dropbox.com/s/g9h23zrycedxtk5/sky.png?raw=1
-
-BASE_PATH:
-
-gems:
-  - jekyll-paginate
+trawler_mode: true
+gems: [jekyll-paginate]
+future: true

@@ -1,0 +1,167 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote,
+a, abbr, acronym, address, big, cite,
+del, dfn, img, ins, kbd, q, s, samp,
+small, strike, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+// Clearfix
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+
+// Custom
+body {
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  font-family: "spoqahansans", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Nanum Gothic", Verdana, Arial, "Malgun Gothic", Dotum, sans-serif;
+  color: $text-color;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: none;
+}
+sub {
+  font-size: 14px;
+}
+strong {
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  text-decoration: none;
+  color: $mainblue-0;
+}
+h1 {
+  font-size: 32px;
+  font-weight: 100;
+}
+h2 {
+  font-size: 32px;
+  font-weight: 100;
+}
+h3 { font-size: 24px; }
+h4 { font-size: 20px; }
+h5 { font-size: 18px; }
+h6 { font-size: 16px; }
+p, dl {
+  color: $text-color;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 1.9em;
+}
+dl dt {
+  font-weight: 100;
+  margin-top: 10px
+}
+dl dd {
+  margin-left: 1.6em;
+}
+table {
+  margin: 10px 0;
+  border-bottom:1px $divider-color solid;
+  border-collapse: collapse;
+}
+thead {
+  background-color: $grey-1;
+}
+th, td{
+  border-top:1px $divider-color solid;
+  padding: 10px 20px;
+}
+blockquote {
+  margin: 20px 0 20px 25px;
+  padding-left: 12px;
+  border-left: 3px solid $divider-color;
+}
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code,
+p code,
+p a code,
+li code,
+li a code,
+table code,
+table a code {
+  margin: 0 2px;
+  padding: 2px 5px;
+  width: 100%;
+  background: $grey-1;
+  border: 1px solid $divider-color;
+  border-radius: 2px;
+}
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+  color: $text-color;
+}
+pre code {
+  word-wrap: break-word;
+  width: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+code {
+  font-family: "Source Code Pro", Consolas, "Letter Gothic Std", Courier, "Nanum Gothic Coding", monospace;
+}
+pre {
+  margin: 10px 0;
+  padding: 20px;
+  display: inline-block;
+  width: 100%;
+  background: $grey-1;
+  border: 1px solid $divider-color;
+  border-radius: 2px;
+}

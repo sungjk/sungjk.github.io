@@ -1,0 +1,768 @@
+---
+# this ensures Jekyll reads the file to be transformed into CSS later
+# only Main files contain this front matter, not partials.
+---
+@import 'spoqa-colors';
+@import 'reset/reset';
+@import 'solarized_light.css';
+@import '_variables';
+@import '_type';
+
+
+// Typekit Font loader attrs
+.wf-loading body {
+  font-family: "Apple SD Gothic Neo", "Nanum Barun Gothic", "Nanum Gothic", Verdana, Arial, "Malgun Gothic", Dotum, sans-serif;
+}
+
+.hljs {
+  background: $grey-highlight-color;
+}
+.content,
+.footer {
+  width: 90%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3% 5%;
+}
+
+.spoqa_intro {
+  padding-top: 28px;
+}
+
+/* text style */
+.post {
+  p a,
+  ol a,
+  ul a {
+    padding-right: 2px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  blockquote p {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  ul,
+  ol {
+    margin: 20px 0 20px 40px;
+  }
+  li {
+    margin: 6px 0;
+    line-height: 1.9em;
+
+    pre {
+      width: calc(100% - 42px);
+    }
+  }
+  ol li ul,
+  ol li ol,
+  ul li ul,
+  ul li ol {
+    margin: 0 0 0 40px;
+  }
+  hr {
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  caption {
+    margin: 10px;
+  }
+}
+
+// footnote
+a.footnote {
+  &,
+  .post p &,
+  .post ol &,
+  .post ul & {
+    margin: 0 3px;
+    padding: 2px 6px 2px;
+    font-size: $blog-font-size-sm;
+    text-align: center;
+    -webkit-text-stroke: 0.25px;
+    border: 1px solid $divider-color;
+    border-radius: 2px;
+    -webkit-transition: 0.2s ease-out all;
+    text-decoration: none;
+
+    &:hover {
+      background: $btn-default-active-bg-color;
+    }
+  }
+}
+.footnotes {
+  margin-top: 60px;
+  border-top: 1px solid $divider-color;
+
+  &.post li,
+  &.post li p {
+    font-size: $blog-font-size-sm;
+  }
+}
+
+// header
+.header {
+  height: 60px;
+  padding: 0 5%;
+  background-color: #fff;
+  border-bottom: 1px solid $divider-color;
+  box-shadow: 0 0 1px rgba(0,0,0,0.15);
+}
+.header-item {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.spoqa-logo-wrap {
+  padding-top: 20px;
+  float:left;
+}
+.spoqa-logo img {
+  width: 60px;
+  height: auto;
+  padding-top: 1px;
+  padding-right: 6px;
+  vertical-align: middle;
+}
+.blog-title {
+  font-size: $blog-font-size-sm;
+  color: $grey-text-color;
+}
+.atom-img {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  cusror: pointer;
+  margin: 0 10px;
+  background-image: url(/images/atom.png);
+  text-indent: -9999em;
+}
+.atom-img:hover {
+  background-image: url(/images/atom-hover.png);
+}
+
+/* menu list btn */
+.nav {
+  display: block;
+  float: right;
+}
+#toggle,
+.toggle {
+  display: none;
+}
+.toggle {
+  z-index: 2;
+}
+.toggle:hover:after {
+  border-bottom: 3px solid $primary-color;
+}
+.toggle:after {
+  content: '메뉴';
+  display: inline-block;
+  padding: 23px 20px 16px;
+  background: transparent;
+  text-align: center;
+  color: $text-color;
+  line-height: 19px;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-bottom: 3px solid transparent;
+}
+#toggle:checked + .toggle:after {
+  border-bottom: 3px solid $primary-color;
+}
+// Menu
+.menu {
+  display: inline-block;
+  float: right;
+}
+.menu li {
+  display: inline-block;
+
+  a {
+    padding: 19px 20px 15px;
+    color: $text-color;
+    display: inline-block;
+    border-bottom: 3px solid transparent;
+
+    &:active,
+    &.selected {
+      -webkit-transition: 0.2s ease-out all;
+      border-bottom: 3px solid $primary-color;
+      color: $hightlight-text-color;
+    }
+    &:focus,
+    &:hover {
+      -webkit-transition: 0.2s ease-out all;
+      border-bottom: 3px solid $divider-color;
+    }
+  }
+}
+.logo-img {
+  margin-top: 10px;
+  padding-right: 15px;
+  vertical-align: middle;
+}
+.dev-blog {
+  font-weight: 100;
+  font-size: $blog-font-size-lg;
+  color: white;
+  display: inline-block;
+}
+
+/* post-authot-info (post-info로 수정하는게 의미상 맞을 듯) */
+
+.sep {
+  color: $grey-text-color;
+  margin: 0 5px;
+}
+
+/* blog list */
+
+.posts .post-author-info { /*추후에는 blog list 의 post-author-info와 blog의 post-author-info를 분리하는게 좋을 듯.*/
+  margin: 0;
+  text-align: left;
+}
+.posts .post-author-info .portrait {
+  width: 60px;
+  vertical-align: middle;
+  border-radius: 50%;
+  float: right;
+  margin-left: 40px;
+}
+.posts li {
+  border-bottom: 1px solid $divider-color;
+  padding: 8% 0;
+}
+.list-type-none {
+  list-style: none;
+}
+
+/* pagination */
+
+.pagination {
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 30px;
+
+  ol {
+    display: inline-block;
+    margin: 14px 24px;
+  }
+  li {
+    display: inline-block;
+  }
+  li a {
+    -webkit-transition: 0.2s ease-out all;
+    margin: 4px 0;
+    padding: 9px 14px;
+    border-radius: 2px;
+    font-size: $blog-font-size-sm;
+    color: $text-color;
+  }
+  .page .current-page,
+  .page .current-page:hover {
+    margin: 4px 0;
+    padding: 9px 14px;
+    border-radius: 2px;
+    font-size: $blog-font-size-sm;
+    color: $text-color;
+    background-color: $grey-highlight-color;
+  }
+  .previous a,
+  .next a,
+  .previous.disabled,
+  .next.disabled {
+    font-size: $blog-font-size-sm;
+    color: $text-color;
+  }
+  .previous.disabled,
+  .next.disabled {
+    color: $text-color;
+  }
+  .previous,
+  .next {
+    padding: 1% 2%;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .previous:hover,
+  .next:hover,
+  .page a:hover {
+    -webkit-transition: 0.2s ease-out all;
+    background-color: $grey-highlight-color;
+  }
+}
+
+/* blog post */
+figcaption {
+  text-align: center;
+  font-size: $blog-font-size-sm;
+  color: $grey-text-color;
+  margin-bottom: 20px;
+}
+
+.post {
+  h1 {
+    font-size: $blog-font-size-lg;
+  }
+
+  img {
+    max-width: 90%;
+    display: block;
+    padding: 20px;
+  }
+}
+.post-author-info {
+  margin-bottom: 12%;
+  text-align: center;
+
+ .portrait {
+    width: 17%;
+    vertical-align: middle;
+    border-radius: 50%;
+  }
+ .author-name a,
+ .author-name {
+    color: $grey-text-color;
+  }
+}
+.post-date {
+  margin-bottom: 10px;
+  color: $grey-text-color;
+}
+.post-title {
+  font-size: 48px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-weight: 100;
+  color: $text-color;
+}
+.posts .post-title {
+  margin: 0 0 5px;
+  font-size: $blog-font-size-lg;
+}
+.post-title-words{
+  font-weight: 100;
+  color: $text-color;
+}
+.post-description {
+  margin: 18px 100px 6px 0;
+  padding: 0;
+}
+.post-footer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* post-footer back btn */
+
+.back-btn {
+  margin: 80px auto;
+  text-align: center;
+}
+.back-btn a {
+  padding: 20px 80px;
+  display: inline-block;
+  border: 1px solid $btn-border-color;
+  border-radius: 3px;
+  color: $text-color;
+}
+.back-btn a:hover {
+  background-color: $btn-default-active-bg-color;
+  border-color: $btn-border-color;
+}
+
+/* blog ends */
+
+/* about */
+
+.post .intro-title {
+  margin-top: 20px;
+  padding-bottom: 12px;
+  font-size: $blog-font-size-lg;
+  border-bottom: 1px solid $divider-color;
+}
+.about p a,
+.about ol a,
+.about ul a {
+  padding-right: 2px;
+}
+.author {
+  overflow: auto;
+  padding: 30px 0;
+  border-bottom: 1px solid $divider-color;
+}
+.author-title {
+  margin-top: 100px;
+}
+.author-info {
+  margin-top: 3px;
+  margin-left: 20%;
+}
+.member-info {
+}
+.sns a {
+  margin: -5px 2px 0 0;
+  vertical-align: middle;
+}
+.nick-name {
+  margin-right: 10px;
+  font-weight: bold;
+}
+.nick-name a {
+  color: $text-color;
+}
+.author img {
+  width: 14%;
+  padding: 0;
+  border-radius: 50%;
+  float: left;
+}
+.twitter-icon {
+  display: inline-block;
+  background-image: url(/images/twitter-icon.png);
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.facebook-icon {
+  display: inline-block;
+  background-image: url(/images/facebook-icon.png);
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.tumblr-icon {
+  display: inline-block;
+  background-image: url(/images/tumblr-icon.png);
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.dribbble-icon {
+  display: inline-block;
+  background-image: url(/images/dribbble-icon.png);
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.linkdin-icon {
+  display: inline-block;
+  background-image: url(/images/linkdin-icon.png);
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.wordpress-icon {
+  display: inline-block;
+  background-image: url(/images/wordpress-icon.png);
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+.homepage-icon {
+  display: inline-block;
+  background-image: url(/images/homepage-icon.png);
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+
+/* footer */
+
+.footer {
+  margin-bottom: 20px;
+  font-size: $blog-font-size-sm;
+  color: $grey-text-color;
+}
+.footer a {
+  color: $grey-text-color;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+
+
+/* hiring banner 
+
+.hiring-banner {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 5%;
+  height: 430px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(/images/hiring-imagex1.jpg);
+  background-color: #fff;
+  background-position: left bottom;
+  -webkit-transition: 0.2s ease-out all;
+
+}
+.lt-ie9 .hiring-banner {
+  background-image: url(/images/hiring-imagex1.jpg) no-repeat;
+  background-position: left bottom;
+}
+.hiring-fixedwidth-wrap {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+}
+.hiring-content {
+  top: 80px;
+  right: 11px;
+  display: block;
+  position: absolute;
+ text-shadow: 0px 0px 20px rgba(248,248,246, 0.6),
+              0px 0px 30px rgba(248,248,246, 0.6);
+}
+.hiring-title {
+  margin-bottom: 20px;
+  font-size: 48px;
+  font-weight: 100;
+  line-height: 1.1em;
+  color: $text-color;
+  -webkit-transition: 0.2s ease-out all;
+}
+.hiring-subtitle {
+  color: $text-color;
+  font-weight: normal;
+  -webkit-transition: 0.2s ease-out all;
+  line-height: 1.5em;
+}
+.btn-job {
+  margin-top: 24px;
+  padding: 17px 15%;
+  display: inline-block;
+  border: 1px solid $primary-color;
+  border-radius: 2px;
+  color: $hightlight-text-color;
+  background-color: rgba(255, 255, 255, 0.7);
+  -webkit-transition: 0.2s ease-out all;
+}
+.btn-job:hover {
+  color: $hightlight-text-color;
+  background-color: transparent;
+  border: 1px solid $primary-color;
+  background-color: rgba(76, 128, 241, 0.1);
+}
+
+*/
+
+/* responsive */
+@media only screen and (max-width: 650px) {
+  body {
+    width: 100%;
+  }
+  .pagination .pages li {
+    display: none;
+  }
+  .pagination .previous {
+    float: left;
+  }
+  .pagination .next {
+    float: right;
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  body {
+    width: 100%;
+  }
+  .header {
+    height: 60px;
+  }
+  .toggle {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .menu {
+    display: none;
+    margin: 10px 5% 0;
+    width: 90%;
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 2px;
+    text-align: center;
+  }
+  .menu li {
+    display: block;
+  }
+  .menu li a {
+    padding: 15px 0;
+    width: 100%;
+  }
+  .hiring-banner {
+    height: 380px;
+    cursor: pointer;
+  }
+  .hiring-content {
+    top: 60px;
+    right:0;
+    left:0;
+    margin: 0;
+    text-align:center;
+  }
+  .hiring-title {
+    font-size: $blog-font-size-lg;
+  }
+  .hiring-subtitle br{
+    display: none;
+  }
+  .btn-job {
+    width: 70%;
+  }
+  .post-author-info .portrait {
+    width: 40%;
+  }
+  .posts .portrait {
+    display: none;
+  }
+  .posts li {
+    padding: 15% 0;
+  }
+  .post-title {
+    margin-right: 0;
+  }
+  .pagination .pages li {
+    display: none;
+  }
+  .post-description {
+    margin-right: 0;
+  }
+  .back-btn a {
+    padding: 20px 25%;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  body {
+    width: 100%;
+  }
+  .hiring-banner {
+    height: 380px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .hiring-content {
+    top: 60px;
+    right:0; left:0;
+    text-align: center;
+    margin: 0;
+  }
+  .hiring-title {
+    font-size: $blog-font-size-lg;
+  }
+  .btn-job {
+    margin-top: 20px;
+  }
+}
+
+/* for IE8 and lower */
+.res-mobile {
+  .header {
+    height: 80px;
+  }
+  .menu {
+    float: left;
+    padding: 8px 0;
+  }
+  .menu li a {
+    padding-left: 0;
+    padding-right: 20px;
+  }
+  .post-title {
+    margin-right: 0;
+  }
+  .pagination .pages li {
+    display: none;
+  }
+  .post-description {
+    margin-right: 0;
+  }
+  .back-btn a {
+    padding: 20px 25%;
+  }
+  .spoqa-logo-wrap {
+      float:none;
+  }
+  .pagination .previous {
+    float: left;
+  }
+  .pagination .next {
+    float: right;
+  }
+}
+
+// job-table
+
+.job-table {
+  margin-top: 20px;
+}
+
+.job-table > thead {
+  border-top: 1px solid $table-border-color;
+}
+
+.job-table > thead > tr,
+.job-table > tbody > tr {
+  border-bottom: 1px solid $table-border-color;
+  background-color: #fff;
+}
+
+.job-table > thead > tr > th {
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  border-color: $table-border-color;
+  padding: 16px;
+  color: $grey-text-color;
+}
+
+.job-table > tbody > tr >td {
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  border-color: $table-border-color;
+  padding: 16px 0;
+
+  > a {
+    display: inline-block;
+    width: 100%;
+  }
+}
+
+.job-table > tbody > tr:hover {
+  background-color: white;
+
+  >td {
+    -webkit-transition: 0.2s ease-out all;
+    background-color: $grey-bg-color;
+
+    >a {
+      color: $hightlight-text-color;
+    }
+  }
+}
+
+
+/* fb comment plug-in overrides */
+.fb-comments > span {
+  padding-top: 30px;
+}

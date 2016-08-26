@@ -1,0 +1,67 @@
+---
+layout: default
+---
+
+{% assign base_path = '../../..' %}
+
+{% if page.author %}
+<div class="post-author-info">
+  {% if page.author-email %}
+    <img class="portrait" src="{{base_path}}/images/profile/{{page.author-email}}.png" />
+    <h1 class="post-title">{{page.title}}</h1>
+    <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
+    <span class="sep">|</span>
+    <span class="author-name"><a href="mailto:{{page.author-email}}">{{page.author}}</a></span>
+  {% else %}
+    <h1 class="post-title">{{page.title}}</h1>
+    <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
+    <span class="sep">|</span>
+    <span class="author-name">{{page.author}}</span>
+
+  {% endif %}
+</div>
+{% endif %}
+
+{% if page.publish == false %}
+  <div class="post">Coming soon</div>
+{% else %}
+  <div class="post">{{ content }}</div>
+{% endif %}
+
+<div class="post-footer">
+  <div class="back-btn"><a href="/">목록으로 돌아가기</a></div>
+  <div class="fb-like" data-href="{{ site.home_url }}{{ page.url }}" data-layout="button_count" data-width="" data-share="false" data-show-faces="false"></div>
+  <div class="fb-comments" data-href="{{ site.home_url }}{{ page.url }}" data-num-posts="5" data-width=""></div>
+  <div id="fb-root"></div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+    $('.fb-like, .fb-comments').attr('data-width', "100%");
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/ko_KR/all.js#xfbml=1&appId=207542736008055";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+});
+</script>
+<style>
+.hiring-banner {
+  height: 320px;
+  background-position-y: 80%;
+}
+.hiring-subtitle
+{
+  display: none;
+}
+.btn-job{
+  margin-top: 4px;
+}
+@media only screen and (max-width: 360px) {
+  .hiring-banner {
+    height: 220px;
+  }
+}
+}
+</style>

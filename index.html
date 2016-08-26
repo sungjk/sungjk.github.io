@@ -1,74 +1,92 @@
 ---
-layout: page
-tagline:
+layout: default
 ---
 
-{% for post in paginator.posts %}
+{% if paginator.page == 1 %}
+  {% assign base_path = '.' %}
+{% else %}
+  {% assign base_path = '..' %}
+{% endif %}
 
-<article class="home">
+  <div class="posts">
+    <ul class="posts list-type-none">
+      {% for post in paginator.posts %}
+        {% if post.publish != false %}
+        <li class="post-item">
+          {% if post.author %}
 
-  <span class="post-date">
-    {% assign d = post.date | date: "%d" | plus:'0' %}
-    {{ post.date | date: "%B" }}
-    {% case d %}
-    {% when 1 or 21 or 31 %}{{ d }}st,
-    {% when 2 or 22 %}{{ d }}nd,
-    {% when 3 or 23 %}{{ d }}rd,
-    {% else %}{{ d }}th,
-    {% endcase %}
-    {{ post.date | date: "%Y" }}
-  </span>
+          <div class="post-author-info">
+            {% if post.author-email %}
+              <img class="portrait" src="{{base_path}}/images/profile/{{post.author-email}}.png" />
+              <h2 class="post-title"><a href="{{ base_path }}{{ post.url }}"><span class="post-title-words">{{ post.title }}</span></a></h2>
+              <p class="post-description">{{ post.description }}</p>
+              <span class="post-date">{{ post.date | date: "%Y년 %m월 %d일" }}</span>
+              <span class="sep">|</span> 
+              <span class="author-name"><a href="mailto:{{post.author-email}}">{{post.author}}</a></span>  
 
-  <h2>
-    <a href="{{ site.BASE_PATH }}{{ post.url }}">{{ post.title }}</a>
-  </h2>
+            {% else %}
+              <h2 class="post-title"><a href="{{ post.url }}"><span class="post-title-words">{{ post.title }}</span></a></h2>
+              <p class="post-description">{{ post.description }}</p>
+              <span class="post-date">{{ post.date | date: "%Y년 %m월 %d일" }}</span>
+              <span class="sep">|</span>
+              <span class="author-name">{{post.author}}</span>  
+            {% endif %}
+          </div>
+        {% endif %}
 
-  <div>
-    {% if post.fullview %}
-    {{ post.content }}
-    {% else %}
-    {% if post.shortinfo %}
-    {{ post.shortinfo }}
-    {% elsif post.description %}
-    {{ post.description }}
-    {% else %}
-    {{ post.excerpt }}
-    {% endif %}
-    {% endif %}
+
+        </li>
+
+        <div style="clear: both;"></div>
+        {% endif %}
+      {% endfor %}
+    </ul>
   </div>
 
-</article>
-{% endfor %}
-<hr/>
-
-<ul class="pager"> 
+  <div id="post-pagination" class="pagination clearfix">
 
   {% if paginator.previous_page %}
-  <li class="previous">
-    {% if paginator.previous_page == 1 %}
-    <a href="{{ site.BASE_PATH }}/">&larr; Newer</a>
-    {% else %}
-    <a href="{{ site.BASE_PATH }}/{{ site.paginate_path | replace: ':num', paginator.previous_page }}">&larr; Newer</a>
-    {% endif %}
-  </li>
+  <p class="previous">
+  {% if paginator.previous_page == 1 %}
+  <a href="/">이전 페이지</a>
   {% else %}
-  <li class="previous disabled">
-    <a>&larr; Newer</a>
-  </li>
+  <a href="/page{{paginator.previous_page}}">이전 페이지</a>
   {% endif %}
-  
-  <li>
-    <span class="page_number">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
+  </p>
+  {% else %}
+  <p class="previous disabled">
+  <span>이전 페이지</span>
+  </p>
+  {% endif %}
+
+  <ol class="pages">
+  <li class="page">
+  {% if paginator.page == 1 %}
+  <span class="current-page">1</span>
+  {% else %}
+  <a href="/">1</a>
+  {% endif %}
   </li>
+
+  {% for count in (2..paginator.total_pages) %}
+  <li class="page">
+  {% if count == paginator.page %}
+  <span class="current-page">{{count}}</span>
+  {% else %}
+  <a href="/page{{count}}">{{count}}</a>
+  {% endif %}
+  </li>
+  {% endfor %}
+  </ol>
 
   {% if paginator.next_page %}
-  <li class="next">
-    <a href="{{ site.BASE_PATH }}/{{ site.paginate_path | replace: ':num', paginator.next_page }}">Older &rarr;</a>
-  </li>
+  <p class="next">
+  <a href="/page{{paginator.next_page}}">다음 페이지</a>
+  </p>
   {% else %}
-  <li class="next disabled">
-    <a>Older &rarr;</a>        
-  </li>
+  <p class="next disabled">
+  <span>다음 페이지</span>
+  </p>
   {% endif %}
 
-</ul>
+  </div>

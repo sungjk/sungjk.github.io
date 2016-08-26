@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'spoqahansans';
+  src: url('https://s3-ap-northeast-1.amazonaws.com/spoqa-techblog/fonts/SpoqaHanSans-Bold_subset.woff') format('woff');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'spoqahansans';
+  src: url('https://s3-ap-northeast-1.amazonaws.com/spoqa-techblog/fonts/SpoqaHanSans-Regular_subset.woff') format('woff');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'spoqahansans';
+  src: url('https://s3-ap-northeast-1.amazonaws.com/spoqa-techblog/fonts/SpoqaHanSans-Thin_subset.woff') format('woff');
+  font-weight: 100;
+}

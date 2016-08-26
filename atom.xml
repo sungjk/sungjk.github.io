@@ -1,0 +1,34 @@
+---
+layout: null
+
+---
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title>YAMIYAMI</title>
+  <link rel="alternate" href="{{ site.home_url }}/"/>
+  <link type="application/atom+xml" rel="self" href="{{ site.home_url }}/atom.xml"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>{{ site.home_url }}/</id>
+  <author>
+    <name>Sungjung Kim</name>
+    <email>ajax0615@gmail.com</email>
+  </author>
+
+  {% for post in site.posts limit:20 %}
+      {% if post.publish != false %}
+      <entry>
+        <id>{{ site.home_url }}{{ post.url }}</id>
+        <link type="text/html" rel="alternate" href="{{ site.home_url }}{{ post.url }}"/>
+        <title>{{ post.title }}</title>
+        <updated>{{ post.date | date_to_xmlschema }}</updated>
+        <author>
+          <name>{{ post.author }}</name>
+          <email>{{ post.author-email }}</email>
+        </author>
+        <content type="html">{{ post.content | xml_escape }}</content>
+      </entry>
+      {% endif %}
+  {% endfor %}
+
+</feed>
