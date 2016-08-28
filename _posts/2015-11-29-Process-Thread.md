@@ -10,7 +10,7 @@ publish: true
 
 # Process와 Thread
 
-![Process_Thread](/img/2015/11/29/Process_Thread.gif "Process_Thread")
+![Process_Thread](/images/2015/11/29/Process_Thread.gif "Process_Thread")
 
 이 그림은 Process와 Thread를 잘 나타내는데 네모 박스는 하나의 프로세스를 나타내고 실은 쓰레드를 나타낸다. 하나의 프로세스에 여러 개의 쓰레드가 있을 수 있지만, 하나의 쓰레드에 여러 개가 있을 수는 없다. 쓰레드는 독립적으로 실행될 수 없고, 하나의 프로세스에 종속되기 때문이다.
 

@@ -7,10 +7,10 @@ description: Big-O Cheat sheet
 publish: true
 ---
 
-![BigO_1](/img/2016/04/29/BigO_1.png "BigO_1")
+![BigO_1](/images/2016/04/29/BigO_1.png "BigO_1")
 
-![BigO_2](/img/2016/04/29/BigO_2.png "BigO_2")
+![BigO_2](/images/2016/04/29/BigO_2.png "BigO_2")
 
-![BigO_3](/img/2016/04/29/BigO_3.png "BigO_3")
+![BigO_3](/images/2016/04/29/BigO_3.png "BigO_3")
 
-![BigO_4](/img/2016/04/29/BigO_4.png "BigO_4")
+![BigO_4](/images/2016/04/29/BigO_4.png "BigO_4")

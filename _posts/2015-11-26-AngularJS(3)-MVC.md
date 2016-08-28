@@ -15,7 +15,7 @@ MVVM 프레임워크라는 주장이 다분했다. 그런데 AngularJS 팀에서
 자바스크립트 MVW 프레임워크라 한다. 하지만 어찌됐든 사용자 인터페이스와 데이터와 애플리케이션 로직을 분리하는 개념은 MVC 패턴과 같으므로
 이해하기 쉽게 좀더 친숙한 MVC 패턴 요소별로 AngularJS를 설명한다.
 
-![MVC_Pattern_1](/img/2015/11/26/MVC_Pattern_1.jpg "MVC_Pattern_1")
+![MVC_Pattern_1](/images/2015/11/26/MVC_Pattern_1.jpg "MVC_Pattern_1")
 
 #### 1. 모델 Model
 도메인에 해당하는 정보를 나타내는 오브젝트다. 대체로 애플리케이션의 데이터와 행위를 포함하고 있다.

@@ -69,4 +69,4 @@ ng-controller로 작성된 <div> 태그를 연결하는 $scope가 있고, childC
 받기 때문이다. 즉, 자식 $scope에서 없는 모델 즉, 속성을 부모 $scope에서 찾는다. 다음은 계층적 구조를 가지는 $scope가 프로토타입 상속으로
 이루어져 있음을 보여주는 그림이다.
 
-![MVC_Pattern_3](/img/2015/11/26/MVC_Pattern_3.png "MVC_Pattern_3")
+![MVC_Pattern_3](/images/2015/11/26/MVC_Pattern_3.png "MVC_Pattern_3")

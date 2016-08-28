@@ -19,4 +19,4 @@ AngularJS에서 뷰는 문서 객체 모델 Document Object Model 이다. 브라
 속성을 처리한 후 데이터를 바인딩한다.
 5. 컴파일을 완료하면 동적 DOM, 즉 뷰가 생성된다.
 
-![MVC_Pattern_2](/img/2015/11/26/MVC_Pattern_2.jpg "MVC_Pattern_2")
+![MVC_Pattern_2](/images/2015/11/26/MVC_Pattern_2.jpg "MVC_Pattern_2")
