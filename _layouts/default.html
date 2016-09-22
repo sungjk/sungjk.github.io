@@ -14,7 +14,7 @@
   <meta property="og:site_name" content="YAMIYAMI">
   {% if page.url contains 'jobs' %}
   <meta property="og:type" content="blog">
-  <meta property="og:description" content="스포카에서 상점을 위한 IT 서비스를 디자인하고 개발할 크리에이터를 찾고 있습니다.">
+  <meta property="og:description" content="개인 블로그입니다.">
   {% elsif page.title %}
   {% assign base_path = '../../..' %}
   <meta property="og:type" content="article">
@@ -74,7 +74,7 @@
       <div class="header-item">
         <div class="spoqa-logo-wrap">
           <a class="spoqa-logo" href="{{ base_path }}/"><img src="{{ base_path }}/images/yami-logo.png" alt="YAMIYAMI logo"></a>
-          <a class="blog-title" href="{{ base_path }}/">기술 블로그</a>
+          <a class="blog-title" href="{{ base_path }}/">YAMIYAMI</a>
         </div>
         <div class="nav">
           <input type="checkbox" id="toggle">
@@ -83,11 +83,11 @@
             <li><a class="
               {% if page.url == '/about.html' %}
               selected
-              {% endif %} menu-about" href="{{ base_path }}/about.html">소개</a></li>
+              {% endif %} menu-about" href="{{ base_path }}/about.html">Intro</a></li>
             <li><a class="
               {% if page.url != '/about.html' and page.url != '/jobs.html' %}
               selected
-              {% endif %} menu-blog" href="{{ base_path }}/index.html">블로그</a></li>
+              {% endif %} menu-blog" href="{{ base_path }}/index.html">Blog</a></li>
             <li><a class="menu-github" href="https://github.com/SungjungKim">GitHub</a></li>
             <li><a class="menu-linkedin" href="https://kr.linkedin.com/in/sungjungkim">LinkedIn</a></li>
             {% if site.trawler_mode %}

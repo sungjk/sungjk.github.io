@@ -404,7 +404,7 @@ figcaption {
   border-bottom: 1px solid $divider-color;
 }
 .author-title {
-  margin-top: 100px;
+  /*margin-top: 100px;*/
 }
 .author-info {
   margin-top: 3px;
@@ -477,6 +477,13 @@ figcaption {
   background-size: 24px 24px;
   width: 24px;
   height: 24px;
+}
+.github-icon {
+  display: inline-block;
+  background-image: url(/images/github-icon.png);
+  background-size: 23px 23px;
+  width: 23px;
+  height: 23px;
 }
 
 /* footer */
