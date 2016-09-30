@@ -12,7 +12,7 @@ layout: null
   <id>{{ site.home_url }}/</id>
   <author>
     <name>Sungjung Kim</name>
-    <email>ajax0615@gmail.com</email>
+    <email>namedcod@gmail.com</email>
   </author>
 
   {% for post in site.posts limit:20 %}
