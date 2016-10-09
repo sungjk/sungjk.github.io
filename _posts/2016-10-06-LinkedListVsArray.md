@@ -3,7 +3,7 @@ layout: entry
 title: Linked List vs. Array
 author: 김성중
 author-email: ajax0615@gmail.com
-description: 자바의 동적 배열인 Linked List와 배열 Array와의 차이에 대한 설명입니다.
+description: 자바의 Linked List와 배열 Array와의 차이에 대한 설명입니다.
 publish: true
 ---
 
