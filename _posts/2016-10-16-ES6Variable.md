@@ -3,7 +3,7 @@ layout: entry
 title: JavaScript ES6+. var, let, or const?
 author: 김성중
 author-email: ajax0615@gmail.com
-description: ㅁㄴㅇㄹ
+description: ES6에서 블록 레벨과 함수 레벨을 모두 지원하면서 var, let, const의 사용에 대한 Eric Elliott님의 개인적인 의견입니다.
 publish: true
 ---
 
