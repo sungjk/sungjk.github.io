@@ -501,71 +501,6 @@ figcaption {
 }
 
 
-/* hiring banner
-
-.hiring-banner {
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 5%;
-  height: 430px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url(/images/hiring-imagex1.jpg);
-  background-color: #fff;
-  background-position: left bottom;
-  -webkit-transition: 0.2s ease-out all;
-
-}
-.lt-ie9 .hiring-banner {
-  background-image: url(/images/hiring-imagex1.jpg) no-repeat;
-  background-position: left bottom;
-}
-.hiring-fixedwidth-wrap {
-  max-width: 700px;
-  margin: 0 auto;
-  position: relative;
-}
-.hiring-content {
-  top: 80px;
-  right: 11px;
-  display: block;
-  position: absolute;
- text-shadow: 0px 0px 20px rgba(248,248,246, 0.6),
-              0px 0px 30px rgba(248,248,246, 0.6);
-}
-.hiring-title {
-  margin-bottom: 20px;
-  font-size: 48px;
-  font-weight: 100;
-  line-height: 1.1em;
-  color: $text-color;
-  -webkit-transition: 0.2s ease-out all;
-}
-.hiring-subtitle {
-  color: $text-color;
-  font-weight: normal;
-  -webkit-transition: 0.2s ease-out all;
-  line-height: 1.5em;
-}
-.btn-job {
-  margin-top: 24px;
-  padding: 17px 15%;
-  display: inline-block;
-  border: 1px solid $primary-color;
-  border-radius: 2px;
-  color: $hightlight-text-color;
-  background-color: rgba(255, 255, 255, 0.7);
-  -webkit-transition: 0.2s ease-out all;
-}
-.btn-job:hover {
-  color: $hightlight-text-color;
-  background-color: transparent;
-  border: 1px solid $primary-color;
-  background-color: rgba(76, 128, 241, 0.1);
-}
-
-*/
-
 /* responsive */
 @media only screen and (max-width: 650px) {
   body {
@@ -714,57 +649,6 @@ figcaption {
   }
   .pagination .next {
     float: right;
-  }
-}
-
-// job-table
-
-.job-table {
-  margin-top: 20px;
-}
-
-.job-table > thead {
-  border-top: 1px solid $table-border-color;
-}
-
-.job-table > thead > tr,
-.job-table > tbody > tr {
-  border-bottom: 1px solid $table-border-color;
-  background-color: #fff;
-}
-
-.job-table > thead > tr > th {
-  font-weight: 700;
-  text-align: center;
-  vertical-align: middle;
-  border-color: $table-border-color;
-  padding: 16px;
-  color: $grey-text-color;
-}
-
-.job-table > tbody > tr >td {
-  font-weight: normal;
-  text-align: center;
-  vertical-align: middle;
-  border-color: $table-border-color;
-  padding: 16px 0;
-
-  > a {
-    display: inline-block;
-    width: 100%;
-  }
-}
-
-.job-table > tbody > tr:hover {
-  background-color: white;
-
-  >td {
-    -webkit-transition: 0.2s ease-out all;
-    background-color: $grey-bg-color;
-
-    >a {
-      color: $hightlight-text-color;
-    }
   }
 }
 
