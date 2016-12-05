@@ -10,7 +10,7 @@ publish: true
 JSX로 작성된 React 코드를 보면 이상하게 생긴 연산자를 쉽게 볼 수 있다. three dots(...)라고 하는 이 녀석은 ES6에서 Rest 연산자와 Spread 연산자를 표현하기 위해 사용되고 있다. 함수의 여러 인수(multiple arguments)를 편리하게 처리하고, 배열 리터럴의 일부를 반복 가능한 식(다른 배열 리터럴 등)에서 초기화하거나 여러 인수로 확장할 수 있는 등 간편한 syntax를 제공하는 Rest 연산자와 Spread 연산자가 무엇인지 알아보자.
 
 ## 1. Rest operator(...)
-**Rest operater** 는 [비구조화 할당(destructuring assignment)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)에 의해 선택되지 않은 남은 열거형 속성 키를 할당해준다. 즉, 반복 가능한 대상에서 선택되지 않은 나머지 원소들을 배열로 추출해준다. spread 연산자를 사용하면 함수 호출의 여러 인수(multiple arguments)를 배열로 전환할 수 있기 때문에, 인수를 개별적으로 지정해주지 않아도 된다.
+**Rest operater** 는 [비구조화 할당(destructuring assignment)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)에 의해 선택되지 않은 남은 열거형 속성 키를 할당해준다. 즉, 반복 가능한 대상에서 선택되지 않은 나머지 원소들을 배열로 추출해준다. Rest 연산자를 사용하면 함수 호출의 여러 인수(multiple arguments)를 배열로 전환할 수 있기 때문에, 인수를 개별적으로 지정해주지 않아도 된다.
 
 ```javascript
 // Rest 연산자는 나머지 원소들을 모아주는 역할을 하므로,
@@ -45,7 +45,7 @@ const abc = ['a', 'b', 'c'];
 const def = ['d', 'e', 'f'];
 const alpha = [...abc, ...def]; // ['a', 'b', 'c', 'd', 'e', 'f']
 
-// Rest 연산자는 함수의 나머지 인수들을 하나의 배열로 만들어준다.
+// Spread 연산자는 함수의 나머지 인수들을 하나의 배열로 만들어준다.
 function sum(first, ...others) {
     for (let i = 0; i < others.length; ++i) {
         first += others[i];
@@ -101,7 +101,7 @@ const z = ['d', 'e'];
 const arr = [...x, ...y, ...z]; // ["a", "b", "c", "d", "e"]
 ```
 
-spread 연산자의 이점은 반복 가능한 어떠한 값이든 피연산자(operand)로 사용할 수 있다는 것이다(반복을 지원하지 않는 배열의 concat() 메소드와 대조적임).
+spread 연산자의 이점은 반복 가능한 어떠한 값이든 피연산자(operand)로 사용할 수 있다는 것이다(자바스크립트 배열의 반복을 지원하지 않는 concat() 메소드와 대조적임).
 
 #### 2.3.1 Converting iterable or Array-like objects to Arrays
 다음과 같이 spread 연산자는 반복 가능한 값을 배열로 변환해준다.
