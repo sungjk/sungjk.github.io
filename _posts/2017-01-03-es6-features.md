@@ -4,7 +4,7 @@ title: ECMAScript 6 — New Features: Overview & Comparison
 author: 김성중
 author-email: ajax0615@gmail.com
 description: ECMAScript 6에서 지원하는 Feature에 대한 설명입니다.
-publish: true
+publish: false
 ---
 
 ## Constants
