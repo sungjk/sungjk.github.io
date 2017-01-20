@@ -21,15 +21,15 @@ layout: default
               <h2 class="post-title"><a href="{{ base_path }}{{ post.url }}"><span class="post-title-words">{{ post.title }}</span></a></h2>
               <p class="post-description">{{ post.description }}</p>
               <span class="post-date">{{ post.date | date: "%Y년 %m월 %d일" }}</span>
-              <span class="sep">|</span> 
-              <span class="author-name"><a href="mailto:{{post.author-email}}">{{post.author}}</a></span>  
+              <span class="sep">|</span>
+              <span class="author-name"><a href="mailto:{{post.author-email}}">{{post.author}}</a></span>
 
             {% else %}
               <h2 class="post-title"><a href="{{ post.url }}"><span class="post-title-words">{{ post.title }}</span></a></h2>
               <p class="post-description">{{ post.description }}</p>
               <span class="post-date">{{ post.date | date: "%Y년 %m월 %d일" }}</span>
               <span class="sep">|</span>
-              <span class="author-name">{{post.author}}</span>  
+              <span class="author-name">{{post.author}}</span>
             {% endif %}
           </div>
         {% endif %}

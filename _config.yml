@@ -18,4 +18,6 @@ trawler_mode: true
 gems:
   - jekyll-paginate
   - jekyll-feed
+feed:
+  path: /atom.xml
 future: true
