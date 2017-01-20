@@ -3,7 +3,7 @@ paginate: 10
 markdown: kramdown
 host: 0.0.0.0
 
-subscribe_rss: /feed.xml
+subscribe_rss: feed.xml
 kramdown:
   input: GFM
   hard_wrap: false
@@ -19,5 +19,5 @@ gems:
   - jekyll-paginate
   - jekyll-feed
 feed:
-  path: /feed.xml
+  path: feed.xml
 future: true
