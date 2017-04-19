@@ -8,7 +8,7 @@ kramdown:
   input: GFM
   hard_wrap: false
 
-home_url: "https://reworky.github.io"
+home_url: "https://sungjk.github.io"
 representing_image: "/images/yami-logo.png"
 
 sass:

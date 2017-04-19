@@ -5,14 +5,14 @@ layout: null
 <?xml version="1.0"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title>NAMEDCOD</title>
+  <title>Jeremy's Blog</title>
   <link rel="alternate" href="{{ site.home_url }}/"/>
   <link type="application/atom+xml" rel="self" href="{{ site.home_url }}/atom.xml"/>
   <updated>{{ site.time | date_to_xmlschema }}</updated>
   <id>{{ site.home_url }}/</id>
   <author>
     <name>Sungjung Kim</name>
-    <email>namedcod@gmail.com</email>
+    <email>ajax0615@gmail.com</email>
   </author>
 
   {% for post in site.posts limit:20 %}
