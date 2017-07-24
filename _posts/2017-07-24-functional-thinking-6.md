@@ -32,7 +32,7 @@ filter() 메서드에서처럼 코드를 매개변수로 전달하는 기능은 
 
 예제 6-1. 템플릿 메서드의 \'표준\' 구현
 
-```java
+```
 abstract class Customer {
   def plan
 
@@ -58,7 +58,7 @@ process() 메서드는 checkCredit(), checkInventory(), ship()에 의존한다. 
 
 예제 6-2. 일급 함수를 사용한 템플릿 메서드
 
-```java
+```
 class CustomerBlocks {
   def plan, checkCredit, checkInventory, ship
 
@@ -103,7 +103,7 @@ println "increment 7: ${incrementer(7)}"
 
 예제 6-14. 스칼라에서의 재귀적 필터링
 
-```java
+```
 object CurryTest extends App {
   def filter(xs: List[Int], p: Int => Boolean): List[Int] =
     if (xs.isEmpty) xs
@@ -132,7 +132,7 @@ object CurryTest extends App {
 
 예제 6-15. 명령형 자연수 분류기
 
-```java
+```
 public class ClassifierAlpha {
   private int number;
 
@@ -178,7 +178,7 @@ public class ClassifierAlpha {
 
 예제 6-16. 명령형으로 소수 찾기
 
-```java
+```
 public class PrimeAlpha {
   private int number;
 
@@ -215,7 +215,7 @@ public class PrimeAlpha {
 
 예제 6-21. 함수형 소수 찾기
 
-```java
+```
 public class FPrime {
   public static boolean isPrime(int number) {
     Set<Integer> factors = Factors.of(number);
@@ -231,7 +231,7 @@ public class FPrime {
 
 예제 6-22. 함수형으로 리팩토링한 Factors 클래스
 
-```java
+```
 public class Factors {
   static public boolean isFactor(int number, int potential_factor) {
     return number % potential_factor == 0;
@@ -253,7 +253,7 @@ public class Factors {
 
 예제 6-23. 리팩토링한 자연수 분류기
 
-```java
+```
 public class FClassifier {
   public static int sumOfFactors(int number) {
     Iterator<Integer> it = Factors.of(number).iterator();
