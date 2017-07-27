@@ -46,7 +46,7 @@
   }
   ul,
   ol {
-    margin: 20px 0 20px 40px;
+    margin: 10px 0 10px 30px;
   }
   li {
     margin: 6px 0;
@@ -235,7 +235,6 @@ a.footnote {
 .posts .post-author-info .portrait {
   width: 60px;
   vertical-align: middle;
-  border-radius: 50%;
   float: right;
   margin-left: 40px;
 }
@@ -323,13 +322,12 @@ figcaption {
   }
 }
 .post-author-info {
-  margin-bottom: 12%;
+  margin: 12% 0;
   text-align: center;
 
  .portrait {
     width: 17%;
     vertical-align: middle;
-    border-radius: 50%;
   }
  .author-name a,
  .author-name {
