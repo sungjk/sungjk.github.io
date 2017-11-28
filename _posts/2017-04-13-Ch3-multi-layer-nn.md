@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: ai
 title: Deep Learning for Beginners - 다층 신경망의 학습
 author: 김성중
 author-email: ajax0615@gmail.com

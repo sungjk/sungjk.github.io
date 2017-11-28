@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: fp
 title: 함수형 사고(8)
 author: 김성중
 author-email: ajax0615@gmail.com

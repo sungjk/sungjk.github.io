@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: java
 title: Effective Java(2)
 author: 김성중
 author-email: ajax0615@gmail.com

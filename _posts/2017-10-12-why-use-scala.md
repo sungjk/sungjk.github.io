@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: scala
 title: 프로젝트에 스칼라 도입하기!
 author: 김성중
 author-email: ajax0615@gmail.com

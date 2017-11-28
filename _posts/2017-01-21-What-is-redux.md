@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: react
 title: What is Redux?
 author: 김성중
 author-email: ajax0615@gmail.com

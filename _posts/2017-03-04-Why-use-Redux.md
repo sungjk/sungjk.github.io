@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: react
 title: Why use Redux over Facebook Flux?
 author: 김성중
 author-email: ajax0615@gmail.com

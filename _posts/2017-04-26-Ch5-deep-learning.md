@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: ai
 title: Deep Learning for Beginners - 딥러닝
 author: 김성중
 author-email: ajax0615@gmail.com

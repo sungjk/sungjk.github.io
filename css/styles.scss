@@ -501,22 +501,13 @@ figcaption {
 
 
 /* responsive */
-@media only screen and (max-width: 650px) {
-  body {
-    width: 100%;
-  }
-  .pagination .pages li {
-    display: none;
-  }
-  .pagination .previous {
-    float: left;
-  }
-  .pagination .next {
-    float: right;
-  }
+@media only screen and (max-width: 660px) {
+  // .spoqa-logo-wrap {
+  //     float:none;
+  // }
 }
 
-@media only screen and (max-width: 580px) {
+@media only screen and (max-width: 660px) {
   body {
     width: 100%;
   }
@@ -590,6 +581,12 @@ figcaption {
   .back-btn a {
     padding: 20px 25%;
   }
+  .pagination .previous {
+    float: left;
+  }
+  .pagination .next {
+    float: right;
+  }
 }
 
 @media only screen and (max-width: 360px) {
@@ -639,15 +636,6 @@ figcaption {
   }
   .back-btn a {
     padding: 20px 25%;
-  }
-  .spoqa-logo-wrap {
-      float:none;
-  }
-  .pagination .previous {
-    float: left;
-  }
-  .pagination .next {
-    float: right;
   }
 }
 

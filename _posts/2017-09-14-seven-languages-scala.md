@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: scala
 title: Seven Languages in Seven Weeks - Scala
 author: Jeremy
 author-email: ajax0615@gmail.com

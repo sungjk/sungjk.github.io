@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: scala
 title: 스칼라 - 퓨처와 동시성
 author: 김성중
 author-email: ajax0615@gmail.com

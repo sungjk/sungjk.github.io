@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: scala
 title: Functional Programming in Scala 1
 author: 김성중
 author-email: ajax0615@gmail.com

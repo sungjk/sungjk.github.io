@@ -15,7 +15,7 @@
   <meta property="og:site_name" content="Jeremy's Blog">
   {% if page.url contains 'jobs' %}
   <meta property="og:type" content="blog">
-  <meta property="og:description" content="This is a blog about what I learned.">
+  <meta property="og:description" content="Jeremy's Blog: Things I've learned.">
   {% elsif page.title %}
   {% assign base_path = '../../..' %}
   <meta property="og:type" content="article">
@@ -31,7 +31,7 @@
   <meta property="og:type" content="blog">
   <meta property="og:url" content="{{ site.home_url }}/">
   <meta property="og:site_name" content="Jeremy's Blog">
-  <meta property="og:description" content="Hello, This is a blog about what I learned.">
+  <meta property="og:description" content="Jeremy's Blog: Things I've learned.">
   {% endif %}
   {% if page.representing_image %}
     <meta property="og:image" content="{{ site.home_url }}{{ page.representing_image }}">
@@ -51,13 +51,6 @@
   <link rel="stylesheet" href="{{ base_path }}/css/styles.css">
   <link href="{{ base_path }}/atom.xml" type="application/atom+xml" rel="alternate" title="Jeremy's Blog">
   <link rel="shortcut icon" href="{{ base_path }}/images/favicon.ico">
-  <style type="text/css">
-@media only screen and (max-width: 580px) {
-  .btn-job {
-    display: none;
-  }
-}
-</style>
 </head>
 <body>
   <div class="wrapper">
@@ -74,13 +67,14 @@
             <li><a class="
               {% if page.url == '/about.html' %}
               selected
-              {% endif %} menu-about" href="{{ base_path }}/about.html">Intro</a></li>
+              {% endif %} menu-about" href="{{ base_path }}/about.html">About</a></li>
             <li><a class="
-              {% if page.url != '/about.html' and page.url != '/jobs.html' %}
+              {% if page.url != '/about.html' %}
               selected
               {% endif %} menu-blog" href="{{ base_path }}/index.html">Blog</a></li>
             <li><a class="menu-github" href="https://github.com/sungjk">GitHub</a></li>
             <li><a class="menu-linkedin" href="https://kr.linkedin.com/in/sungjungkim">LinkedIn</a></li>
+            <li><a class="menu-rss" href="{{ base_path }}/feed.xml">RSS</a></li>
             {% if site.trawler_mode %}
             {% endif %}
           </ul>
