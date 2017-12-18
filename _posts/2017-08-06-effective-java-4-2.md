@@ -234,7 +234,59 @@ public E pop() {
 
 ---
 
-# 규칙 27.
+# 규칙 27. 가능하면 제네릭 메서드로 만들 것
+세 집합(인자 두 개와 반홥값 하나)에 보관될 원소의 자료형을 나타내는 형인자(type parameter)를 메서드 선언에 추가하고, 그 인자를 사용해서 메서드를 구현해야 한다. **형인자를 선언하는 형인자 목록(type parameter list)은 메서드의 수정자(modifier)와 반환값 자료형 사이에 둔다.** 이 예제에서 형인자 목록은 \<E\>이고 반환값 자료형은 Set\<E\>이다. 형인자의 이름을 지울 때는 제네릭 자료형과 같은 관습을 따른다.
+
+```
+// 제네릭 메서드
+public static <E> Set<E> union(Set<E> s1, Set<E> s2) {
+  Set<E> result = new HashSet<E>(s1);
+  result.addAll(s2);
+  return result;
+}
+
+// 제네릭 메서드의 용례를 보이는 프로그램
+public static void main(String[] args) {
+  Set<String> guys = new HashSet<String>(Arrays.asList("Tom", "Dick", "Harry"));
+  Set<String> stooges = new HashSet<String>(Arrays.asList("Larry", "Moe", "Curly"));
+  Set<String> aflCio = union(guys, stooges);
+  System.out.println(aflCio);
+}
+```
+
+제네릭 메서드의 주목할 만한 특징 하나는, 제네릭 생성자를 호출할 때는 명시적으로 주어야 했던 형인자를 전달할 필요가 없다는 것이다. 컴파일러는 메서드에 전해진 인자의 자료형을 보고 형인자의 값을 알아낸다. 위의 예제에서는 union에 전달된 자료형이 Set<String>이므로, 컴파일러는 E가 String임을 알아낼 수 있다. 이 과정을 *자료형 유추*(type inference)라 한다.
+
+제네릭 생성자를 호출할 때는 형인자를 명시적으로 전달해야 하는데 이런 번거러움을 피하려면, 사용할 생성자마다 제네릭 정적 팩터리 메서드(generic static factory method)를 만들면 된다. 예를 들어, 아래는 아무 인자도 받지 않는 HashMap 생성자에 대한 제네릭 정적 팩터리 메서드이다.
+
+```
+// 제네릭 정적 팩털 ㅣ메서드
+public static <K, V> HashMap<K, V> newHashMap() {
+  return new HashMap<K, V>();
+}
+```
+
+이 제네릭 정적 팩터리 메서드를 사용하면 중복되는 형인자를 제거하여 간결한 코드를 만들 수 있다.
+
+```
+// 정적 팩터리 메서드를 통한 형인자 자료형 객체 생성
+Map<String, List<String>> anagrams = newHashMap();
+```
+
+#### 요약
+- 제제릭 메서드는 클라이언트가 직접 입력 값과 반환값의 자료형을 형변환해야 하는 메서드보다 사용하기 쉽고 형 안전성도 높다.
+- 자료형을 만들 때처럼, 새로운 메서드를 고안할 때는 형변환 없이도 사용할 수 있을지 살펴보자.
+
+---
+
+# 규칙 28.
+
+
+
+
+
+
+
+
 
 
 
