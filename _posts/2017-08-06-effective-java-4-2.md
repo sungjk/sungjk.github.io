@@ -5,7 +5,7 @@ title: Effective Java(4-2)
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java의 5장(제네릭)을 정리한 글입니다.
-publish: false
+publish: true
 ---
 
 # 규칙 25. 배열 대신 리스트를 써라
@@ -278,27 +278,156 @@ Map<String, List<String>> anagrams = newHashMap();
 
 ---
 
-# 규칙 28.
+# 규칙 28. 한정적 와일드카드를 써서 API 유연성을 높여라
+일련의 원소들을 인자로 받아 차례로 스택에 집어넣는 메서드를 추가하는 pushAll 메서드를 정의했다. Integer 형의 intVal로 push(intVal)을 호출하면 제대로 동작할 것이다. Integer는 Number의 하위 자료형(subtype)이기 때문이다. 그러니 논리적으로 보자면 아래의 코드는 문제가 없어야 할 것이지만, 실제로 해 보면 에러가 발생한다. 앞서 설명한 대로, 형인자 자료형은 불변(invariant)이기 때문이다.
+```
+public class Stack<E> {
+  public Stack();
+  public void push(E e);
+  public E pop();
+  public boolean isEmpty();
+}
 
+// 와일드카드 자료형을 사용하지 않는 pushAll 메서드 - 문제가 있다.
+public void pushAll(Iterable<E> src) {
+  for (E e : src)
+    push(e);
+}
 
+Stack<Number> numberStack = new Stack<Number>();
+Iterable<Integer> integers = ... ;
+numberStack.pushAll(integers);  // 에러 발생
+```
 
+자바는 이런 상황을 해결하기 위해, 한정적 와일드카드 자료형(bounded wildcard type)이라는 특별한 형인자 자료형을 제공한다. 따라서, pushAll의 인자 자료형을 \"E의 Iterable\"이 아니라 \"E의 하위 자로형의 Iterable\"이라고 명시할 방법이 필요한데, 와일드카드 자료형을 써서 Iterable\<? extends E\>라고 하면 된다는 것이다.
 
+```
+// E 객체 생산자 역할을 하는 인자에 대한 와일드카드 자료형
+public void pushAll(Iterable<? extends E> src) {
+  for (E e : src)
+    push(e);
+}
+```
 
+popAll 메서드는 스택의 모든 원소를 꺼내서 인자로 주어진 컬렉션에 넣는다. 이 메서드는 깔끔하게 컴파일될 뿐 아니라 인자로 주어진 컬렉션의 원소 자료형이 스택의 원소 자료형과 일치할 때는 완벽히 동작한다. 하지만 스택에서 원소를 꺼내는 코드는 에러가 발생한다.
 
+```
+// 와일드카드 자료형 없이 구현한 popAll 메서드 - 문제가 있다!
+public void popAll(Collection<E> dst) {
+  while (!isEmpty())
+    dst.add(pop());
+}
 
+Stack<Number> numberStack = new Stack<Number>();
+Collection<Object> objects = ... ;
+numberStack.popAll(objects);  // pushAll의 첫 번째 버전과 같은 오류 발생
+```
 
+Collection\<Object\>가 Collection\<Number\>의 하위 자료형이 아니라는 오류가 난다. 이는 popAll의 인자 자료형을 \"E의 컬렉션\"이 아니라 \"E의 상위 자료형(supertype)의 컬렉션\"이라고 명시하면 된다.
 
+```
+// E의 소비자 구실을 하는 인자에 대한 와일드카드 자료형
+public void popAll(Collection<? super E> dst) {
+  while (!isEmpty())
+    dst.add(pop());
+}
+```
 
+여기서 배울 교훈은 명확하다. 유연성을 최대화하려면, 객체 생산자(producer)나 소비자(consumer) 구실을 하는 메서드 인자의 자료형은 와일드카드 자료형으로 하라는 것이다.
 
+어떤 와일드카드를 쓸지 암기하기 어렵다면, PECS (Produce - Extends, Consumer - Super) 약어를 활용하자. 다시 말해서, 인자가 T 생성자라면 \<? extends T\>라고 하라는 것이다. PECS는 와일드카드 자료형을 사용할 때 지켜야 할 기본적 원칙을 훌륭히 표현하는 약어다.
 
+---
 
+# 규칙 29. 형 안전 다형성 컨테이너를 쓰면 어떨지 따져보라
+제네릭은 Set이나 Map 같은 컬렉션(collection)과 ThreadLocal, AtomicReference처럼 하나의 원소만을 담는 컨테이너(container)에 가장 많이 쓰인다. 이때 형인자를 받는 것은 컨테이너 구실을 하는 부분이다. 따라서 컨테이너별로 형인자의 수는 고정된다.
 
+하지만 좀 더 유연한 방법이 필요할 때도 있다. 예를 들어, 데이터베이스에 저장되는 레코드는 임의 개수의 열(column)을 갖는데, 형 안전성(typesafe)을 깨지 않으면서 각 열에 접근할 방법이 있다면 좋을 것이다. 이는 *컨테이너* 대신 *키*(key)에 형인자를 지정하는 것이 기본적 아이디어다. 그런 다음, 컨테이너에 값을 넣거나 뺄 때마다 키를 제공하는 것이다. 값의 자료형이 키의 자료형에 부합하도록 하는 것은 제네릭 자료형 시스템(generic type system)을 통해 처리한다.
 
+임의 클래스 객체 가운데 맘에 드는 것을 골라 저장하고 꺼낼 수 있는 Favorites 클래스를 만든다고 하자. 이 API를 사용하는 클라이언트는 좋아하는 객체를 넣거나 뺼 때 Class 객체를 함께 전달해야 한다.
 
+```
+// 형 안전 다형성(heterogeneous) 컨테이너 패턴 - API
+public class Favorites {
+  public <T> void putFavorite(Class<T> type, T instance);
+  public <T> T getFavorite(Class<T> type);
+}
 
+// 형 안전 다형성(heterogeneous) 컨테이너 패턴 - 클라이언트
+public static void main(String[] args) {
+  Favorites f = new Favorites();
+  f.putFavorite(String.class, "Java");
+  f.putFavorite(Integer.class, 0xcafebabe);
+  f.putFavorite(Class.class, Favorites.class);
+  String favoriteString = f.getFavorite(String.class);
+  int favoriteInteger = f.getFavorite(Integer.class);
+  Class<?> favoriteClass = f.getFavorite(Class.class);
+  System.out.printf("%s %x %s%n", favoriteString, favoriteInteger, favoriteClass.getName());
+}
+```
 
+실행해 보면 기대하는 대로 Java cafebabe Favorites가 출력된다.
 
+Favorites 객체는 형 안전성을 보장한다. 다시 말해, String을 요청했는데 Integer를 반환한다거나 하지 않는다. 또한, 다형성(heterogeneous)을 갖고 있다. 일반적인 맵과 달리, 모든 키의 자료형이 서로 다르다. 따라서 Favorites 같은 클래스를 형 안전 다형성 컨테이너(typesafe heterogeneous container)라 부른다.
 
+```
+// 형 안전 다형성(heterogeneous) 컨테이너 패턴 - 구현
+public class Favorites {
+  private Map<Class<?>, Object> favorites = new HashMap<Class<?>, Object>();
+
+  public <T> void putFavorite(Class<T> type, T instance) {
+    if (type == null)
+      throw new NullPointerException("Type is null");
+    favorites.put(type, instance);
+  }
+
+  public <T> T getFavorite(Class<T> type) {
+    return type.cast(favorites.get(type));
+  }
+}
+```
+
+cast 메서드의 시그니처를 보면, Class가 제네릭 클래스라는 사실을 완벽히 이용하고 있음을 알 수 있다. cast 메서드의 반환값 자료형이 Class 객체의 형인자와 일치하도록 선언되어 있는 것이다.
+
+```
+public class Class<T> {
+  T cast(Object obj);
+}
+```
+
+getFavorite 메서드가 필요로 하는 것이 바로 이것이다. cast가 이렇게 선언된 덕분에, T 형으로 무점검 형변환(unchecked cast)하는 코드가 없는, 형 안전성이 보장되는 Favorites 클래스를 만들 수 있었던 것이다.
+
+Favorites 클래스에는 중요한 문제점이 두 가지 있다. 첫 번째는 악의적인 클라이언트가 Favorites 객체의 형 안전성을 쉽게 깨뜨릴 수 있다는 것이다. Class 객체를 무인자 형태(raw form)로 사용하기만 하면 된다. 이는 Favorites 클래스가 자료형 불변식을 위반하지 않도록 보장하는 한 가지 방법은 putFavorite 메서드가 instance의 자료형이 정말로 type이 나타내는 자료형과 일치하는지 동적 형변환을 통해 검사하도록 하는 것이다.
+
+```
+// 동적 형변환으로 실행시간 형 안전성 확보
+public <T> void putFavorite(Class<T> type, T instance) {
+  favorites.put(type, type.cast(instance));
+}
+```
+
+Favorites 클래스의 두 번째 단점은 실체화 불가능 자료형(non-reifiable type)에는 쓰일 수 없다는 것이다. 따라서 String이나 String[]은 저장할 수 있으나 List\<String\>은 저장할 수 없다. List\<String\>의 Class 객체를 얻을 수 없기 때문에 이를 저장하는 코드는 컴파일되지 않는다. 이를 피하기 위해 *상위 자료형 토큰*(super type token)이라는 기법이 만들어지기는 했으나 아직 완벽한 해법은 없다.
+
+클래스 Class에는 무점검 형변환을 안전하게, 그리고 동적으로 처리해주는 객체 메서드(instance method)가 정의되어 있다. asSubclass인데, 특정한 Class 객체를 인자로 주어진 하위 클래스의 Class 객체로 형변환해 준다. 형변환이 성공하면 인자로 주어진 Class 객체가 반환되고, 형변환 할 수 없는 경우에는 ClassCastException이 뜬다.
+
+컴파일 시점에는 자료형을 알 수 없는 어노테이션을 실행시간에 읽어내는 메서드를 asSubclass를 사용해 구현한 예이다.
+
+```
+static Annotation getAnnotation(AnnotatedElement element, String annotationTypeName) {
+  Class<?> annotationType = null; // 비한정적 자료형 토큰
+  try {
+    annotationType = Class.forName(annotationTypeName);
+  } catch (Exception ex) {
+    throw new IllegalArgumentException(ex);
+  }
+  return element.getAnnotation(annotationType.asSubclass(Annotation.class));
+}
+```
+
+#### 요약
+컬렉션 API는 컨테이너별로 형인자 개수가 고정되어 있는데, 컨테이너 대신 키를 제네릭으로 만들면 그런 제약이 없는 형 안전 다형성을 만들 수 있다.
+
+---
 
 # Reference
 - [Effective Java 2/E](http://www.insightbook.co.kr/%EB%8F%84%EC%84%9C-%EB%AA%A9%EB%A1%9D/programming-insight/%EC%9D%B4%ED%8E%99%ED%8B%B0%EB%B8%8C-%EC%9E%90%EB%B0%94effective-java-2e)
