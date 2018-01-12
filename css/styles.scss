@@ -251,8 +251,7 @@ a.footnote {
 
 .pagination {
   text-align: center;
-  padding: 10px 0;
-  margin-top: 30px;
+  margin-top: 2em;
 
   ol {
     display: inline-block;
@@ -284,14 +283,24 @@ a.footnote {
   .next.disabled {
     font-size: $blog-font-size-sm;
     color: $text-color;
+    -moz-pointer-events: none;
+		-webkit-pointer-events: none;
+		-ms-pointer-events: none;
+		pointer-events: none;
+		color: rgba(160, 160, 160, 0.3) !important;
   }
   .previous.disabled,
   .next.disabled {
     color: $text-color;
+    -moz-pointer-events: none;
+		-webkit-pointer-events: none;
+		-ms-pointer-events: none;
+		pointer-events: none;
+		color: rgba(160, 160, 160, 0.3) !important;
   }
   .previous,
   .next {
-    padding: 1% 2%;
+    padding: 0;
     border-radius: 2px;
     display: inline-block;
   }
@@ -300,6 +309,175 @@ a.footnote {
   .page a:hover {
     -webkit-transition: 0.2s ease-out all;
     background-color: $grey-highlight-color;
+  }
+}
+
+ol {
+  list-style: decimal;
+  margin: 0 0 2em 0;
+  padding-left: 1.25em;
+}
+
+ol li {
+  padding-left: 0.25em;
+}
+
+ul {
+  list-style: disc;
+  padding-left: 1em;
+  margin: 1em 0 1em 0;
+}
+
+ul li {
+  padding-left: 0.5em;
+}
+
+ul li ul {
+  margin-bottom: 0;
+}
+
+ul.alt {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.alt li {
+  border-top: solid 1px rgba(160, 160, 160, 0.3);
+  padding: 0.5em 0;
+}
+
+ul.alt li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+ul.actions {
+  cursor: default;
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.actions li {
+  display: inline-block;
+  padding: 0 0 0 0;
+  vertical-align: middle;
+}
+
+ul.actions li:last-child {
+  padding-right: 0;
+}
+
+ul.actions.pagination .next {
+  text-decoration: none;
+  font-size: $blog-font-size-md;
+  margin: 0 0.5em 0 0.5em;
+}
+
+ul.actions.pagination .previous {
+  text-decoration: none;
+  font-size: $blog-font-size-md;
+  margin: 0 0.5em 0 0.5em;
+}
+
+@media screen and (max-width: 1280px) {
+  ul.actions.pagination {
+    text-align: center;
+  }
+
+  ul.actions.pagination .next, ul.actions.pagination .previous {
+    min-width: 10em;
+  }
+}
+
+@media screen and (max-width: 736px) {
+  ul.actions.pagination .next, ul.actions.pagination .previous {
+    min-width: 8em;
+  }
+}
+
+ul.actions.small li {
+  padding: 0 1em 0 0;
+}
+
+ul.actions.vertical li {
+  display: block;
+  padding: 1.5em 0 0 0;
+}
+
+ul.actions.vertical li:first-child {
+  padding-top: 0;
+}
+
+ul.actions.vertical li > * {
+  margin-bottom: 0;
+}
+
+ul.actions.vertical.small li {
+  padding: 1em 0 0 0;
+}
+
+ul.actions.vertical.small li:first-child {
+  padding-top: 0;
+}
+
+ul.actions.fit {
+  display: table;
+  margin-left: -1em;
+  padding: 0;
+  table-layout: fixed;
+  width: calc(100% + 1em);
+}
+
+ul.actions.fit li {
+  display: table-cell;
+  padding: 0 0 0 1em;
+}
+
+ul.actions.fit li > * {
+  margin-bottom: 0;
+}
+
+ul.actions.fit.small {
+  margin-left: -0.5em;
+  width: calc(100% + 0.5em);
+}
+
+ul.actions.fit.small li {
+  padding: 0 0 0 0.5em;
+}
+
+@media screen and (max-width: 480px) {
+  ul.actions {
+    margin: 0 0 2em 0;
+  }
+
+  ul.actions li {
+    padding: 1em 0 0 0;
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+
+  ul.actions li:first-child {
+    padding-top: 0;
+    padding-bottom: 1em;
+  }
+
+  ul.actions li:last-child {
+    padding-top: 0.5em;
+  }
+
+  ul.actions li > * {
+    width: 100%;
+    margin: 0 !important;
+  }
+
+  ul.actions.small li {
+    padding: 0.5em 0 0 0;
+  }
+
+  ul.actions.small li:first-child {
+    padding-top: 0;
   }
 }
 
