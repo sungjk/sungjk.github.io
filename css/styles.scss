@@ -325,7 +325,6 @@ ol li {
 ul {
   list-style: disc;
   padding-left: 1em;
-  margin: 1em 0 1em 0;
 }
 
 ul li {
@@ -448,7 +447,7 @@ ul.actions.fit.small li {
 
 @media screen and (max-width: 480px) {
   ul.actions {
-    margin: 0 0 2em 0;
+    margin: 2em 0;
   }
 
   ul.actions li {

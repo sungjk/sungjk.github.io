@@ -9,7 +9,9 @@ kramdown:
   hard_wrap: false
 
 home_url: "https://sungjk.github.io"
-representing_image: "/images/yami-logo.png"
+author: "김성중"
+author-email: "ajax0615@gmail.com"
+thumbnail-image: "/images/yami-logo.png"
 
 sass:
     sass_dir: css

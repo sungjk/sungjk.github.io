@@ -4,23 +4,12 @@ layout: default
 
 {% assign base_path = '../../..' %}
 
-{% if page.author %}
 <div class="post-author-info">
-  {% if page.author-email %}
-    <!-- <img class="portrait" src="{{base_path}}/images/profile/{{page.author-email}}.png" /> -->
-    <h1 class="post-title">{{page.title}}</h1>
-    <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
-    <span class="sep">|</span>
-    <span class="author-name"><a href="mailto:{{page.author-email}}">{{page.author}}</a></span>
-  {% else %}
-    <h1 class="post-title">{{page.title}}</h1>
-    <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
-    <span class="sep">|</span>
-    <span class="author-name">{{page.author}}</span>
-
-  {% endif %}
+  <h1 class="post-title">{{page.title}}</h1>
+  <span class="post-date">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
+  <span class="sep">|</span>
+  <span class="author-name"><a href="mailto:{{site.author-email}}">{{ site.author }}</a></span>
 </div>
-{% endif %}
 
 {% if page.publish == false %}
   <div class="post">Coming soon</div>

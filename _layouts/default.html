@@ -33,10 +33,14 @@
   <meta property="og:site_name" content="Jeremy's Blog">
   <meta property="og:description" content="Jeremy's Blog: Things I've learned.">
   {% endif %}
-  {% if page.representing_image %}
-    <meta property="og:image" content="{{ site.home_url }}{{ page.representing_image }}">
+  {% if page.thumbnail-image %}
+    <meta property="og:image" content="{{ site.home_url }}{{ page.thumbnail-image }}">
   {% else %}
-    <meta property="og:image" content="{{ site.home_url }}{{ site.representing_image }}">
+    <meta property="og:image" content="{{ site.home_url }}{{ site.thumbnail-image }}">
+  {% endif %}
+  {% if page.keywords %}
+    <meta property="og:keywords" content="{{ page.keywords }}">
+  {% else %}
   {% endif %}
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -88,7 +92,7 @@
     </div>
     <div class="footer">
       <div id="info">
-        <span>© 2015 - 2017 Jeremy, templated by Spoqa.</span>
+        <span>© 2015 - 2018 Jeremy, templated by Spoqa.</span>
       </div>
     </div>
   </div>
