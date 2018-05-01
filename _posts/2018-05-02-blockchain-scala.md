@@ -192,4 +192,5 @@ class BlockChain(chain: Chain = EmptyChain) {
 
 # Reference
 - [블록체인 펼쳐보기](http://www.yes24.com/24/goods/56887730)
+- [How Blockchain Works - 블록체인의 원리](https://www.slideshare.net/skimaza/ss-57356762)
 - [Bitcoin Developer Guide](https://bitcoin.org/en/developer-guide#block-chain)
