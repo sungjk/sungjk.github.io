@@ -148,6 +148,8 @@ def run[A](a: Par[A]): A
 
 Par 이제 순수 자료구조이므로, run은 병렬성을 구현하는 어떤 수단을 갖추어야 한다. 새 스레드를 생성하거나 작업들을 스레드 풀에 위임할 수도 있고, 그 밖의 다른 어떤 메커니즘을 사용할 수도 있다.
 
+---
+
 # 2. 표현의 선택
 이제 우리가 만든 Par를 위한 API 개요는 다음과 같다.
 
@@ -156,7 +158,7 @@ def unit[A](a: A): Par[A]
 def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) => C): Par[C]
 def fork[A](a: => Par[A]): Par[A]
 def lazyUnit[A](a: => A): Par[A] = fork(unit(A))
-// 주어진 Par를 fork의 요청에 따라 병렬 계싼들을 수행하고 그 결과 값을 추출함으로써 완전히 평가한다.
+// 주어진 Par를 fork의 요청에 따라 병렬 계산들을 수행하고 그 결과 값을 추출함으로써 완전히 평가한다.
 def run[A](a: Par[A]):A
 ```
 
@@ -201,8 +203,217 @@ def run[A](s: ExecutorService)(a: Par[A]): Future[A] = a(s)
 
 Par가 ExecutorService를 필요로 하는 **하나의 함수**로 표현되었기 때문에, Future의 생성은 이 ExecutorService가 제공되기 전까지는 일어나지 않음을 주목하기 바란다.
 
-# 3. API의 정련
-...
+---
+
+# 3. API 다듬기
+Par의 기본적인 구현은 다음과 같다.
+
+```
+object Par {
+  // unit은 UnitFuture를 돌려주는 함수로 표현된다. UnitFuture는 Future의 간단한 구현으로,
+  // 그냥 상수 값을 감싸기만 할 뿐 ExecutorService는 전혀 사용하지 않는다.
+  // UnitFuture는 항상 완료 가능하며, 취소는 불가능하다.
+  def unit[A](a: A): Par[A] = (es: ExecutorService) => UnitFuture(a)
+
+  private case class UnitFuture[A](get: A) extends Future[A] {
+    def isDone = true
+    def get(timeout: Long, units: TimeUnit) = get
+    def isCancelled = false
+    def cancel(evenIfRunning: Boolean): Boolean = false
+  }
+
+  // f 호출을 개별 논리적 스레드에서 평가하지 않는다.
+  // f를 개별 스레드에서 평가하고 싶다면 fork(map2(a, b)(f))를 사용하면 된다.
+  def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) => C): Par[C] =
+    (es: ExecutorService) => {
+      val af = a(es)
+      val bf = b(es)
+      // ExecutorService를 두 Par 값에 전달하고, Future의 af와 bf의 결과들을 기다리고,
+      // 그것들에 f를 적용하고, 적용 결과를 UnitFuture로 감싼다.
+      UnitFuture(f(af.get, bf.get))
+    }
+
+  def fork[A](a: => Par[A]): Par[A] =
+    es => es.submit(new Callable[A] {
+      def call = a(es).get
+    })
+}
+```
+
+Future의 인터페이스가 순수 함수적이지 않음을 주목하기 바란다. 그러나 중요한 것은, 비록 Future의 메서드들이 부수 효과에 의존하긴 하지만, Par API 자체는 여전히 순수하다는 것이다. Future의 내부 작동 방식은 오직 사용자가 run을 호출해서 구현이 ExecutorService를 받게 되어야 드러난다. 따라서, 구현이 언젠가는 효과들에 의존하긴 하지만, 사용자는 항상 순수한 인터페이스로 프로그램을 짤 수 있다.
+
+하나의 List\[Int\]를 산출하는 병렬 계산을 나타내는 Par[List[Int]]를 결과가 정렬된 Par[List[Int]]로 변환한다고 하자.
+
+```
+def sortPar(parList: Par[List[Int]]): Par[List[Int]]
+```
+
+물론 Par에 run을 적용하고, 결과 목록을 정렬하고 정렬된 목록을 unit을 이용해서 다시 Par로 꾸릴 수 있다. 하지만 우리는 run의 호출을 피하고 map2를 이용해서(unit 이외에 Par 값을 조작할 수 있는 조합기는 map2뿐) 목록을 정렬할 것이다.
+
+```
+def sortPar(parList: Par[List[Int]]): Par[List[Int]] =
+  map2(parList, unit(()))((a, _) => a.sorted)
+```
+
+그리 어렵지 않게 문제를 해결했다. 이제 Par[List[Int]]에게 목록을 정렬하라고 알려 줄 수 있다. 그런데 이를 좀 더 일반화하는 것도 가능하다. A => B 형식의 임의의 함수를, Par[A]를 받고 Par[B]를 돌려주는 함수로 승급(lift)시킬 수 있다. 다음은 Par에 대해 임의의 함수를 사상하는 map의 정의이다.
+
+```
+def map[A, B](pa: Par[A])(f: A => B): Par[B] =
+  map2(pa, unit(()))((a, _) => f(a))
+```
+
+예를 들어, 이제 sortPar는 그냥 다음과 같이 정의하면 된다.
+
+```
+def sortPar(parList: Par[List[Int]]) = map(parList)(_.sorted)
+```
+
+map2가 둘째 인수를 그냥 무시하게 만들기 위해 둘째 인수에 무의미한 값 unit(()) 을 전달하는 것은 속임수가 아니다. map2를 이용해서 map을 구현할 있지만 그 반대로는 불가능하다는 사실은 map2가 map보다 더 강력함을 보여줄 뿐이다.
+
+이 API로 하나의 목록에 map을 병렬로 적용할 수 있을까? 그럼 map2처럼 두 개의 병렬 계산을 결합하는 것이 아니라 N개의 병렬 계산을 결합하는 함수를 만들어 보자. 이름은 parMap이라 하겠다. 이 함수를 다음과 같이 표현할 수 있다.
+
+```
+def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]]
+```
+
+parMap을 그냥 새로운 수단으로서 작성할 수도 있었다. Par[A]는 ExecutorService => Future[A]의 별칭일 뿐임을 기억하기 바란다.
+
+어떠한 연산을 새로운 기본수단으로서 구현하는 것이 잘못된 일은 아니다. 경우에 따라서는, 다루고자 하는 자료 형식의 바탕 표현에 관한 어떤 가정을 두면 연산을 좀 더 효율적으로 구현할 수 있다. 그러나 지금 우리의 관심은 기존의 API로 표현할 수 있는 연산들을 살펴보고, 지금까지 정의한 여러 연산들 사이의 관계를 파악하는 데 있다.
+
+그럼 이 parMap을 기존 조합기들을 이용해서 어느 정도나 구현할 수 있는지 살펴보자.
+
+```
+def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]] = {
+  val fbs: List[Par[B]] = ps.map(asyncF(f))
+}
+
+// 참고. 임의의 함수 A => B를 그 결과가 비동기적으로 평가되는 함수로 변환하는 함수
+def asyncF[A, B](f: A => B): A => Par[B] = a => lazyUnit(f(a))
+```
+
+asyncF가 병렬 계산 하나를 분기(forking)해서 결과를 산출함으로써 A => B를 A => Par[B]로 변환함을 기억할 것이다. 이를 이용하면 N개의 병렬 계산을 수월하게 분기시킬 수 있다. 그런데 그 계산들의 결과를 취합할 방법이 필요하다. List[Par[B]]를 parMap의 반환 형식이 요구하는 Par[List[B]]로 변환하는 수단이 필요함을 알 수 있다. sequence라는 새로운 함수를 정의하고, parMap의 구현을 완성시켜보자.
+
+```
+def sequence[A](as: List[Par[A]]): Par[List[A]]
+
+def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]] = fork {
+  val fbs: List[Par[B]] = ps.map(asyncF(f))
+  sequence(fbs)
+}
+```
+
+구현을 fork 호출 하나로 감쌌다. 이 구현에서 parMap은 입력이 거대한 목록이라고 해도 즉시 반환된다. 이후에 run을 호출하면 하나의 비동기 계산이 분기되며, 그 계산은 N개의 병렬 계산을 띄우고 그 계산들이 끝나길 기다렸다가 결과들을 하나의 목록으로 취합한다.
+
+---
+
+# 4. API의 대수(algebra)
+일단 원하는 연산의 서명만 작성 한 후 \"그 형식을 따라가다 보면\" 구현에 도달하는 경우가 많다. 이는 대수 방정식을 단순화할 때 하는 추론과 비슷한 자연스러운 추론 방식이다. API를 하나의 **대수**(algebra), 즉 **법칙** 이라고 간주하고 그 대수에 정의된 규칙에 따라 형식적으로 기호를 조작하면서 문제를 풀어나가면 된다.
+
+설계상의 다른 선택들과 마찬가지로, 법칙의 선택에는 **결과**가 따른다. 법칙을 선택하면 연산에 부여할 수 있는 의미에 제약이 생기고, 선택 가능한 구현 방식이 결정되며, 참일 수 있는 다른 속성들에도 영향이 미친다.
+
+```
+map(unit(1))(_ + 1) == unit(2)
+```
+
+이 테스트 코드는 unit(1)에 _ + 1 함수르 사상한 것이 어떤 의미로는 unit(2)와 동등함을 의미한다. 어떤 의미에서 동등할까? 일단 지금은 **임의의 유효한** ExecutorService에 대해 두 Par 객체의 Future 결과가 서로 같다면 그 두 Par 객체가 동등하다고 말하기로 하자.
+
+어떤 ExecutorService에 대해 이 법칙이 성립하는지는 다음과 같은 함수로 점검할 수 있다.
+
+```
+def equal[A](e: ExecutorService)(p: Par[A], p2: Par[A]): Boolean =
+  p(e).get == p2(e).get
+```
+
+법칙과 함수는 공통점이 아주 많다. 함수를 일반화할 수 있듯이, 법칙도 일반화할 수 있다. 앞의 법칙을 다음과 같이 일반화할 수 있다.
+
+```
+map(unit(x))(f) == unit(f(x))
+```
+
+이는 이 법칙이 1과 _ + 1 함수 뿐만 아니라 **임의의**(any) x와 f에 대해 성립함을 의미한다. 앞서 언급했듯 이는 구현에 제약을 가하는데, unit을 구현할 때 주어진 입력을 조사해서 그 값이 1이면 병렬 계산의 결과로 42를 산출하도록 구현할 수는 없다. unit은 자신이 받은 것을 넘겨주기만 해야 하고, ExecutorService도 마찬가지이다.
+
+어떤 함수를 정의할 때 그보다 더 간단한 함수들, 즉 한 가지 일만 하는 함수들을 이용해서 정의하려는 것과 아주 비슷하게, **어떤 법칙을 정의할 때에는 한 가지 사실만 말하는 더 간단한 법칙들을 이용해서 정의할 수 있다.** 앞에서 이 법칙이 **임의의** x와 f에 대해 성립했으면 한다고 말했다. f를 항등 함수(identity function)로 치환하면 다음과 같이 훨씬 더 간단한 법칙이 나온다.
+
+```
+map(unit(x))(f) == unit(f(x))   // 초기 법칙
+map(unit(x))(id) == unit(id(x)) // f를 항등 함수로 치환
+map(unit(x))(id) == unit(x)     // 단순화
+map(y)(id) == y                 // 양변에서 unit(x)를 y로 치환
+```
+
+돌이켜보면 unit을 사용한 것은 군더더기였다. map은 단지 함수 f를 y의 결과에 적용할 뿐이다. 그리고 f가 id라면 y에 아무런 영향도 미치지 않는다. 그리고 map(y)(id) == y 라고 할 때 반대 방향의 치환들을 통해서 원래의 좀 더 복잡한 법칙으로도 돌아갈 수 있다. 논리적으로, 이러한 자유도는 map이 주어진 함수에 따라 다른 방식으로 행동하지 않기 때문에 생긴 것이다. 즉, 만일 map(y)(id) == y 라면 반드시 map(unit(x))(f) == unit(f(x)) 도 참이어야 한다.
+
+---
+
+# 5. 조합기들을 가장 일반적인 형태로 다듬기
+함수적 설계는 반복적인 과정이다. API의 명세를 만들고 적어도 하나의 원형(prototype) 구현을 작성했다면, 그것을 현실적인 시나리오들에 사용해봐야 한다. 그런데 필요한 조합기를 바로 구현하는 것보다는, 그 조합기를 **가장 일반적인 형태** 로 정련할 수 있는지 살펴보는 것이 바람직하다. 그러면 새 조합기를 필요한 것이 아닌 좀 더 일반적인 조합기의 특별한 경우가 필요했던 것일 뿐임을 깨닫게 될 수도 있기 때문이다.
+
+그럼 이에 관한 예로, 두 분기 계산 중 하나를 초기 계산의 결과에 기초해서 선택하는 함수가 필요하다고 하자.
+
+```
+def choice[A](cond: Par[Boolean]])(t: Par[A], f: Par[A]): Par[A] =
+  es =>
+    if (run(es)(cond).get) t(es) // cond의 결과가 나올 때까지 차단됨
+    else f(es)
+```
+
+이 함수는 만일 cond의 결과가 true이면 t를 사용해서 계산을 진행하고 cond의 결과가 false이면 f를 사용해서 계산을 진행한다. 이를, cond의 결과가 나올때까지 실행을 차단하고 그 결과를 이용해서 t나 f의 실행을 결정하는 식으로 구현할 수도 있다.
+
+이 조합기는 cond를 실행하고, 결과가 나오면 t나 f 중 하나를 실행한다. 여기서 Boolean을 사용하는 것과, **두 병렬 계산** t와 f 중 하나를 선택한다는 사실은 다소 자의적이다. 어떤 조건에 기초해서 두 병렬 계산 중 하나를 선택하는 것이 유용하다면, N개의 계산 중 하나를 선택하는 것도 당연히 유용할 것이다.
+
+```
+def choicdN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] =
+  es => {
+    val ind = run(es)(n).get
+    run(es)(choices(ind))
+  }
+```
+
+이 choiceN은 n을 실행하고, 그 결과에 기초해서 choices의 병렬 계산 중 하나를 선택한다. 하지만 choiceN에도 여전히 자의적인 구석이 남아 있다. List를 사용하는 것은 필요 이상으로 구체적인것 같다. 이 조합기는 컨테이너의 구체적인 종류에 구애받을 필요가 없다. 예를 들어, 계산들의 목록 대신 계산들의 Map이 있다면 어떨까?
+
+```
+def choiceMap[K, V](key: Par[K])(choices: Map[K, Par[V]]): Par[V]
+  es => {
+    val k = run(es)(key).get
+    run(es)(choices(k))
+  }
+```
+
+List와 마찬가지로, 가능한 선택들의 집합을 이처럼 Map으로 표현하는 것도 필요 이상으로 구체적이다. choiceMap의 구현을 살펴보면 Map의 API는 그리 많이 사용하지 않음을 알 수 있다. Map[A, Par[B]]는 단지 A => Par[B] 형식의 함수를 제공하는 데 쓰일 뿐이다. 이 점을 염두에 두고 choice와 choiceN을 다시 보면, choice에서는 한 쌍의 인수들이 그냥 Boolean => Par[A] 형식의 함수로 쓰이고 choicdN에서는 목록이 Int => Par[A] 형식의 함수로 쓰일 뿐이다.
+
+이를 모두 통합하는 좀 더 일반적인 서명을 만든다면 다음과 같다.
+
+```
+def chooser[A, B](pa: Par[A])(choices: A => Par[B]): Par[B]
+  es => {
+    val k = run(es)(p).get
+    run(es)(choices(k))
+  }
+```
+
+함수들을 이런 식으로 일반화할 때에는, 일반화의 결과로 나온 함수를 비판적으로 살펴보기 바란다. chooser는 일단 실행되면 첫 계산을 실행하고 그 결과에 따라 둘째 계산을 결정하는 하나의 병렬 계산이다. 그런데 첫 계산의 결과가 준비되기 전에 둘째 계산이 반드시 존재해야 할 필요는 없다. List나 Map 같은 컨테이너에 저장해 둘 필요가 없는 것이다. 첫 계산의 결과를 이용해서 둘째 계산을 즉석에서 생성할 수도 있다. 함수적 라이브러리에 흔히 등장하는 그러한 함수를 흔히 bind나 flatMap이라고 부른다.
+
+```
+def flatMap[A,B](p: Par[A])(choices: A => Par[B]): Par[B] =
+  es => {
+    val k = run(es)(p).get
+    run(es)(choices(k))
+  }
+```
+
+flatMap이라는 이름은 이 연산을 두 단계를 분해할 수 있음을 암시한다. 첫 단계는 Par[A]에 f: A => Par[B]를 **사상** 해서 Par[Par[B]]를 생성하는 것이고, 둘째 단계는 Par[Par[B]]를 **평평하게 만들어서**(flattening) Par[B]를 만드는 것이다. **임의의** x에 대해 Par[Par[X]]를 Par[X]로 변환하는 **더욱 간단한** 조합기를 추가하기만 하면 된다는 점을 암시해 준다. 그런 조합기를 join이라고 부르자.
+
+```
+def join[A](a: Par[Par[A]]): Par[A] =
+  es => run(es)(run(es)(a).get())
+```
+
+함수의 이름을 join이라고 한 것은, 개념적으로 이 함수는 일단 실행되면 내부 계산을 실행하고, 그 계산이 완료되길 기다리고(Thread.join과 비슷하게), 그 결과를 돌려주기 때문이다.
+
+> **대수의 표현력과 한계 인식**
+> 함수형 프로그래밍을 계속 연습하다 보면 **대수로부터 표현할 수 있는 함수**들과 그 대수의 한계들을 인식하는 능력이 생긴다. 한 예로, 앞의 예제에서 choice 같은 함수를 map과 map2, unit 만으로 순수하게 표현할 수는 없다는 점을 처음부터 명백하게 인식하지는 못했을 것이다. 또한 choice가 단지 flatMap의 특수 경우라는 점도 명백하지 않았을 것이다. 시간이 지나면 이런 부분을 좀 더 일찍 인식하게 될 것이고, 필요한 조합기를 표현할 수 있도록 대수를 수정하는 방법 역시 좀 빨리 찾아내게 될 것이다. 이러한 능력은 모든 API 설계 작업에 도움이 된다.<br/>
+> 실무의 관점에서 볼 때, API를 최소한의 기본 함수들로 줄이는 능력은 대단히 유용하다. parMap을 기존의 조합기들을 이용해서 구현할 때 언급했듯이, 기본적인 조합기들은 다소 까다로운 논리를 캡슐화하고 있는 경우가 많으며, 그런 것들을 재사용하면 까다로운 논리를 되풀이해서 다룰 필요가 없다.
+
 
 # Reference
 - [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala)
