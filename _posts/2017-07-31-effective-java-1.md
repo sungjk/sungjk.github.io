@@ -5,6 +5,7 @@ title: Effective Java(1)
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java의 2장(객체의 생성과 삭제)을 정리한 글입니다.
+next_url: /2017/08/06/effective-java-2.html
 publish: true
 ---
 

@@ -5,6 +5,7 @@ title: Effective Java(4-2)
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java의 5장(제네릭)을 정리한 글입니다.
+next_url: /2017/08/06/effective-java-5.html
 publish: true
 ---
 

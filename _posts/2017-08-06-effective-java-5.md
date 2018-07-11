@@ -5,6 +5,7 @@ title: Effective Java(5)
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java의 6장(열거형(enum)과 어노테이션)을 정리한 글입니다.
+next_url: /2017/08/06/effective-java-6.html
 publish: true
 ---
 
@@ -52,33 +53,33 @@ enum 자료형에 메서드나 필드를 추가하는 이유 중 하나는 상�
 ```java
 // 데이터와 연산을 구비한 enum 자료형
 public enum Planet {
-	MERCURY (3.302e+23, 2.439e6),
-	VENUS   (4.869e+24, 6.052e6),
-	EARTH   (5.975e+24, 6.378e6),
-	MARS    (6.419e+23, 3.393e6),
-	JUPITER (1.899e+27, 7.149e7),
-	SATURN  (5.685e+26, 6.027e7),
-	URANUS  (8.683e+25, 2.556e7),
-	NEPTUNE (1.024e+26, 2.477e7);
+  MERCURY (3.302e+23, 2.439e6),
+  VENUS   (4.869e+24, 6.052e6),
+  EARTH   (5.975e+24, 6.378e6),
+  MARS    (6.419e+23, 3.393e6),
+  JUPITER (1.899e+27, 7.149e7),
+  SATURN  (5.685e+26, 6.027e7),
+  URANUS  (8.683e+25, 2.556e7),
+  NEPTUNE (1.024e+26, 2.477e7);
 
-	private final double mass;
-	private final double radius;
-	private final double surfaceGravity;
-	private static final double G = 6.67300E-11;
+  private final double mass;
+  private final double radius;
+  private final double surfaceGravity;
+  private static final double G = 6.67300E-11;
 
-	Planet(double mass, double radius) {
-		this.mass = mass;
-		this.radius = radius;
-		surfaceGravity = G * mass / (radius * radius);
-	}
+  Planet(double mass, double radius) {
+    this.mass = mass;
+    this.radius = radius;
+    surfaceGravity = G * mass / (radius * radius);
+  }
 
-	public double mass() { return mass; }
-	public double radius() { return radius; }
-	public double surfaceGravity() { return surfaceGravity; }
+  public double mass() { return mass; }
+  public double radius() { return radius; }
+  public double surfaceGravity() { return surfaceGravity; }
 
-	public double surfaceWeight(double mass) {
-		return mass * surfaceGravity;
-	}
+  public double surfaceWeight(double mass) {
+    return mass * surfaceGravity;
+  }
 }
 ```
 
@@ -88,12 +89,12 @@ Planet enum 자료형은 아주 단순하지만 놀랄 만큼 강력하다. 아�
 
 ```java
 public class WeightTable {
-	public static void main(String[] args) {
-		double earthWeight = Double.parseDouble(args[0]);
-		double mass = earthWeight / Planet.EARTH.surfaceGravity();
-		for (Planet p : Planet.values())
-			System.out.printf("Weight on %s is %f%n", p, p.surfaceWeight(mass));
-	}
+  public static void main(String[] args) {
+    double earthWeight = Double.parseDouble(args[0]);
+    double mass = earthWeight / Planet.EARTH.surfaceGravity();
+    for (Planet p : Planet.values())
+      System.out.printf("Weight on %s is %f%n", p, p.surfaceWeight(mass));
+  }
 }
 ```
 
@@ -108,18 +109,18 @@ public class WeightTable {
 ```java
 // 자기 값에 따라 분기하는 enum 자료형
 public enum Operation {
-	PLUS, MINUS, TIMES, DIVIDE;
+  PLUS, MINUS, TIMES, DIVIDE;
 
-	// 'this' 상수가 나타내는 산술 연산 실행
-	double apply(double x, double y) {
-		switch(this) {
-			case PLUS:		return x + y;
-			case MINUS:		return x - y;
-			case TIMES:		return x * y;
-			case DIVIDE:	return x / y;
-		}
-		throw new AssertionError("Unknown op: " + this);
-	}
+  // 'this' 상수가 나타내는 산술 연산 실행
+  double apply(double x, double y) {
+    switch(this) {
+      case PLUS: return x + y;
+      case MINUS: return x - y;
+      case TIMES: return x * y;
+      case DIVIDE: return x / y;
+    }
+    throw new AssertionError("Unknown op: " + this);
+  }
 }
 ```
 
@@ -129,12 +130,12 @@ public enum Operation {
 
 ```java
 public enum Operation {
-	PLUS		{ double apply(double x, double y) { return x + y; }},
-	MINUS		{ double apply(double x, double y) { return x - y; }},
-	TIMES		{ double apply(double x, double y) { return x * y; }},
-	DIVIDE	{ double apply(double x, double y) { return x / y; }};
+  PLUS   { double apply(double x, double y) { return x + y; }},
+  MINUS  { double apply(double x, double y) { return x - y; }},
+  TIMES  { double apply(double x, double y) { return x * y; }},
+  DIVIDE { double apply(double x, double y) { return x / y; }};
 
-	abstract double apply(double x, double y);
+  abstract double apply(double x, double y);
 }
 ```
 
@@ -146,13 +147,13 @@ enum 자료형에는 자동 생성된 valueOf(String) 메서드가 있는데, �
 // enum 자료형에 대한 fromString 메서드 구현
 private static final Map<String, Operation> stringToEnum = new HashMap<String, Operation>();
 static { // 상수 이름을 실제 상수로 대응시키는 맵 초기화
-	for (Operation op : values())
-		stringToEnum.put(op.toString(), op);
+  for (Operation op : values())
+    stringToEnum.put(op.toString(), op);
 }
 
 // 문자열이 주어지면 그에 대한 Operation 상수 반환. 잘못된 문자열이면 null 반환
 public static Operation fromString(String symbol) {
-	return stringToEnum.get(symbol);
+  return stringToEnum.get(symbol);
 }
 ```
 
@@ -163,24 +164,24 @@ Operation 상수를 stringToEnum 맵에 넣는 것은 상수가 만들어진 다
 ```java
 // enum 상수에 따라 분기하는 switch 문을 이용해서 코드 공유 - 좋은 방법인가?
 enum PayrollDay {
-	MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
-	private static final int HOURS_PER_SHIFT = 8;
+  MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
+  private static final int HOURS_PER_SHIFT = 8;
 
-	double pay(double hoursWorked, double payRate) {
-		double basePay = hoursWorked * payRate;
+  double pay(double hoursWorked, double payRate) {
+    double basePay = hoursWorked * payRate;
 
-		double overtimePay;	// 초과근무수당 계산
-		switch(this) {
-			case SATURDAY: case SUNDAY:
-				overtimePay = hoursWorked * payRate / 2;
-				break;
-			default: // Weekdays
-				overtimePay = hoursWorked <= HOURS_PER_SHIFT ?
-					0 : (hoursWorked - HOURS_PER_SHIFT) * payRate / 2;
-		}
+    double overtimePay;	// 초과근무수당 계산
+    switch(this) {
+      case SATURDAY: case SUNDAY:
+        overtimePay = hoursWorked * payRate / 2;
+        break;
+      default: // Weekdays
+        overtimePay = hoursWorked <= HOURS_PER_SHIFT ?
+          0 : (hoursWorked - HOURS_PER_SHIFT) * payRate / 2;
+    }
 
-		return basePay + overtimePay;
-	}
+    return basePay + overtimePay;
+  }
 }
 ```
 
@@ -194,40 +195,40 @@ enum PayrollDay {
 
 ```java
 enum PayrollDay {
-	MONDAY(PayType.WEEKDAY), TUESDAY(PayType.WEEKDAY), WEDNESDAY(PayType.WEEKDAY),
-	THURSDAY(PayType.WEEKDAY), FRIDAY(PayType.WEEKDAY), SATURDAY(PayType.WEEKEND),
-	SUNDAY(PayType.WEEKEND);
+  MONDAY(PayType.WEEKDAY), TUESDAY(PayType.WEEKDAY), WEDNESDAY(PayType.WEEKDAY),
+  THURSDAY(PayType.WEEKDAY), FRIDAY(PayType.WEEKDAY), SATURDAY(PayType.WEEKEND),
+  SUNDAY(PayType.WEEKEND);
 
-	private final PayType payType;
-	PayrollDay(PayType payType) { this.payType = payType; }
+  private final PayType payType;
+  PayrollDay(PayType payType) { this.payType = payType; }
 
-	double pay(double hoursWorked, double payRate) {
-		return payType.pay(hoursWorked, payRate);
-	}
+  double pay(double hoursWorked, double payRate) {
+    return payType.pay(hoursWorked, payRate);
+  }
 
 	// 정책 enum 자료형
-	private enum PayType {
+  private enum PayType {
 		WEEKDAY {
-			double overtimePay(double hours, double payRate) {
-				return hours <= HOURS_PER_SHIFT ? 0 :
-					(hours - HOURS_PER_SHIFT) * payRate / 2;
-			}
-		},
-		WEEKEND {
-			double overtimePay(double hours, double payRate) {
-				return hours * payRate / 2;
-			}
-		};
+      double overtimePay(double hours, double payRate) {
+        return hours <= HOURS_PER_SHIFT ? 0 :
+          (hours - HOURS_PER_SHIFT) * payRate / 2;
+      }
+    },
+    WEEKEND {
+      double overtimePay(double hours, double payRate) {
+        return hours * payRate / 2;
+      }
+    };
 
-		private static final int HOURS_PER_SHIFT = *;
+    private static final int HOURS_PER_SHIFT = *;
 
-		abstract double overtimePay(double hrs, double payRate);
+    abstract double overtimePay(double hrs, double payRate);
 
 		double pay(double hoursWorked, double payRate) {
-			double basePay = hoursWorked * payRate;
-			return basePay + overtimePay(hoursWorked, payRate);
-		}
-	}
+      double basePay = hoursWorked * payRate;
+      return basePay + overtimePay(hoursWorked, payRate);
+    }
+  }
 }
 ```
 
@@ -236,13 +237,13 @@ enum에서 switch 문을 사용해 상수별로 다르게 동작하는 코드를
 ```java
 // 기존 enum 자료형에 없는 메서드를 switch 문을 사용해 구현한 사례
 public static Operation inverse(Operation op) {
-	switch(op) {
-		case PLUS:		return Operation.MINUS;
-		case MINUS:		return Operation.PLUS;
-		case TIMES:		return Operation.TIMES;
-		case DIVIDE:	return Operation.DIVIDE;
-		default: throw new AssertionError("Unknown op: " + op);
-	}
+  switch(op) {
+    case PLUS:  return Operation.MINUS;
+    case MINUS:  return Operation.PLUS;
+    case TIMES:  return Operation.TIMES;
+    case DIVIDE:  return Operation.DIVIDE;
+    default: throw new AssertionError("Unknown op: " + op);
+  }
 }
 ```
 
@@ -264,10 +265,10 @@ public static Operation inverse(Operation op) {
 ```java
 // ordinal을 남용한 사례
 public enum Ensemble {
-	SOLO, DUET, TRIO, QUARTET, QUINTET,
-	SEXTET, SEPTET, OCTET, NONET, DECTET;
+  SOLO, DUET, TRIO, QUARTET, QUINTET,
+  SEXTET, SEPTET, OCTET, NONET, DECTET;
 
-	public int numberOfMusicians() { return ordinal() + 1; }
+  public int numberOfMusicians() { return ordinal() + 1; }
 }
 ```
 
@@ -277,15 +278,15 @@ public enum Ensemble {
 
 다행히도 이 문제는 간단히 해결할 수 있다. **enum 상수에 연계되는 값을 ordinal을 사용해 표현하지 말라는 것이다. 그런 값이 필요하다면 그 대신 객체 필드(instance field)에 저장해야 한다.**
 
-```
+```java
 public enum Ensemble {
-	SOLO(1), DUET(2), TRIO(3), QUARTET(4), QUINTET(5),
-	SEXTET(6), SEPTET(7), OCTET(8), DOUBLE_QUARTET(8),
-	NONET(9), DECTET(10), TRIPLE_QUARTET(12);
+  SOLO(1), DUET(2), TRIO(3), QUARTET(4), QUINTET(5),
+  SEXTET(6), SEPTET(7), OCTET(8), DOUBLE_QUARTET(8),
+  NONET(9), DECTET(10), TRIPLE_QUARTET(12);
 
-	private final int numberOfMusicians;
-	Ensemble(int size) { this.numberOfMusicians = size; }
-	public int numberOfMusicians() { return numberOfMusicians; }
+  private final int numberOfMusicians;
+  Ensemble(int size) { this.numberOfMusicians = size; }
+  public int numberOfMusicians() { return numberOfMusicians; }
 }
 ```
 
@@ -297,13 +298,13 @@ public enum Ensemble {
 ```java
 // 비트 필드 열거형 상수
 public class Text {
-	public static final int STYLE_BOLD = 1 << 0; // 1
-	public static final int STYLE_ITALIC = 1 << 1; // 2
-	public static final int STYLE_UNDERLINE = 1 << 2; // 4
-	public static final int STYLE_STRIKETHROUGH = 1 << 3; // 8
+  public static final int STYLE_BOLD = 1 << 0; // 1
+  public static final int STYLE_ITALIC = 1 << 1; // 2
+  public static final int STYLE_UNDERLINE = 1 << 2; // 4
+  public static final int STYLE_STRIKETHROUGH = 1 << 3; // 8
 
-	// 이 메서드의 인자는 STYLE_ 상수를 비트별(bitwise) OR 한 값이거나 0.
-	public void applyStyles(int styles) { ... }
+  // 이 메서드의 인자는 STYLE_ 상수를 비트별(bitwise) OR 한 값이거나 0.
+  public void applyStyles(int styles) { ... }
 }
 ```
 
@@ -322,10 +323,10 @@ text.applyStyles(STYLE_BOLD | STYLE_ITALIC);
 ```java
 // EnumSet
 public class Text {
-	public enum Style { BOLD, ITALIC, UNDERLINE, STRIKETHROUGH }
+  public enum Style { BOLD, ITALIC, UNDERLINE, STRIKETHROUGH }
 
-	// 어떤 Set 객체도 인자로 전달할 수 있으나, EnumSet이 최선
-	public void applyStyles(Set<Style> styles) { ... }
+  // 어떤 Set 객체도 인자로 전달할 수 있으나, EnumSet이 최선
+  public void applyStyles(Set<Style> styles) { ... }
 }
 ```
 
@@ -347,20 +348,20 @@ applyStyles 메서드가 EnumSet\<Style\>이 아니라 Set\<Style\> 형의 인�
 
 ```java
 class Herb {
-	enum Type { ANNUAL, PERENNIAL, BIENNIAL }
+  enum Type { ANNUAL, PERENNIAL, BIENNIAL }
 
-	final String name;
-	final Type type;
+  final String name;
+  final Type type;
 
-	Herb(String name, Type type) {
-		this.name = name;
-		this.type = type;
-	}
+  Herb(String name, Type type) {
+    this.name = name;
+    this.type = type;
+  }
 
-	@Override
-	public String toString() {
-		return name;
-	}
+  @Override
+  public String toString() {
+    return name;
+  }
 }
 ```
 
@@ -371,16 +372,16 @@ class Herb {
 Herb[] garden = ...;
 
 Set<Herb>[] herbsByType = // Index by Herb.Type.ordinal()
-	(Set<Herb>[]) new Set[Herb.Type.values().length];
+  (Set<Herb>[]) new Set[Herb.Type.values().length];
 for (int i = 0; i < herbsByType.length; i++)
-	herbsByType[i] = new HashSet<Herb>();
+  herbsByType[i] = new HashSet<Herb>();
 
 for (Herb h : garden)
-	herbsByType[h.type.ordinal()].add(h);
+  herbsByType[h.type.ordinal()].add(h);
 
 // 결과 출력
 for (int i = 0; i < herbsByType.length; i++) {
-	System.out.printf("%s: %s%n", Herb.Type.values()[i], herbsByType[i]);
+  System.out.printf("%s: %s%n", Herb.Type.values()[i], herbsByType[i]);
 }
 ```
 
@@ -391,11 +392,11 @@ for (int i = 0; i < herbsByType.length; i++) {
 ```java
 // EnumMap을 사용해 enum 상수별 데이터를 저장하는 프로그램
 Map<Herb.Type, Set<Herb>> herbsByType =
-	new EnumMap<Herb.Type, Set<Herb>>(Herb.Type.class);
+  new EnumMap<Herb.Type, Set<Herb>>(Herb.Type.class);
 for (Herb.Type t : Herb.Type.values())
-	herbsByType.put(t, new HashSet<Herb>());
+  herbsByType.put(t, new HashSet<Herb>());
 for (Herb h : garden)
-	herbsByType.get(h.type).add(h);
+  herbsByType.get(h.type).add(h);
 System.out.println(herbsByType);
 ```
 
@@ -406,25 +407,25 @@ ordinal 값을 첨자로 사용하는 배열을 사용해서 두 개 enum 상수
 ```java
 // ordinal() 값을 배열의 배열 첨자로 사용
 public enum Phase {
-	SOLID, LIQUID, GAS;
+  SOLID, LIQUID, GAS;
 
-	public enum Transition {
-		MELT, FREEZE, BOIL, CONDENSE, SUBLIME, DEPOSIT;
+  public enum Transition {
+    MELT, FREEZE, BOIL, CONDENSE, SUBLIME, DEPOSIT;
 
-		// 아래 배열의 행은 상전이 이전 상태를 나타내는 enum 상수의 ordinal 값을
-		// 첨자로 사용하고, 열은 상전이 이후 상태를 나타내는 enum 상수의
-		// ordinal 값을 첨자로 사용한다.
-		private static final Transition[][] TRANSITIONS = {
-			{ null, MELT, SUBLIME },
-			{ FREEZE, null, BOIL },
-			{ DEPOSIT, CONDENSE, null }
-		};
+    // 아래 배열의 행은 상전이 이전 상태를 나타내는 enum 상수의 ordinal 값을
+    // 첨자로 사용하고, 열은 상전이 이후 상태를 나타내는 enum 상수의
+    // ordinal 값을 첨자로 사용한다.
+    private static final Transition[][] TRANSITIONS = {
+      { null, MELT, SUBLIME },
+      { FREEZE, null, BOIL },
+      { DEPOSIT, CONDENSE, null }
+    };
 
-		// 특정 상전이 과정을 표현하는 enum 상수를 반환
-		public static Transition from(Phase src, Phase dst) {
-			return TRANSITIONS[src.ordinal()][dst.ordinal()];
-		}
-	}
+    // 특정 상전이 과정을 표현하는 enum 상수를 반환
+    public static Transition from(Phase src, Phase dst) {
+      return TRANSITIONS[src.ordinal()][dst.ordinal()];
+    }
+  }
 }
 ```
 
@@ -435,36 +436,36 @@ EnumMap을 쓰면 훨씬 좋은 프로그램을 만들 수 있다. 안쪽 맵은
 ```java
 // EnumMap을 중첩해서 enum 쌍에 대응되는 데이터를 저장한다.
 public enum Phase {
-	SOLID, LIQUID, GAS;
+  SOLID, LIQUID, GAS;
 
-	public enum Transition {
-		MELT(SOLID, LIQUID), FREEZE(LIQUID, SOLID),
-		BOIL(LIQUID, GAS), CONDENSE(GAS, LIQUID),
-		SUBLIME(SOLID, GAS), DEPOSIT(GAS, SOLID);
+  public enum Transition {
+    MELT(SOLID, LIQUID), FREEZE(LIQUID, SOLID),
+    BOIL(LIQUID, GAS), CONDENSE(GAS, LIQUID),
+    SUBLIME(SOLID, GAS), DEPOSIT(GAS, SOLID);
 
-		private final Phase src;
-		private final Phase dst;
+    private final Phase src;
+    private final Phase dst;
 
-		Transition(Phase src, Phase dst) {
-			this.src = src;
-			this.dst = dst;
-		}
+    Transition(Phase src, Phase dst) {
+      this.src = src;
+      this.dst = dst;
+    }
 
-		// 상전이 맵 초기화
-		private static final Map<Phase, Map<Phase, Transition>> m =
-			new EnumMap<Phase, Map<Phase, Transition>>(Phase.class);
+    // 상전이 맵 초기화
+    private static final Map<Phase, Map<Phase, Transition>> m =
+      new EnumMap<Phase, Map<Phase, Transition>>(Phase.class);
 
-		static {
-			for (Phase p : Phase.values())
-				m.put(p, new EnumMap<Phase, Transition>(Phase.class));
-			for (Transition trans : Transition.values())
-				m.get(trans.src).put(trans.dst, trans);
-		}
+    static {
+      for (Phase p : Phase.values())
+        m.put(p, new EnumMap<Phase, Transition>(Phase.class));
+      for (Transition trans : Transition.values())
+        m.get(trans.src).put(trans.dst, trans);
+    }
 
-		public static Transition from(Phase src, Phase dst) {
-			return m.get(src).get(dst);
-		}
-	}
+    public static Transition from(Phase src, Phase dst) {
+      return m.get(src).get(dst);
+    }
+  }
 }
 ```
 
@@ -487,32 +488,32 @@ EnumMap으로 만든 맵의 맵은 내무적으로는 배열의 배열일 터이
 ```java
 // 인터페이스를 이용해 확장 가능하게 만든 enum 자료형
 public interface Operation {
-	double apply(double x, double y);
+  double apply(double x, double y);
 }
 
 public enum BasicOperation implements Operation {
-	PLUS("+") {
-		public double apply(double x, double y) { return x + y; }
-	},
-	MINUS("-") {
-		public double apply(double x, double y) { return x - y; }
-	},
-	TIMES("*") {
-		public double apply(double x, double y) { return x * y; }
-	},
-	DIVIDE("/") {
-		public double apply(double x, double y) { return x / y; }
-	};
+  PLUS("+") {
+    public double apply(double x, double y) { return x + y; }
+  },
+  MINUS("-") {
+    public double apply(double x, double y) { return x - y; }
+  },
+  TIMES("*") {
+    public double apply(double x, double y) { return x * y; }
+  },
+  DIVIDE("/") {
+    public double apply(double x, double y) { return x / y; }
+  };
 
-	private final String symbol;
+  private final String symbol;
 
-	BasicOperation(String symbol) {
-		this.symbol = symbol;
-	}
+  BasicOperation(String symbol) {
+    this.symbol = symbol;
+  }
 
-	@Override public String toString() {
-		return symbol;
-	}
+  @Override public String toString() {
+    return symbol;
+  }
 }
 ```
 
@@ -521,26 +522,26 @@ BasicOperation은 enum 자료형이라 계승할 수 없지만 Operation은 인�
 ```java
 // 인터페이스를 이용해 기존 enum 자료형을 확장하는 사례
 public enum ExtendedOperation implements Operaiont {
-	EXP("^") {
-		public double apply(double x, double y) {
-			return Math.pow(x, y);
-		}
-	},
-	REMAINDER("%") {
-		public double apply(double x, double y) {
-			return x % y;
-		}
-	};
+  EXP("^") {
+    public double apply(double x, double y) {
+      return Math.pow(x, y);
+    }
+  },
+  REMAINDER("%") {
+    public double apply(double x, double y) {
+      return x % y;
+    }
+  };
 
-	private final String symbol;
+  private final String symbol;
 
-	ExtendedOperation(String symbol) {
-		this.symbol = symbol;
-	}
+  ExtendedOperation(String symbol) {
+    this.symbol = symbol;
+  }
 
-	@Override public String toString() {
-		return symbol;
-	}
+  @Override public String toString() {
+    return symbol;
+  }
 }
 ```
 
@@ -548,15 +549,15 @@ public enum ExtendedOperation implements Operaiont {
 
 ```java
 public static void main(String[] args) {
-	double x = Double.parseDouble(args[0]);
-	double y = Double.parseDouble(args[1]);
-	test(ExtendedOperation.class, x, y);
+  double x = Double.parseDouble(args[0]);
+  double y = Double.parseDouble(args[1]);
+  test(ExtendedOperation.class, x, y);
 }
 
 private static <T extends Enum<T> & Operation> void test(
-		Class<T> opSet, double x, double y) {
-	for (Operation op : opSet.getEnumConstants())
-		System.out.printf("%f %s %f = %f%n", x, op, y, op.apply(x, y));
+    Class<T> opSet, double x, double y) {
+  for (Operation op : opSet.getEnumConstants())
+    System.out.printf("%f %s %f = %f%n", x, op, y, op.apply(x, y));
 }
 ```
 
@@ -566,15 +567,15 @@ private static <T extends Enum<T> & Operation> void test(
 
 ```java
 public static void main(String[] args) {
-	double x = Double.parseDouble(args[0]);
-	double y = Double.parseDouble(args[1]);
-	test(Arrays.asList(ExtendedOperation.values(), x, y));
+  double x = Double.parseDouble(args[0]);
+  double y = Double.parseDouble(args[1]);
+  test(Arrays.asList(ExtendedOperation.values(), x, y));
 }
 
 private static void test(Collection<? extends Operation> opSet,
-		double x, double y) {
-	for (Operation op : opSet)
-		System.out.printf("%f %s %f = %f%n", x, op, y, op.apply(x, y));
+    double x, double y) {
+  for (Operation op : opSet)
+    System.out.printf("%f %s %f = %f%n", x, op, y, op.apply(x, y));
 }
 ```
 
@@ -618,23 +619,23 @@ public @interface Test {
 ```java
 // 버그가 어디 있는지 보이는가?
 public class Bigram {
-	private final Char first;
-	private final Char second;
+  private final Char first;
+  private final Char second;
 
-	public Bigram(char first, char second) {
-		this.first = first;
-		this.second = second;
-	}
-	public boolean equals(Bigram b) {
-		return b.first == first && b.second == second;
-	}
-	public static void main(String[] args) {
-		Set<Bigram> s = new HashSet<Bigram>();
-		for (int i = 0; i < 10; i++)
-			for (char ch = 'a'; ch <= 'z'; ch++)
-				s.add(new Bigram(ch, ch));
-		System.out.printf(s.size());
-	}
+  public Bigram(char first, char second) {
+    this.first = first;
+    this.second = second;
+  }
+  public boolean equals(Bigram b) {
+    return b.first == first && b.second == second;
+  }
+  public static void main(String[] args) {
+    Set<Bigram> s = new HashSet<Bigram>();
+    for (int i = 0; i < 10; i++)
+      for (char ch = 'a'; ch <= 'z'; ch++)
+        s.add(new Bigram(ch, ch));
+    System.out.printf(s.size());
+  }
 }
 ```
 
@@ -645,10 +646,10 @@ Bigram 클래스의 프로그래머는 equals 메서드를 재정의하고자 �
 ```java
 @Override
 public boolean equals(Object o) {
-	if (!(o instanceof Bigram))
-		return false;
-	Bigram b = (Bigram) o;
-	return b.first == first && b.seoncd == second;
+  if (!(o instanceof Bigram))
+    return false;
+  Bigram b = (Bigram) o;
+  return b.first == first && b.seoncd == second;
 }
 ```
 

@@ -5,6 +5,7 @@ title: Effective Java(2)
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java의 3장(모든 객체의 공통 메서드)을 정리한 글입니다.
+next_url: /2017/08/06/effective-java-3.html
 publish: true
 ---
 

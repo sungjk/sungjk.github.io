@@ -4,6 +4,7 @@ title: Clean Code
 author: 김성중
 author-email: ajax0615@gmail.com
 description: 로버트 C. 마틴의 Clean Code를 읽고 정리한 글입니다.
+next_url: /2017/07/31/effective-java-1.html
 publish: true
 ---
 
