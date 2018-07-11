@@ -5,6 +5,7 @@ title: Functional Programming in Scala 5
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Functional Programming in Scala의 6장(순수 함수적 상태)을 정리한 글입니다.
+next_url: /2018/05/16/functional-scala-6.html
 publish: true
 ---
 

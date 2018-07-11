@@ -542,13 +542,30 @@ figcaption {
 }
 
 /* post-footer back btn */
+.next-btn {
+  margin: 70px auto 0px auto;
+  text-align: center;
+}
+.next-btn a {
+  padding: 20px 70px;
+  display: inline-block;
+  border: 1px solid $btn-border-color;
+  border-radius: 3px;
+  color: $text-color;
+}
+.next-btn a:hover {
+  background-color: $btn-default-active-bg-color;
+  border-color: $btn-border-color;
+}
+
+/* post-footer back btn */
 
 .back-btn {
-  margin: 80px auto;
+  margin: 40px auto 70px auto;
   text-align: center;
 }
 .back-btn a {
-  padding: 20px 80px;
+  padding: 20px 70px;
   display: inline-block;
   border: 1px solid $btn-border-color;
   border-radius: 3px;

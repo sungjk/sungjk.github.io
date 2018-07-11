@@ -5,6 +5,7 @@ title: Functional Programming in Scala 3
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Functional Programming in Scala의 4장(예외를 이용하지 않은 오류 처리)을 정리한 글입니다.
+next_url: /2017/12/18/functional-scala-4.html
 publish: true
 ---
 

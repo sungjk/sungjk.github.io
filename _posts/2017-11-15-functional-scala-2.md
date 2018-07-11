@@ -5,6 +5,7 @@ title: Functional Programming in Scala 2
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Functional Programming in Scala의 3장(함수적 자료구조)을 정리한 글입니다.
+next_url: /2017/11/25/functional-scala-3.html
 publish: true
 ---
 

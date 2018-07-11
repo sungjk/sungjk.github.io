@@ -5,6 +5,7 @@ title: Functional Programming in Scala 1
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Functional Programming in Scala의 1장(함수형 프로그래밍이란 무엇인가?)을 정리한 글입니다.
+next_url: /2017/11/15/functional-scala-2.html
 publish: true
 ---
 

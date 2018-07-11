@@ -5,6 +5,7 @@ title: Functional Programming in Scala 4
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Functional Programming in Scala의 5장(엄격성과 나태성)을 정리한 글입니다.
+next_url: /2018/01/06/functional-scala-5.html
 publish: true
 ---
 
