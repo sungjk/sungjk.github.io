@@ -5,6 +5,7 @@ title: Effective Java(6)
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java의 7장(메서드)을 정리한 글입니다.
+next_url: /2017/08/06/effective-java-7.html
 publish: true
 ---
 
