@@ -5,6 +5,7 @@ title: Effective Java(7)
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java의 8장(일반적인 프로그래밍 원칙들)을 정리한 글입니다.
+next_url: /2017/08/06/effective-java-8.html
 publish: true
 ---
 
