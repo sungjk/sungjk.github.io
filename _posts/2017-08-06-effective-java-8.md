@@ -5,6 +5,7 @@ title: Effective Java(8)
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java의 9장(예외)을 정리한 글입니다.
+next_url: /2017/08/06/effective-java-9.html
 publish: true
 ---
 
