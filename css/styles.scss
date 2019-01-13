@@ -591,19 +591,23 @@ figcaption {
 .about ul a {
   padding-right: 2px;
 }
-.author {
+.author, .skills, .education, .experience, .projects {
   overflow: auto;
-  padding: 30px 0;
-  border-bottom: 1px solid $divider-color;
+  padding: 20px 0;
+  // border-bottom: 1px solid $divider-color;
 }
 .author-title {
   /*margin-top: 100px;*/
 }
 .author-info {
   margin-top: 3px;
-  margin-left: 20%;
+  // margin-left: 20%;
 }
-.member-info {
+.author .description {
+  line-height: 1.6em;
+}
+.highlight {
+  font-weight: bold;
 }
 .sns a {
   margin: -5px 2px 0 0;
@@ -622,6 +626,20 @@ figcaption {
   border-radius: 50%;
   float: left;
 }
+.item {
+  margin: 10px 0;
+}
+.item-title {
+  width: 23%;
+  padding: 0;
+  float: left;
+  font-weight: bold;
+  color: #939a9f;
+}
+.item-body {
+  margin-left: 23%;
+}
+
 .twitter-icon {
   display: inline-block;
   background-image: url(/images/twitter-icon.png);
@@ -780,6 +798,13 @@ figcaption {
   }
   .pagination .next {
     float: right;
+  }
+  .item-title {
+    float: inherit;
+    width: auto;
+  }
+  .item-body {
+    margin-left: 0;
   }
 }
 
