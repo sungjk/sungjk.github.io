@@ -16,13 +16,10 @@
 }
 
 .hljs {
-  // background: $grey-highlight-color;
-
   display: block;
   overflow-x: auto;
   overflow-x: overlay;
   padding: 0.5em;
-  // background: #24344f;
   background: $grey-9;
   -webkit-text-size-adjust: none;
   word-wrap: break-word;
@@ -795,6 +792,12 @@ figcaption {
   }
   .posts .portrait {
     display: none;
+  }
+  .post {
+    ul,
+    ol {
+      margin: 10px 0 10px 10px;
+    }
   }
   .posts li {
     padding: 15% 0;
