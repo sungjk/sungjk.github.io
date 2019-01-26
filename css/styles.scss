@@ -4,7 +4,8 @@
 ---
 @import 'spoqa-colors';
 @import 'reset/reset';
-@import 'solarized_light.css';
+// @import 'solarized_light.css';
+@import 'monokai_sublime.css';
 @import '_variables';
 @import '_type';
 
@@ -15,7 +16,23 @@
 }
 
 .hljs {
-  background: $grey-highlight-color;
+  // background: $grey-highlight-color;
+
+  display: block;
+  overflow-x: auto;
+  overflow-x: overlay;
+  padding: 0.5em;
+  // background: #24344f;
+  background: $grey-9;
+  -webkit-text-size-adjust: none;
+  word-wrap: break-word;
+  border: none;
+  margin: 0 2px;
+  padding: 2px 5px;
+  width: 100%;
+  font-size: 13px;
+  border-radius: 4px;
+  line-height: 1.4em;
 }
 .content,
 .footer {
@@ -494,9 +511,10 @@ figcaption {
   }
 
   img {
-    max-width: 90%;
+    max-width: 100%;
     display: block;
-    padding: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 }
 .post-author-info {
@@ -591,22 +609,22 @@ figcaption {
 .about ul a {
   padding-right: 2px;
 }
-.author, .skills, .education, .experience, .projects {
+.author {
   overflow: auto;
-  padding: 20px 0;
-  // border-bottom: 1px solid $divider-color;
+  padding: 30px 0;
+  border-bottom: 1px solid $divider-color;
 }
 .author-title {
   /*margin-top: 100px;*/
 }
 .author-info {
   margin-top: 3px;
-  // margin-left: 20%;
+  margin-left: 20%;
 }
 .author .description {
   line-height: 1.6em;
 }
-.highlight {
+.about .bold {
   font-weight: bold;
 }
 .sns a {
