@@ -30,24 +30,17 @@
   border-radius: 4px;
   line-height: 1.4em;
 }
-
-/* width */
-::-webkit-scrollbar {
+.hljs::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
-
-/* Track */
-::-webkit-scrollbar-track {
+.hljs::-webkit-scrollbar-track {
   background: #292a2b;
 }
-
-/* Handle */
-::-webkit-scrollbar-thumb {
+.hljs::-webkit-scrollbar-thumb {
   background: #888;
 }
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+.hljs::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
@@ -522,6 +515,9 @@ figcaption {
   margin-bottom: 20px;
 }
 
+img {
+  pointer-events: none;
+}
 .post {
   h1 {
     font-size: $blog-font-size-lg;
@@ -822,13 +818,19 @@ figcaption {
   .posts li {
     padding: 15% 0;
   }
-  .post-title {
-    margin-right: 0;
+  .posts {
+    ul {
+      padding-left: 0;
+    }
   }
   .pagination .pages li {
     display: none;
   }
-  .post-description {
+  .posts .post-title {
+    margin-right: 0;
+    word-break: break-all;
+  }
+  .posts .post-description {
     margin-right: 0;
   }
   .back-btn a {

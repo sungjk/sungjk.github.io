@@ -159,8 +159,10 @@ code {
 pre {
   margin: 10px 0;
   padding: 20px;
-  display: inline-block;
-  width: 100%;
+  // display: inline-block;
+  // width: 100%;
+  // background: $grey-1;
+	// background: #24344f;
 	background: $grey-9;
   border: 1px solid $divider-color;
   border-radius: 2px;
