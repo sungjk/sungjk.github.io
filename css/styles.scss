@@ -18,19 +18,39 @@
 .hljs {
   display: block;
   overflow-x: auto;
-  overflow-x: overlay;
   padding: 0.5em;
   background: $grey-9;
   -webkit-text-size-adjust: none;
   word-wrap: break-word;
   border: none;
   margin: 0 2px;
-  padding: 2px 5px;
+  padding: 5px;
   width: 100%;
   font-size: 13px;
   border-radius: 4px;
   line-height: 1.4em;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #292a2b;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .content,
 .footer {
   width: 90%;
