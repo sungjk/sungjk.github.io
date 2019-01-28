@@ -4,7 +4,8 @@
 ---
 @import 'spoqa-colors';
 @import 'reset/reset';
-@import 'solarized_light.css';
+// @import 'solarized_light.css';
+@import 'monokai_sublime.css';
 @import '_variables';
 @import '_type';
 
@@ -15,7 +16,20 @@
 }
 
 .hljs {
-  background: $grey-highlight-color;
+  display: block;
+  overflow-x: auto;
+  overflow-x: overlay;
+  padding: 0.5em;
+  background: $grey-9;
+  -webkit-text-size-adjust: none;
+  word-wrap: break-word;
+  border: none;
+  margin: 0 2px;
+  padding: 2px 5px;
+  width: 100%;
+  font-size: 13px;
+  border-radius: 4px;
+  line-height: 1.4em;
 }
 .content,
 .footer {
@@ -494,9 +508,10 @@ figcaption {
   }
 
   img {
-    max-width: 90%;
+    max-width: 100%;
     display: block;
-    padding: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 }
 .post-author-info {
@@ -603,7 +618,11 @@ figcaption {
   margin-top: 3px;
   margin-left: 20%;
 }
-.member-info {
+.author .description {
+  line-height: 1.6em;
+}
+.about .bold {
+  font-weight: bold;
 }
 .sns a {
   margin: -5px 2px 0 0;
@@ -622,6 +641,20 @@ figcaption {
   border-radius: 50%;
   float: left;
 }
+.item {
+  margin: 10px 0;
+}
+.item-title {
+  width: 23%;
+  padding: 0;
+  float: left;
+  font-weight: bold;
+  color: #939a9f;
+}
+.item-body {
+  margin-left: 23%;
+}
+
 .twitter-icon {
   display: inline-block;
   background-image: url(/images/twitter-icon.png);
@@ -760,6 +793,12 @@ figcaption {
   .posts .portrait {
     display: none;
   }
+  .post {
+    ul,
+    ol {
+      margin: 10px 0 10px 10px;
+    }
+  }
   .posts li {
     padding: 15% 0;
   }
@@ -780,6 +819,13 @@ figcaption {
   }
   .pagination .next {
     float: right;
+  }
+  .item-title {
+    float: inherit;
+    width: auto;
+  }
+  .item-body {
+    margin-left: 0;
   }
 }
 
