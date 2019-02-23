@@ -18,21 +18,21 @@ publish: true
 
 자바 1.5 이전에는 컬렉션을 아래와 같이 선언하고 사용했다.
 
-```
+```java
 // 무인자 컬렉션 자료형. Stamp 객체만 보관한다.
 private final Collection stamps = ...;
 ```
 
 이 컬렉션에 엉뚱한 자료형의 객체를 넣어도 컴파일 시에는 아무런 문제가 없다.
 
-```
+```java
 // 실수로 Coin 객체를 넣었다.
 stamps.add(new Coin(...));
 ```
 
 stamps 컬렉션에서 객체를 꺼내고 형변환하는 과정에서 잘못 삽입된 Coin 객체를 만나게 되면 실행 도중에 오류가 발생한다.
 
-```
+```java
 // 무인자 반복자 자료형. 앞으로는 이렇게 코딩하면 안 된다.
 for (Iterator i = stamps.iterator(); i.hasNext()) {
     Stamp s = (Stamp) i.next(); // ClassCastException 예외 발생
@@ -44,7 +44,7 @@ for (Iterator i = stamps.iterator(); i.hasNext()) {
 
 이런 주석 대신 제네릭을 쓰면, 컴파일러에게 컬렉션에 담길 객체의 자료형이 무엇인지 선언할 수 있다.
 
-```
+```java
 // 형인자 컬렉션 자료형 - 형 안전성(typesafe) 확보
 private final Collection<Stamp> stamps = ...;
 ```
@@ -61,7 +61,7 @@ private final Collection<Stamp> stamps = ...;
 
 아래의 예제를 통해 좀 더 구체적으로 살펴보자.
 
-```
+```java
 // 실행 도중에 오류를 일으키는 무인자 자료형(List) 사용 예
 public static void main(String[] args) {
     List<String> strings = new ArrayList<String>();
@@ -77,7 +77,7 @@ private static void unsafeAdd(List list, Object o) {
 
 컬렉션에 들어갈 원소들의 자료형을 모르고 상관할 필요도 없다면 무인자 자료형을 써보고도 싶을 것이다. 예를 들어, 집합 두 개를 인자로 받아 공통 원소 개수를 반환하는 메서드를 작성하려 한다고 해 보자. 제네릭에 익숙하지 않은 프로그래머라면 아래와 같은 코드를 만들 수도 있다.
 
-```
+```java
 // 원소 자료형을 모르므로 무인자 자료형 사용 - 이러면 곤란
 static int numElementsInCommon(Set s1, Set s2) {
     int result = 0;
@@ -90,7 +90,7 @@ static int numElementsInCommon(Set s1, Set s2) {
 
 이 메서드는 정상 동작하지만 무인자 자료형을 사용하므로 위험하다. 버전 1.5부터 자바는 비한정적 와일드카드 자료형(unbounded wildcard type)이라는 좀 더 안전한 대안을 제공한다. 제네릭 자료형을 쓰고 싶으나 실제 형 인자가 무엇인지는 모르거나 신경쓰고 싶지 않을 때는 형 인자로 \'?\'를 쓰면 된다. 예를 들어, Set\<E\>에 대한 비한정적 와일드카드 자료형은 Set\<?\>이다. 이 자료형은 가장 일반적인 형인자 Set 자료형으로, 어떤 Set이건 참조할 수 있다. 비한정적 와일드카드 자료형을 사용한 numElementsInCommon 메서드 코드를 아래에 보였다.
 
-```
+```java
 // 비한정적 와일드카드 자료형 - 형 안전성과 유연성 만족
 static int numElementsInCommon(Set<?> s1, Set<?> s2) {
     int result = 0;
@@ -109,7 +109,7 @@ Collection\<?\>에는 null 이외의 어떤 원소도 넣을 수 없을 뿐 아�
 
 두 번째 예외는 instanceof 연산자 사용 규칙에 관한 것이다. 제네릭 자료형 정보는 프로그램이 실행될 때는 지워지기 때문에, instanceof 연산자는 비한정적 와일드카드 자료형 이외의 형인자 자료형에 적용할 수 없다. 게다가 무인자 자료형 대신 비한정적 와일드카드 자료형을 쓴다고 해서 instanceof 연산자가 다르게 동작하는 것은 아니다. 따라서 \<?\>를 붙여봐야 코드만 지저분해질 뿐이다. **제네릭 자료형에 instanceof 연산자를 적용할 때는 다음과 같이 하는 것이 좋다.**
 
-```
+```java
 // instanceof 연산자에는 무인자 자료형을 써도 OK
 if (o instanceof Set) {     // 무인자 자료형
     Set<?> m = (Set<?>) o;  // 와일드카드 자료형
@@ -129,13 +129,13 @@ o가 Set 객체라는 것이 확실해진 다음에는 와일드카드 자료형
 # 규칙 24. 무점검 경고(unchecked warning)를 제거하라
 무점검 경고(unchecked warning) 가운데 상당수는 쉽게 없앨 수 있다. 예를 들어, 실수로 아래와 같은 선언문을 만들었다고 해 보자.
 
-```
+```java
 Set<Lark> exaltation = new HashSet();
 ```
 
 컴파일러는 무슨 잘못을 저질렀는지 친절하게 알려줄 것이다.
 
-```
+```java
 Venery.java:4: warning: [unchecked] unchecked conversion
 found   : HashSet, required: Set<Lark>
 ...
@@ -143,7 +143,7 @@ found   : HashSet, required: Set<Lark>
 
 컴파일러가 지적하는 대로 코드를 고치면 경고 메시지는 사라진다.
 
-```
+```java
 Set<Lark> exaltation = new HashSet<Lark>();
 ```
 
@@ -155,7 +155,7 @@ SupressWarnings 어노테이션은 개별 지역 변수 선언부터 클래스 �
 
 SupressWarnings 어노테이션은 return 문에 붙일 수 없는데, 선언문이 아니기 때문이다. 메서드 전체에 어노테이션을 붙이고 싶을 수도 있겠지만 그렇게 하진 마라. 대신, 반환값을 담을 지역 변수를 선언한 다음에 해당 선언문 앞에 어노테이션을 붙이라.
 
-```
+```java
 // @SupressWarnings의 적용 범위를 줄이기 위해 지역 변수 사용
 public <T> T[] toArray(T[] a) {
     if (a.length < size) {

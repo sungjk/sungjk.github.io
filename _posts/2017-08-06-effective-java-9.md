@@ -360,7 +360,7 @@ synchronized FieldType getField() {
 
 **성능 문제 때문에 정적 필드 초기화를 지연시키고 싶을 때는 초기화 지연 담당 클래스(lazy initialization holder class) 숙어를 적용하라**
 
-```
+```java
 // 정적 필드에 대한 초기화 지연 담당 클래스 숙어
 private static class FieldHolder {
   static final FieldType field = computeFieldValue();

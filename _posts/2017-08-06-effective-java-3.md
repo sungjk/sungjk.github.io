@@ -285,7 +285,7 @@ public interface SingerSongwriter extends Singer, Songwriter {
 
 골격 구현 클래스를 적절히 정의하기만 하면, 프로그래머는 쉽게 인터페이스를 구현할 수 있다. 예를 들어, 아래의 정적 팩터리 메서드는 기능적으로 완전한 List를 구현한다.
 
-```
+```java
 // 골격 구현 위에서 만들어진 완전한 List 구현
 static List<Integer> intArrayAsList(final int[] a) {
     if (a == null)
@@ -329,7 +329,7 @@ static List<Integer> intArrayAsList(final int[] a) {
 
 이 기준에 미달하는 사례로는 소위 상수 인터페이스(constant interface)라는 것이 있다. 이런 인터페이스에는 메서드가 없고, static final 필드만 있다. 모든 필드는 상수 정의다. 이런 인터페이스를 구현하는 것은 대체로 상수 이름 앞에 클래스 이름을 붙이는 번거로움을 피하기 위해서다.
 
-```
+```java
 // 상수 인터페이스 안티패턴 - 사용하지 말 것!
 public interface PhysicalConstants {
     // 아보가드로 수(1/mod)
@@ -347,7 +347,7 @@ public interface PhysicalConstants {
 
 상수를 API 일부로 공개하고 싶을 때는 더 좋은 방법이 있다. 해당 상수가 이미 존재하는 클래스나 인터페이스에 강하게 연결되어 있을 때는 해당 클래스나 인터페이스에 추가해야 한다. 예를 들어, 수를 표현하는 기본 자료형의 객체 표현형들(Integer나 Double)에는 MIN_VALUE나 MAX_VALUE 상수가 공개되어 있다. 이런 상수들이 enum 자료형의 멤버가 되어야 바람직할 때는 enum 자료형(규칙 30)과 함께 공개해야 한다. 그렇지 않을 때는 해당 상수들을 객체 생성이 불가능한 유틸리티 클래스(규칙 4)에 넣어서 공개해야 한다.
 
-```
+```java
 // 상수 유틸리티 클래스
 package com.effectivejava.science;
 
@@ -369,7 +369,7 @@ public class PhysicalConstants {
 # 규칙 20. 태그 달린 클래스 대신 클래스 계층을 활용하라
 두 가지 이상의 기능을 가지고 있으며, 그 중 어떤 기능을 제공하는지 표시하는 태그(tag)가 달린 클래스를 만날 때가 있다.
 
-```
+```java
 // 태그 달린 클래스 - 클래스 계층을 만드는 쪽이 더 낫다!
 class Figure {
     enum Shape { RECTANGLE, CIRCLE };
@@ -416,7 +416,7 @@ class Figure {
 
 태그 기반 클래스를 클래스 계층으로 변환하려면, 먼저 태그 값에 따라 달리 동작하는 메서드를 추상 메서드(abstract method)로 선언하는 추상 클래스를 정의해야 한다. 그 다음 할 일은 태그 기반 클래스가 제공하던 각각의 기능을 방금 만든 최상위 클래스의 객체 생성 가능 하위 클래스(concrete subclass)로 정의하는 것이다.
 
-```
+```java
 // 태그 기반 클래스를 클래스 계층으로 변환한 결과
 abstract class Figure {
     abstract double area();
@@ -456,7 +456,7 @@ class Rectangle extends Figure {
 # 규칙 21. 전략을 표현하고 싶을 때는 함수 객체를 사용하라
 자바는 함수 포인터를 지원하지 않지만 객체 참조를 통해 비슷한 효과를 달성할 수 있다. 객체의 메서드는 보통 호출 대상 객체에 뭔가를 한다. 하지만 다른 객체에 작용하는 메서드, 그러니까 인자로 전달된 객체에 뭔가를 하는 메서드를 정의하는 것도 가능하다. 가지고 있는 메서드가 그런 메서드 하나뿐인 객체는 해당 메서드의 포인터 구실을 한다. 그런 객체를 함수 객체(function object)라고 부른다.
 
-```
+```java
 class StringLengthComparator {
     public int compare(String s1, String s2) {
         return s1.length() - s2.length();
@@ -466,7 +466,7 @@ class StringLengthComparator {
 
 StringLengthComparator 객체는 문자열을 비교하는 데 사용될 수 있는, 실행 가능 전략(concrete strategy)이다. 이에 더해 전략 인터페이스(strategy interface)를 정의할 필요가 있다.
 
-```
+```java
 // 전략 인터페이스
 public interface Comparator<T> {
     public int compare(T t1, T t2);
@@ -486,7 +486,7 @@ public interface Comparator<T> {
 
 비-정적 멤버 클래스는 어댑터(Adapter)를 정의할 때 많이 쓰인다. 바깥 클래스 객체를 다른 클래스 객체인 것처럼 보이게 하는 용도다.
 
-```
+```java
 // 비-정적 멤버 클래스의 전형적 용례
 public class MySet<E> extends AbstractSet<E> {
     ... // 생략

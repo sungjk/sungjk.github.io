@@ -25,7 +25,7 @@ try {
 
 이 원칙은 API 설계에도 적용된다. 잘 **설계된 API는 클라이언트에게 평상시 제어 흐름의 일부로 예외를 사용하도록 강요해서는 안 된다.** 특정한 예측 불가능 조건이 만족될 때만 호출할 수 있는 \"상태 종속적(state-dependent)\" 메서드를 가진 클래스에는 보통 해당 메서드를 호출해도 되는지를 알기 위한 \"상태 검사(state-testing)\" 메서드가 별도로 갖춰져 있다. 예를 들어, Iterator 인터페이스에는 상태 종속적 메서드 next가 있고, 상태 검사 메서드 hasNext가 있다. 그 덕에, 아래와 같은 표준적 for 숙어를 사용할 수 있다.
 
-```
+```java
 for (Iterator<Foo> i = collection.iterator(); i.hasNext(); ) {
   Foo foo = i.next();
 }

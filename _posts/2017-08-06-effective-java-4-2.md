@@ -12,7 +12,7 @@ publish: true
 # 규칙 25. 배열 대신 리스트를 써라
 배열은 제네릭 자료형과 두 가지 중요한 차이점을 갖고 있다. 첫 번째는, 배열은 공변 자료형(covariant)이라는 것이다. Sub가 Super의 하위 자료형(subtype)이라면 Sub[]도 Super[]의 하위 자료형이라는 것이다. 반면 제네릭은 불변 자료형(invariant)이다. Type1과 Type2가 있을 때, List\<Type1\>은 List\<Type2\>의 상위 자료형이나 하위 자료형이 될 수 없다. 그렇다면 제네릭 쪽이 배열보다 취약한 것이 아니냐는 논쟁의 여지가 있지만, 취약한 것은 배열 쪽이다.
 
-```
+```java
 // 실행 중에 문제를 일으킴
 Object[] objectArray = new Long[1];
 objectArray[0] = "I don't fit in";  // ArrayStoreException 예외 발생
@@ -30,7 +30,7 @@ ol.add("I don't fit in");
 
 제네릭 배열 생성은 왜 허용되지 않을까? 형 안전성(typesafe)이 보장되지 않기 때문이다.
 
-```
+```java
 // 제네릭 배열 생성이 허용되지 않는 이유 - 아래의 코드는 컴파일되지 않는다!
 List<String>[] stringLists = new List<String>[1];   // (1)
 List<Integer> intList = Arrays.asList(42);          // (2)
@@ -45,7 +45,7 @@ String s = stringLists[0].get(0);                   // (5)
 
 예를 들어, 동기화된 리스트가 하나 있고(Collections.synchronizedList가 반환하는 종류의 리스트) 리스트에 원소의 자료형과 같은 자료형의 값 두 개를 인자로 받는 함수가 있다고 하자. 이제 리스트에 해당 함수를 적용해서, 리스트를 \"줄이고(reduce)\" 싶다고 해 보자. 리스트에 정수들이 들어있고, 함수가 하는 일이 두 개의 정수를 더하는 일이라면, 그 함수를 사용해서 리스트 내의 모든 정수의 합을 구하는 reduce 메서드를 만들어 보자는 것이다. 따라서 reduce는 리스트와 함수 하나를 인자로 받아야 하고, reduce의 초기값, 그러니까 리스트가 비어있을 때 reduce가 반환해야 하는 값도 인자로 받아야 한다.
 
-```
+```java
 // 제네릭 없이 작성한 reduce 함수. 병행성(concurrency) 문제가 있다!
 static Object reduce(List list, Function f, Object initVal) {
     synchronized(list) {
@@ -63,7 +63,7 @@ interface Function {
 
 규칙 67에서 다루는 지침은 동기화(synchronized) 영역 안에서 \"불가해 메서드(alien method)\"를 호출하면 안 된다는 것이다. 그러니 락(lock)을 건 상태에서 리스트를 복사한 다음, 복사본에 작업하도록 reduce 메서드를 수정해야 한다. 그러니 락(lock)을 건 상태에서 리스트를 복사한 다음, 복사본에 작업하도록 reduce 메서드를 수정해야 한다.
 
-```
+```java
 // 제네릭 없이 작성한 reduce 함수. 병행성 문제는 없다.
 static Object reduce(List list, Function f, Object initVal) {
     Object[] snapshot = list.toArray(); // 리스트에 내부적으로 락을 건다.
@@ -76,7 +76,7 @@ static Object reduce(List list, Function f, Object initVal) {
 
 이런 작업을 제네릭으로 하면 앞서 설명한 문제들을 겪게 된다. 앞서 살펴본 Function 인터페이스를 제네릭 버전으로 바꿔보자.
 
-```
+```java
 interface Function<T> {
     T apply(T arg1, T arg2);
 }
@@ -84,7 +84,7 @@ interface Function<T> {
 
 그리고 아래는 제네릭을 \'순진하게\' 적용한 reduce 메서드다. *제네릭 메서드*(규칙 27)로 선언되어 있는데, 선언문의 의미를 이해하지 못한다 해도 실망하지 말자. 지금으로서는 메서드 내부에만 집중하면 된다.
 
-```
+```java
 // reduce의 제네릭 버전 - 컴파일되지 않는다!
 static <E> E reduce(List<E> list, Function<E> f, E initVal) {
     E[] snapshot = list.toArray();  // 리스트에 락을 건다.
@@ -103,7 +103,7 @@ Reduce.java:12: warning: [unchecked] unchecked cast
 
 컴파일러가 전하려는 메시지는, 실행 도중에 형변환이 안전하게 이루어질지 검사할 수 없다는 뜻이다. 실행 시에 E가 무슨 자료형이 될지 알 수 없기 때문이다. **원소의 자료형 정보는 프로그램이 실행될 때에는 제네릭에서 삭제된다(erased)는 것을 기억하기 바란다.** 배열 대신 리스트를 써서 컴파일해도 아무런 오류나 경고 메시지가 없도록 수정하자.
 
-```
+```java
 // 리스트를 사용하는 제네릭 버전 reduce
 static <E> E reduce(List<E> list, Function<E> f, E initVal) {
     List<E> snapshot;
@@ -129,7 +129,7 @@ static <E> E reduce(List<E> list, Function<E> f, E initVal) {
 # 규칙 26. 가능하면 제네릭 자료형으로 만들 것
 제네릭 자료형을 직접 만드는 것은 좀 더 까다로운데, 그렇다 해도 배워둘 만한 가치는 있다.
 
-```
+```java
 // Object를 사용한 컬렉션 - 제네릭을 적용할 중요 후보
 public class Stack {
     private Object[] elements;
@@ -166,7 +166,7 @@ public class Stack {
 
 이 클래스는 *제네릭화*(generification)하면 딱 좋을 후보다. 호환성을 유지하면서도 제네릭 자료형을 사용하도록 개선할 수 있다. 위의 코드를 사용하면 스택에서 꺼낸 객체를 사용하기 전에 형변환을 해야 하는데, 그런 형변환은 프로그램 실행 중에 실패할 가능성이 있다. 클래스를 제네릭화하는 첫 단계는 선언부에 형인자(type parameter)를 추가하는 것이다. 위의 경우에는 스택에 담길 원의 자료형을 나타내는 형인자 하나가 필요한데, 관습적으로 이름은 E라고 붙이도록 하겠다(규칙 56).
 
-```
+```java
 // 제네릭을 사용해 작성한 최초 Stack 클래스 - 컴파일되지 않는다!
 public class Stack<E> {
     private E[] elements;
@@ -200,7 +200,7 @@ Stack.java:8: generic array creation
 
 규칙 25에서 설명한 대로, E 같은 실체화 불가능 자료형으로는 배열을 생성할 수 없다. 배열을 사용하는 제네릭 자료형을 구현할 때마다 이런 문제를 겪게 될 것이다. 해결책은 두 가지다. 첫 번째 방법은 제네릭 배열을 만들 수 없다는 조건을 우회하는 것이다. Object의 배열을 만들어서 제네릭 배열 자료형으로 형변환(cast)하는 방법이다. 그런데 그 방법을 사용한 코드를 컴파일해 보면 오류 대신 경고 메시지가 출력된다. 문법적으로는 문제는 없지만, 일반적으로 형 안전성을 보장하는 방법은 아니다. 컴파일러는 프로그램의 형 안전성을 입증할 수 없을지 모르지만, 프로그래머는 할 수 있다. 무점검 형변환(unchecked cast)을 하기 전에 개발자는 반드시 그런 형변환이 프로그램의 형 안전성을 해치지 않음을 확실히 해야 한다.
 
-```
+```java
 // elements 배열에는 push(E)를 통해 전달된 E 형의 객체만 저장된다.
 // 이 정도면 형 안전성은 보장할 수 있지만, 배열의 실행시간 자료형은 E[]가
 // 아니라 항상 Object[]이다.
@@ -212,7 +212,7 @@ public Stack() {
 
 제네릭 배열 생성을 피하는 두 번째 방법은 elements의 자료형을 E[]에서 Object[]로 바꾸는 것이다. E는 실체화 불가능 자료형이므로 컴파일러는 이 형변환을 실행 중에 검사할 수 없다. 하지만 무점검 형변환이 안전하다는 것, 그래서 경고를 억제해도 좋다는 것은 개발자 스스로 쉽게 입증할 수 있다.
 
-```
+```java
 // 무점검 경고를 적절히 억제한 사례
 public E pop() {
     if (size == 0)
@@ -238,7 +238,7 @@ public E pop() {
 # 규칙 27. 가능하면 제네릭 메서드로 만들 것
 세 집합(인자 두 개와 반홥값 하나)에 보관될 원소의 자료형을 나타내는 형인자(type parameter)를 메서드 선언에 추가하고, 그 인자를 사용해서 메서드를 구현해야 한다. **형인자를 선언하는 형인자 목록(type parameter list)은 메서드의 수정자(modifier)와 반환값 자료형 사이에 둔다.** 이 예제에서 형인자 목록은 \<E\>이고 반환값 자료형은 Set\<E\>이다. 형인자의 이름을 지울 때는 제네릭 자료형과 같은 관습을 따른다.
 
-```
+```java
 // 제네릭 메서드
 public static <E> Set<E> union(Set<E> s1, Set<E> s2) {
   Set<E> result = new HashSet<E>(s1);
@@ -259,7 +259,7 @@ public static void main(String[] args) {
 
 제네릭 생성자를 호출할 때는 형인자를 명시적으로 전달해야 하는데 이런 번거러움을 피하려면, 사용할 생성자마다 제네릭 정적 팩터리 메서드(generic static factory method)를 만들면 된다. 예를 들어, 아래는 아무 인자도 받지 않는 HashMap 생성자에 대한 제네릭 정적 팩터리 메서드이다.
 
-```
+```java
 // 제네릭 정적 팩털 ㅣ메서드
 public static <K, V> HashMap<K, V> newHashMap() {
   return new HashMap<K, V>();
@@ -268,7 +268,7 @@ public static <K, V> HashMap<K, V> newHashMap() {
 
 이 제네릭 정적 팩터리 메서드를 사용하면 중복되는 형인자를 제거하여 간결한 코드를 만들 수 있다.
 
-```
+```java
 // 정적 팩터리 메서드를 통한 형인자 자료형 객체 생성
 Map<String, List<String>> anagrams = newHashMap();
 ```
@@ -281,7 +281,8 @@ Map<String, List<String>> anagrams = newHashMap();
 
 # 규칙 28. 한정적 와일드카드를 써서 API 유연성을 높여라
 일련의 원소들을 인자로 받아 차례로 스택에 집어넣는 메서드를 추가하는 pushAll 메서드를 정의했다. Integer 형의 intVal로 push(intVal)을 호출하면 제대로 동작할 것이다. Integer는 Number의 하위 자료형(subtype)이기 때문이다. 그러니 논리적으로 보자면 아래의 코드는 문제가 없어야 할 것이지만, 실제로 해 보면 에러가 발생한다. 앞서 설명한 대로, 형인자 자료형은 불변(invariant)이기 때문이다.
-```
+
+```java
 public class Stack<E> {
   public Stack();
   public void push(E e);
@@ -302,7 +303,7 @@ numberStack.pushAll(integers);  // 에러 발생
 
 자바는 이런 상황을 해결하기 위해, 한정적 와일드카드 자료형(bounded wildcard type)이라는 특별한 형인자 자료형을 제공한다. 따라서, pushAll의 인자 자료형을 \"E의 Iterable\"이 아니라 \"E의 하위 자로형의 Iterable\"이라고 명시할 방법이 필요한데, 와일드카드 자료형을 써서 Iterable\<? extends E\>라고 하면 된다는 것이다.
 
-```
+```java
 // E 객체 생산자 역할을 하는 인자에 대한 와일드카드 자료형
 public void pushAll(Iterable<? extends E> src) {
   for (E e : src)
@@ -312,7 +313,7 @@ public void pushAll(Iterable<? extends E> src) {
 
 popAll 메서드는 스택의 모든 원소를 꺼내서 인자로 주어진 컬렉션에 넣는다. 이 메서드는 깔끔하게 컴파일될 뿐 아니라 인자로 주어진 컬렉션의 원소 자료형이 스택의 원소 자료형과 일치할 때는 완벽히 동작한다. 하지만 스택에서 원소를 꺼내는 코드는 에러가 발생한다.
 
-```
+```java
 // 와일드카드 자료형 없이 구현한 popAll 메서드 - 문제가 있다!
 public void popAll(Collection<E> dst) {
   while (!isEmpty())
@@ -326,7 +327,7 @@ numberStack.popAll(objects);  // pushAll의 첫 번째 버전과 같은 오류 �
 
 Collection\<Object\>가 Collection\<Number\>의 하위 자료형이 아니라는 오류가 난다. 이는 popAll의 인자 자료형을 \"E의 컬렉션\"이 아니라 \"E의 상위 자료형(supertype)의 컬렉션\"이라고 명시하면 된다.
 
-```
+```java
 // E의 소비자 구실을 하는 인자에 대한 와일드카드 자료형
 public void popAll(Collection<? super E> dst) {
   while (!isEmpty())
@@ -347,7 +348,7 @@ public void popAll(Collection<? super E> dst) {
 
 임의 클래스 객체 가운데 맘에 드는 것을 골라 저장하고 꺼낼 수 있는 Favorites 클래스를 만든다고 하자. 이 API를 사용하는 클라이언트는 좋아하는 객체를 넣거나 뺼 때 Class 객체를 함께 전달해야 한다.
 
-```
+```java
 // 형 안전 다형성(heterogeneous) 컨테이너 패턴 - API
 public class Favorites {
   public <T> void putFavorite(Class<T> type, T instance);
@@ -371,7 +372,7 @@ public static void main(String[] args) {
 
 Favorites 객체는 형 안전성을 보장한다. 다시 말해, String을 요청했는데 Integer를 반환한다거나 하지 않는다. 또한, 다형성(heterogeneous)을 갖고 있다. 일반적인 맵과 달리, 모든 키의 자료형이 서로 다르다. 따라서 Favorites 같은 클래스를 형 안전 다형성 컨테이너(typesafe heterogeneous container)라 부른다.
 
-```
+```java
 // 형 안전 다형성(heterogeneous) 컨테이너 패턴 - 구현
 public class Favorites {
   private Map<Class<?>, Object> favorites = new HashMap<Class<?>, Object>();
@@ -390,7 +391,7 @@ public class Favorites {
 
 cast 메서드의 시그니처를 보면, Class가 제네릭 클래스라는 사실을 완벽히 이용하고 있음을 알 수 있다. cast 메서드의 반환값 자료형이 Class 객체의 형인자와 일치하도록 선언되어 있는 것이다.
 
-```
+```java
 public class Class<T> {
   T cast(Object obj);
 }
@@ -400,7 +401,7 @@ getFavorite 메서드가 필요로 하는 것이 바로 이것이다. cast가 �
 
 Favorites 클래스에는 중요한 문제점이 두 가지 있다. 첫 번째는 악의적인 클라이언트가 Favorites 객체의 형 안전성을 쉽게 깨뜨릴 수 있다는 것이다. Class 객체를 무인자 형태(raw form)로 사용하기만 하면 된다. 이는 Favorites 클래스가 자료형 불변식을 위반하지 않도록 보장하는 한 가지 방법은 putFavorite 메서드가 instance의 자료형이 정말로 type이 나타내는 자료형과 일치하는지 동적 형변환을 통해 검사하도록 하는 것이다.
 
-```
+```java
 // 동적 형변환으로 실행시간 형 안전성 확보
 public <T> void putFavorite(Class<T> type, T instance) {
   favorites.put(type, type.cast(instance));
@@ -413,7 +414,7 @@ Favorites 클래스의 두 번째 단점은 실체화 불가능 자료형(non-re
 
 컴파일 시점에는 자료형을 알 수 없는 어노테이션을 실행시간에 읽어내는 메서드를 asSubclass를 사용해 구현한 예이다.
 
-```
+```java
 static Annotation getAnnotation(AnnotatedElement element, String annotationTypeName) {
   Class<?> annotationType = null; // 비한정적 자료형 토큰
   try {
