@@ -1,9 +1,5 @@
 <!doctype html>
-<!--[if lt ie 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if ie 7]>         <html class="lt-ie9 lt-ie8 ie7"> <![endif]-->
-<!--[if ie 8]>         <html class="lt-ie9 ie8"> <![endif]-->
-<!--[if gt ie 8]><!-->
-<html class=""><!--<![endif]-->
+<html class="">
 <head>
   {% feed_meta %}
   <meta charset="utf-8">
@@ -51,15 +47,6 @@
     ga('create', 'UA-87733025-1', 'auto');
     ga('send', 'pageview');
   </script>
-
-  <!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({
-      google_ad_client: "ca-pub-7799417056248960",
-      enable_page_level_ads: true
-    });
-  </script> -->
-
   <link rel="stylesheet" href="{{ base_path }}/css/styles.css">
   <link href="{{ base_path }}/atom.xml" type="application/atom+xml" rel="alternate" title="Jeremy's Blog">
   <link rel="shortcut icon" href="{{ base_path }}/images/favicon.ico">
@@ -96,8 +83,6 @@
     <div class="content">
       {{ content }}
     </div>
-    <div class="push">
-    </div>
     <div class="footer">
       <div id="info">
         <span>© 2015 - 2019 Jeremy, templated by Spoqa.</span>
@@ -114,21 +99,9 @@
       })
     });
   </script>
-  <!-- Responsive layout polyfill for IE8 and lower -->
-  <!--[if lte IE 8]>
-  <script>
-    var config = {
-        mobileResponsiveBreakpoint: 650
-    };
-    $(window).on('resize', function(){
-        if ($(window).width() <= config.mobileResponsiveBreakpoint) {
-           !$(document.body).hasClass('res-mobile')) {
-            $(document.body).addClass('res-mobile');
-        } else {
-            $(document.body).removeClass('res-mobile');
-        }
-    }).trigger('resize');
-  </script>
-  <![endif]-->
+  <!--       _
+         .__(.)< (MEOW)
+          \___)
+   ~~~~~~~~~~~~~~~~~~~~-->
 </body>
 </html>
