@@ -5,7 +5,7 @@ author: 김성중
 author-email: ajax0615@gmail.com
 description: 이상민님의 자바 성능 튜닝 이야기를 읽고 정리한 글입니다.
 keywords: Java, 자바
-publish: true
+publish: false
 ---
 
 # 1. 디자인 패턴 꼭 써야 한다
