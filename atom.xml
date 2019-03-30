@@ -11,7 +11,7 @@ layout: null
   <updated>{{ site.time | date_to_xmlschema }}</updated>
   <id>{{ site.home_url }}/</id>
   <author>
-    <name>Sungjung Kim</name>
+    <name>Jeremy</name>
     <email>ajax0615@gmail.com</email>
   </author>
 
