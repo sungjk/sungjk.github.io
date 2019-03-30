@@ -1,12 +1,15 @@
 ---
 layout: entry
+post-category: java
 title: 자바 성능 튜닝 이야기 - 1
 author: 김성중
 author-email: ajax0615@gmail.com
-description: 이상민님의 자바 성능 튜닝 이야기를 읽고 정리한 글입니다.
+description: 이상민님의 '자바 성능 튜닝 이야기'를 읽고 정리한 글입니다.
 keywords: Java, 자바
-publish: false
+publish: true
 ---
+
+![java_performance_tuning](/images/2019/03/28/java_performance_tuning.jpeg "java_performance_tuning"){: .center-image }
 
 # 1. 디자인 패턴 꼭 써야 한다
 디자인 패턴은 [임백준님의 개발자의 초식, 디자인 패턴「그러나…」](http://www.zdnet.co.kr/view/?no=00000039131344)에도 잘 드러나있듯이 과거의 소프트웨어 개발 과정에서 발견한 설계의 노하우를 일종의 패턴으로 정리해 놓은 것이다. 따라서 문제점에 대해서 검증된 방법으로 해결 방안을 찾을 수 있고, 시스템을 만들기 위해서 전체 중 일부 의미 있는 클래스들을 묶기 위해 사용될 수 있다. 반복되는 의미 있는 집합을 정의하고 이름을 지정해서, 누가 이야기하더라도 동일한 의미의 패턴이 되도록 만들어 놓은 것이다.
@@ -293,23 +296,6 @@ for (int loop = 0; loop < list.size(); loop++)
 int listSize = list.size();
 for (int loop = 0; loop < listSize; loop++)
 ```
-
----
-
-# 6. static 제대로 한번 써 보자
-100개의 클래스의 인스턴스를 생성하더라도, static으로 선언된 변수나 메서드들은 동일한 주소의 값을 참조한다.
-
-static의 특징은 다른 JVM에서는 static으로 선언해도 다른 주소나 다른 값을 참조하지만, 하나의 JVM이나 WAS 인스턴스에서는 같은 주소에 존재하는 값을 참조한다. 그리고 GC의 대상도 되지 않는다.
-
-### static 잘 활용하기
-- 자주 사용하고 절대 변하지 않는 변수는 final static으로 선언하자.
-- 설정 파일 정보도 static으로 관리하자.
-- 코드성 데이터는 DB에서 한 번만 읽자.
-
-### static과 메모리 릭
-static으로 선언한 부분은 GC가 되지 않는다. 만약 어떤 클래스에 데이터를 Vector나 ArrayList에 담을 때 해당 Collection 객체를 static으로 선언하면 어떻게 될까? 지속적으로 해당 객체에 데이터가 쌓인다면, 더 이상 GC가 되지 않으면서 시스템은 OutOfMemoryError를 발생시킨다.
-
----
 
 ---
 
