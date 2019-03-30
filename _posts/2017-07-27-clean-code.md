@@ -5,6 +5,7 @@ author: 김성중
 author-email: ajax0615@gmail.com
 description: 로버트 C. 마틴의 Clean Code를 읽고 정리한 글입니다.
 next_url: /2017/07/31/effective-java-1.html
+keywords: clean code, 클린코드
 publish: true
 ---
 
@@ -132,7 +133,7 @@ if (deletePage(page) == E_OK) {
 
 위 코드는 동사/형용사 혼란을 일으키지 않는 대신 여러 단계로 중첩되는 코드를 야기한다. 반면 오류 코드 대신 예외를 사용하면 오류 처리 코드가 원래 코드에서 분리되므로 코드가 깔끔해진다.
 
-```
+```java
 try {
     deletePage(page);
     registry.deleteReference(page.name);
@@ -145,7 +146,7 @@ catch (Exception e) {
 
 try/catch 블록은 원래 추하다. 코드 구조에 혼란을 일으키며, 정상 동작과 오류 처리 동작을 뒤섞는다. 그러므로 try/catch 블록을 별도 함수로 뽑아내는 편이 좋다.
 
-```
+```java
 public void delete(Page page) {
     try {
         deletePageAndAllReferences(page);
@@ -179,14 +180,14 @@ private void logError(Exception e) {
 표현력이 풍부하고 깔끔하며 주석이 거의 없는 코드가, 복잡하고 어수선하며 주석이 많이달린 코드보다 훨씬 좋다.
 
 #### **코드로 의도를 표현하라!**
-```
+```java
 // 직원에게 복지 혜택을 받을 자격이 있는지 검사한다.
 if ((employee.flags & HOURLY_FLAG) && (employee.age > 65))
 ```
 
 보다는
 
-```
+```java
 if (employee.isEligibleForFullBenefits())
 ```
 
@@ -511,7 +512,7 @@ TEMPLATE METHOD 패턴을 사용하면 중복을 제거할 수 있다. 아니면
 **단일 책임 원칙**<br/>
 단일 책임 원칙(Single Responsibility Principle, SRP)은 클래스나 모듈을 **변경할 이유** 가 하나, 단 하나뿐이어야 한다는 원칙이다. 클래스는 책임, 즉 변경할 이유가 하나여야 한다는 의미다.
 
-```
+```java
 // 단일 책임 클래스
 public class Version {
   public int getMajorVersionNumber()
@@ -662,3 +663,8 @@ public class EUVacationPolicy extends VacationPolicy {
 - 프로세서 수보다 많은 스레드를 돌려보라.
 - 다른 플랫폼에서 돌려보라.
 - 코드에 보조 코드 *instrument* 를 넣어 돌려라. 강제로 실패를 일으키게 해보라.
+
+---
+
+# Reference
+- [Clean Code 클린 코드](http://www.yes24.co.kr/Product/goods/11681152)
