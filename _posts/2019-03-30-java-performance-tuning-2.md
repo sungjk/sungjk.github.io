@@ -172,6 +172,55 @@ HotSpot VM에서 대부분의 동기화 작업은 fast-path 코드 작업을 통
 
 ---
 
+# 9. IO에서 발생하는 병목 현상
+웹 애플리케이션에서 IO 처리를 하는 부분은 시스템의 응답 속도에 많은 영향을 준다.
+
+### 기본적인 IO는 이렇게 처리한다
+자바에서 입력과 출력은 스트림(stream)을 통해서 이루어진다. 파일을 포함해 디바이스를 통해 이뤄지는 작업을 모두 IO라고 한다. 네트워크를 통해서 다른 서버로 데이터를 전송하거나, 다른 서버로부터 데이터를 전송 받는 것도 IO에 포함된다.
+
+```java
+System.out.println("Jeremy");
+```
+
+여기서 out은 PrintStream을 System 클래스에 static으로 정의해 놓은 변수이다(이 또한 역시 IO). IO에서 발생하는 시간은 CPU를 사용하는 시간과 대기 시간 중 대기 시간에 속하기 때문에 성능에 영향을 가장 많이 미친다.
+
+자바에서 파일을 읽고 처리하는 방법은 굉장히 많다. 스트림을 읽는 데 관련된 주요 클래스는 다음과 같다. 여기에 명시된 모든 입력과 관련된 스트림들은 java.io.InputStream 클래스로부터 상속받았다.
+
+- ByteArrayInputStream: 바이트로 구성된 배열을 읽어서 입력 스트림을 만든다.
+- FileInputStream: 이미지와 같은 바이너리 기반의 파일의 스트림을 만든다.
+- FilterInputStream: 여러 종류의 유용한 입력 스트림의 추상 클래스이다.
+- ObjectInputStream: ObjectOutputStream을 통해서 저장해 놓은 객체를 읽기 위한 스트림을 만든다.
+- PipedInputStream: PipedOutputStream을 통해서 출력된 스트림을 읽어서 처리하기 위한 스트림을 만든다.
+- SequenceInputStream: 별개인 두 개의 스트림을 하나의 스트림으로 만든다.
+
+문자열 기반의 스트림을 읽기 위해서 사용하는 클래스는 java.io.Reader 클래스의 하위 클래스들이다.
+
+- BufferedReader: 문자열 입력 스트림을 버퍼에 담아서 처리한다. 일반적으로 문자열 기반의 파일을 읽을 때 가장 많이 사용된다.
+- CharArrayReader: char의 배열로 된 문자 배열을 처리한다.
+- FilterReader: 문자열 기반의 스트림을 처리하기 위한 추상 클래스이다.
+- FileReader: 문자열 기반의 파일을 읽기 위한 클래스이다.
+- InputStreamReader: 바이트 기반의 스트림을 문자열 기반의 스트림으로 연결하는 역할을 수행한다.
+- PipedReader: 파이프 스트림을 읽는다.
+- StringReader: 문자열 기반의 소스를 읽는다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
