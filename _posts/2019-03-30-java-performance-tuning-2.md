@@ -6,7 +6,7 @@ author: 김성중
 author-email: ajax0615@gmail.com
 description: 이상민님의 '자바 성능 튜닝 이야기'를 읽고 정리한 글입니다.
 keywords: Java, 자바
-publish: false
+publish: true
 ---
 
 ![java_performance_tuning](/images/2019/03/28/java_performance_tuning.jpeg "java_performance_tuning"){: .center-image }
@@ -138,7 +138,7 @@ join() 메서드는 명시된 시간만큼 해당 스레드가 죽기를 기다�
 ### Synchronized를 이해하자
 메서드를 동기화하려면 메서드 선언부에 사용하면 된다. 특정 부분을 동기화하려면 해당 블록에만 선언을 해서 사용하면 된다.
 
-```
+```java
 public synchronized void foo(){
   ...
 }
@@ -203,24 +203,192 @@ System.out.println("Jeremy");
 - PipedReader: 파이프 스트림을 읽는다.
 - StringReader: 문자열 기반의 소스를 읽는다.
 
+BufferedReader 클래스는 다른 FileReader 클래스와 마찬가지로 문자열 단위나 문자열 배열 단위로 읽을 수 있는 기능을 제공하지만, 추가로 라인 단위로 읽을 수 있는 readLine() 메서드를 제공한다. 실제 응답 속도도 약 350ms로, 약간 빨라진다. 이 속도는 파일의 크기와 비례한다.
 
+|  | 버퍼 없이 FileReader | 버퍼 포함한 FileReader | BufferedReader 사용시 |
+| :---: | :---: | :---: | :---: |
+| 응답 속도 | 2,480ms | 400ms | 350ms |
 
+### NIO의 원리
+JDK 1.4부터 새롭게 추가된 NIO가 어떤 것인지 알아보자. 자바를 사용하여 하드 디스크에 있는 데이터를 읽는다면 어떤 프로세스로 진행될까?
 
+1. 파일을 읽으라는 메서드를 자바에 전달한다.
+2. 파일명을 전달받은 메서드가 운영체제의 커널에게 파일을 읽어 달라고 요청한다.
+3. 커널이 하드 디스크로부터 파일을 읽어서 자신의 커널에 있는 버퍼에 복사하는 작업을 수행한다. DMA에서 이 작업을 하게 된다.
+4. 자바에서는 마음대로 커널의 버퍼를 사용하지 못하므로, JVM으로 그 데이터를 전달한다.
+5. JVM에서는 메서드에 있는 스트림 관리 클래스를 사용하여 데이터를 처리한다.
 
+자바에서는 3번 복사 작업과 4번 전달 작업을 수행할 때 대기하는 시간이 발생할 수 밖에 없다. 이러한 단점을 보완하기 위해 NIO가 탄생했다. NIO를 사용한다고 IO에서 발생하는 모든 병목 현상이 해결되는 것은 아니지만, IO를 위한 여러 가지 새로운 개념이 도입되었다.
 
+- 버퍼의 도입
+- 채널의 도입
+- 문자열의 인코더와 디코어 제공
+- Perl 스타일의 정규 표현식에 기초한 패턴 매칭 방법 제공
+- 파일을 잠그거나 메모리 매핑이 가능한 파일 인터페이스 제공
+- 서버를 위한 복합적인 Non-blocking IO 제공
 
+### DirectByteBuffer를 잘못 사용하여 문제가 발생한 사례
+NIO를 사용할 때 ByteBuffer를 사용하는 경우가 있다. ByteBuffer는 네트워크나 파일에 있는 데이터를 읽어 들일때 사용한다. ByteBuffer 객체를 생성하는 메서드에는 wrap(), allocate(), allocateDirect()가 있다. 이 중에서 allocateDirect 메서드는 데이터를 JVM에 올려서 사용하는 것이 아니라, OS 메모리에 할당된 메모리를 Native한 JNI로 처리하는 DirectByteBuffer 객체를 생성한다. 그런데 이 DirectByteBuffer 객체는 필요할 때 계속 생성해서는 안 된다.
 
+```java
+...
+psvm() {
+  DirectByteBuffer check = new DirectByteBufferCheck();
+  for (int loop = 1; loop < 1024000; loop++) {
+    check.getDirectByteBuffer();
+    if (loop % 100 == 0) {
+      System.out.println(loop);
+    }
+  }
+}
 
+public ByteBuffer getDirectByteBuffer() {
+  ByteBuffer buffer = ByteBuffer.allocateDirect(65536);
+  return buffer;
+}
+...
+```
 
+getDirectByteBuffer 메서드를 지속적으로 호출하는 간단한 코드다. getDirectByteBuffer 메서드에서는 ByteBuffer 클래스의 allocateDirect 메서드를 호출함으로써 DirectByteBuffer 객체를 생성한 후 리턴해준다.
 
+이 예제를 실행하고 나서 GC 상황을 모니터링하기 위해 jstat 명령을 사용하여 확인해보면 거의 5~10초에 한 번씩 Full GC가 발생하는 것을 볼 수 있다. 그런데 Old 영역의 메모리는 증가하지 않는다. 왜 이러한 문제가 발생했을까?
 
+그 이유는 DirectByteBuffer의 생성자 때문이다. 이 생성자는 java.nio 에 아무런 접근 제어자가 없이 선언된(package private) Bits라는 클래스의 reserveMemory() 메서드를 호출한다. 이 reserveMemory 메서드에서는 JVM에 할당되어 있는 메모리보다 더 많으 메모리를 요구할 경우 System.gc() 메서드를 호출하도록 되어 있다.
 
+JVM에 있는 코드에 System.gc() 메서드가 있기 때문에 해당 생성자가 무차별적으로 생성될 경우 GC가 자주 발생하고 성능에 영향을 줄 수 밖에 없다. 따라서, 이 DirectByteBuffer 객체를 생성할 때는 매우 신중하게 접근해야만 하며, 가능하다면 singleton 패턴을 사용하여 해당 JVM에는 하나의 객체만 생성하도록 하는 것을 권장한다.
 
+---
 
+# 10. 로그는 반드시 필요한 내용만 찍자
 
+### System.out.println()의 문제점
+파일이나 콘솔에 로그를 남길 경우 애플리케이션에서는 대기 시간이 발생한다. 이 대기 시간은 시스템의 속도에 의존적이다. 만약 디스크에 로그를 남긴다면, 서버 디스크의 RPM이 높을수록 로그의 처리 속도는 빨라질 것이다.
 
+> 개션율이란 튜닝 전과 후의 차이를 수치로 나타낸 것이다. 다음의 공식으로 구한다<br/>
+> (튜닝 전 응답 속도 - 튜닝 후 응답 속도) * 100 / 튜닝 후 응답 속도 = 개선율(%)
 
+의미 없는 디버그용 로그를 프린트하기 위해서 아까운 서버의 리소스와 디스크가 낭비될 수 있다. 별다른 튜닝도 필요 없는 로그 제거 작업이 성능을 얼마나 많이 향상 시킬 수 있을지 다시 한 번 생각해 보고, 운영 서버의 소스에 있는 모든 시스템 로그를 제거하기 바란다.
 
+### System.out.format() 메서드
+format() 메서드는 JDK 5.0의 System 클래스에서 사용하는 out 객체 클래스인 PrintStream에 새로 추가되었다. 문자열을 사용할 경우에는 %s, int나 long과 같은 정수형을 나타낼 경우에는 %d, float이나 double을 나타낼 경우에는 %f를 사용하면 된다.
+
+```java
+
+String str1;
+for (int i = 0; i < repeats; i++) {
+  str1 = "aaa" + " " + "bbb" + " " + "ccc" + " " + 1L;
+}
+
+String str2;
+for (int i = 0; i < repeats; i++) {
+  str2 = String.format("%s %s %s %d", "aaa", "bbb", "ccc", 1L);
+}
+```
+
+이 코드를 컴파일한 클래스를 역 컴파일 해보면 String을 더하는 문장(str1)은 다음과 같이 변환된다.
+
+```java
+(new StringBuilder(String.valueOf("aaa"))).append(" ")
+  .append("bbb").append(" ")
+  .append("ccc").append(" ")
+  .append(1L).append(" ").toString();
+```
+
+그리고 format() 메서드를 사용하는 문장은 다음과 같이 변환된다.
+
+```java
+str2 = String.format("%s %s %s %d", new Object[] {
+  "aaa", "bbb", "ccc", Long.valueOf(1)
+}});
+```
+
+컴파일시 변환된 부분을 보면 새로운 Object 배열을 생성하여 그 값을 배열에 포함 시키도록 되어 있다. 게다가 long 값을 Object 형태로 나타내기 위해서 Long 클래스의 valueOf() 메서드를 사용하고 있다.
+
+실제 String.format() 메서드의 소스를 보면, 그 내부에서 java.util 패키지에 있는 Formatter 클래스를 호출한다. Formatter 클래스에서는 %가 들어가 있는 format 문자열을 항상 파싱(parsing)하기 때문에 문자열을 그냥 더하는 것보다 성능이 좋을 수 없다.
+
+만약 디버그용으로 사용한다면, 필자는 format 메서드를 사용하기를 권장한다. 더 편리하고 소스의 가독성도 높아지기 때문이다. 다만 운영 시에는 디버그용 로그를 제거할 경우를 가정하고 권하는 것임을 꼭 명심하기 바란다.
+
+### 로그를 더 간결하게 처리하는 방법
+모든 소스를 찾아 다니면서 printFlag를 변경하는 것보다 간단한 flag 정보를 갖는 클래스를 만들어 관리하면 약간 더 편하다.
+
+```java
+public class LogFlag {
+  public static final boolean printFlag = false;
+}
+
+...
+if (LogFlag.printFlag) {
+  System.out.format("LogRemoveSample.getList() : size = %d\n", retList.size());
+}
+...
+```
+
+매번 if 문장으로 막는 것보다 간단하게 사용하기 위해서는 좀 더 보완을 해서 다음과 같이 클래스를 만들면 된다.
+
+```java
+public class SampleLogger {
+  private static final boolean printFlag = false;
+  public static void log(String message) {
+    if (printFlag) {
+      System.out.println(message);
+    }
+  }
+}
+```
+
+SimpleLogger.log("...") 같은 방식으로 소스를 작성하면 되고, printFlag에 따라서 로그를 남길지, 남기지 않을지를 결정 할 수 있다. 이 소스의 단점은 printFlag를 수정하기 위해서 다시 컴파일해야 한다는 점과 어차피 log() 메서드 요청을 하기 위해서 메시지 문자열을 생성해야 한다는 것이다.
+
+### 로거 사용 시의 문제점
+운영 시 로그 레벨을 올려 놓는다고 해도, 디버그용 로그 메시지는 간단한 문자든 간단한 쿼리든 상관 없이 하나 이상의 객체가 필요하다. 그러면 그 객체를 생성하는 데 메모리와 시간이 소요된다. 또한 메모리에서 제거하기 위해서는 GC를 수행해야 하고, GC 수행 시간이 또 소요된다.
+
+가장 좋은 방법은 디버그용 로그를 제거하는 것이다. 하지만 그렇지 못한 것이 현실이다. 그래서 이 경우에는 시스템 로그의 경우처럼 로그 처리 여부를 처리하는 것이 좋다.
+
+```java
+if (logger.isLoggable(Level.INFO)) {
+  // 로그 처리
+}
+```
+
+이렇게 if 문장으로 처리하면 로그를 위한 불필요한 메모리 사용을 줄일 수 있어, 더 효율적으로 메시지를 처리할 수 있다.
+
+### 로그를 깔끔하게 처리해주는 slf4j와 LogBack
+
+> Simple Logging Facade for Java(SLF4J)
+
+```java
+...
+logger.debug("Temperature set to {}. Old temperature was {}.", newT, oldT);
+...
+logger.debug("Temperature has risen above 50 degrees.");
+...
+```
+
+기존 로거들은 앞 절에서 이야기한 대로 출력을 위해서 문자열을 더해 전달해 줘야만 했다. 하지만, slf4j는 format 문자열에 중괄호를 넣고, 그 순서대로 출력하고자 하는 데이터들을 콤마로 구분하여 전달해준다. 이렇게 전달해 주면 로그를 출력하지 않을 경우 필요 없는 문자열 더하기 연산이 발생하지 않는다.
+
+추가로 LogBack이라는 로거는 예외의 스택 정보를 출력할 때 해당 클래스가 어떤 라이브러리를 참고하고 있는지도 포함하여 제공하기 때문에 쉽게 관련된 클래스를 확인할 수 있다.
+
+### 예외 처리는 이렇게
+여러 스레드에서 콘솔에 로그를 프린트하면 데이터가 섞인다. 자바의 예외 스택 정보는 로그를 최대 100개까지 프린트하기 때문에 서버의 성능에도 많은 부하를 준다. 스택 정보를 가져오는 부분에서는 거의 90% 이상이 CPU를 사용하는 시간이고, 나머지 프린트하는 부분에서는 대기 시간이 소요된다.
+
+예외를 메시지로 처리하면 실제 사용자들은 한 줄의 오류 메시지나 오류 코드만을 보게되기 때문에 장애를 처리하기 쉽지 않다. 스택 정보를 보고 싶을 경우에는 다음과 같이 처리하는 방법도 있다.
+
+```java
+try {
+  ...
+} catch (Exception e) {
+  StackTraceElement[] ste = e.getStackTrace();
+  String className = ste[0].getClassName();
+  String methodName = ste[0].getMethodName();
+  int lineNumber = ste[0].getLineNumber();
+  String fileName = ste[0].getFileName();
+  logger.severe("Exception : " + e.getMessage());
+  logger.severe(className + "." + methodName + " " + fileName + " " + lineNumber + "line");
+}
+```
+
+마지막 라인의 문자열 더하는 구문들은 어차피 StringBuilder로 변환되므로 큰 성능 저하를 발생시키지 않는다.
+
+참고로 StackTraceElement 배열의 0번째에는 예외가 발생한 클래스 정보가 있으며, 마지막에는 최초 호출된 클래스의 정보가 있다.
 
 ---
 
