@@ -6,7 +6,7 @@ author: 김성중
 author-email: ajax0615@gmail.com
 description: 이상민님의 '자바 성능 튜닝 이야기'를 읽고 정리한 글입니다.
 keywords: Java, 자바
-next_url: /2019/03/30/java-performance-tuning-1.html
+next_url: /2019/03/30/java-performance-tuning-2.html
 publish: true
 ---
 
