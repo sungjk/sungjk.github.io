@@ -61,7 +61,7 @@ JSP에서 사용할 수 있는 include 방식은 정적진 방식(include direct
 - 정적인 방식: <%@include file=\"FILE_URL\"%>
 - 동적인 방식: <jsp:include page=\"FILE_URL\"/>
 
-동적인 방식이 정직인 방식보다 느릴 수밖에 없다. 정적인 방식과 동적인 방식의 응답 속도를 비교해보면 동적인 방식이 약 30배 더 느리게 나타난다. 즉, 성능을 더 빠르게 하려면 정적인 방식을 사용해야 한다는 의미다. 하지만 모든 화면을 정적인 방식으로 구성하면 잘 수행되던 화면에서 오류가 발생할 수 있다. 정적인 방식을 사용하면 메인 JSP에 추가되는 JSP가 생긴다. 이 떄 추가된 JSP와 메인 JSP에 동일한 이름의 변수가 있으면 심각한 오류가 발생할 수 있다.
+동적인 방식이 정직인 방식보다 느릴 수밖에 없다. 정적인 방식과 동적인 방식의 응답 속도를 비교해보면 동적인 방식이 약 30배 더 느리게 나타난다. 즉, 성능을 더 빠르게 하려면 정적인 방식을 사용해야 한다는 의미다. 하지만 모든 화면을 정적인 방식으로 구성하면 잘 수행되던 화면에서 오류가 발생할 수 있다. 정적인 방식을 사용하면 메인 JSP에 추가되는 JSP가 생긴다. 이 때 추가된 JSP와 메인 JSP에 동일한 이름의 변수가 있으면 심각한 오류가 발생할 수 있다.
 
 ### 자바 빈즈, 잘 쓰면 약 못 쓰면 독
 자바 빈즈(Java Beans)는 UI에서 서버 측 데이터를 담아서 처리하기 위한 컴포넌트이다. 자바 빈즈를 통하여 userBean을 하면 성능에 많은 영향을 미치지는 않지만, 너무 많이 사용하면 JSP에서 소요되는 시간이 증가될 수 있다.
@@ -117,7 +117,7 @@ JDBC 관련 API는 클래스가 아니라 인터페이스다. JDK의 API에 있�
 
 Connection 객체를 생성하는 부분에서 발생하는 대기 시간을 줄이고, 네트워크의 부담을 줄이기 위해서 사용하는 것이 DB Connection Pool이다.
 
-Statement와 PreparedStatement의 가장 큰 차이점은 캐시(cache) 사용 여부이다. Statement를 사용할 떄와 PreparedStatement를 처음 사용할 때는 다음과 같은 프로세스를 거친다.
+Statement와 PreparedStatement의 가장 큰 차이점은 캐시(cache) 사용 여부이다. Statement를 사용할 때와 PreparedStatement를 처음 사용할 때는 다음과 같은 프로세스를 거친다.
 
 1. 쿼리 문장 분석
 2. 컴파일
@@ -253,7 +253,157 @@ WAS에서 따로 설정한 바가 없거나 세션 객체의 invalidate() 메서
 
 ---
 
-# 16.
+# 16. JVM은 도대체 어떻게 구동될까?
+자바를 만든 Sun에서는 자바의 성능을 개선하기 위해서 Just In Time(JIT) 컴파일러를 만들었고, 이름을 HotSpot으로 지었다. 여기서 JIT 컴파일러는 프로그램의 성능에 옇양을 주는 지점에 대해서 지속적으로 분석한다. 분석된 지점은 부하를 최소화하고, 높은 성능을 내기 위한 최적화의 대상이 된다. 이 HotSpot은 자바 1.3 버전부터 기본 VM으로 사용되어 왔기 때문에, 지금 운영되고 있는 대부분의 시스템들은 모두 HotSpot 기반의 VM이라고 생각하면 된다. HotSpot VM은 세 가지 주요 컴포넌트로 되어 있다.
+
+- VM(Virtual Machine) 런타임
+- JIT(Just In Time) 컴파일러
+- 메모리 관리자
+
+![hotspot-vm](/images/2019/04/06/hotspot-vm.png "hotspot-vm"){: .center-image }
+
+\'HotSpot VM Runtime\'에 \'GC\'와 \'JIT 컴파일러\'를 끼워 맞춰 사용할 수 있다. 이를 위해서 \'VM 런타임\'은 JIT 컴파일러용 API와 가비지 컬렉터용 API를 제공한다. 그리고, JVM을 시작하는 런처와 스레드 관리, JNI 등도 VM 런타임에서 제공한다.
+
+### JIT Optimizer라는게 도대체 뭘까?
+모든 코드는 초기에 인터프리터에 의해서 컴파일되고, 해당 코드가 충분히 많이 사용될 경우에 JIT가 컴파일할 대상이 된다. HotSpot VM에서 이 작업은 각 메서드에 있는 카운터를 통해서 통제되며, 메서드에는 두 개의 카운터가 존재한다.
+
+- 수행 카운터(Invocation counter): 메서드를 시작할 때마다 증가
+- 백에지 카운터(backedge counter): 높은 바이트 코드 인덱스에서 낮은 인덱스로 컨트롤 흐름이 변경될 때마다 증가
+
+backedge counter는 메서드가 루프가 존재하는지를 확인할 때 사용되며, Invocation counter 보다 컴파일 우선순위가 높다.
+
+이 카운터들이 인터프리터에 의해서 증가될 때마다 그 값들이 한계치에 도달했는지를 확인하고, 도달했을 경우 인터프리터는 컴파일을 요청한다. Invocation counter에서 사용하는 한계치는 CompileThreashold이며, backedge counter에서 사용하는 한계치는 다음의 공식을 계산한다.
+
+CompileThreashold * OnStackReplacePercentage / 100
+
+> 이 두 개의 값들은 JVM이 시작할 때 지정 가능하며 다음과 같이 시작 옵션에 지정할 수 있다.<br/>
+> -XX:CompileThreashold=35000<br/>
+> -XX:OnStackReplacePercentage=80<br/>
+> 이렇게 지정하면 메서드가 35000번 호출되었을 때 JIT에서 컴파일을 하며, backedge counter가 35000 * 80 / 100 = 28000이 되었을때 컴파일된다.
+
+컴파일이 요청되면 컴파일 대상 목록의 큐에 쌓이고, 하나 이상의 컴파일러 스레드가 이 큐를 모니터링한다. 만약 컴파일 스레드가 바쁘지 않을 때는 큐에서 대상을 빼내서 컴파일을 시작한다. 보통 인터프리터는 컴파일이 종료되기를 기다리지 않고 Invocation counter를 리셋하고 인터프리터에서 메서드 수행을 계속한다. 컴파일이 종료되면 컴파일된 코드와 메서드가 연결되어 그 이후부터는 메서드가 호출되면 컴파일된 코드를 사용하게 된다. 만약 인터프리터에서 컴파일이 종료될 때까지 기다리도록 하려면 JVM 시작시 -Xbatch나 -XX:-BackgroundCompilation 옵션을 지정하여 컴파일을 기다리도록 할 수도 있다.
+
+HotSpot VM은 OSR(On Stack Replacement)이라는 특별한 컴파일도 수행한다. 이 OSR은 인터프리터에서 수행한 코드 중 오랫동안 루프가 지속되는 경우에 사용된다. 만약 해당 코드의 컴파일이 완료된 상태에서 최적화되지 않은 코드가 수행되고 있는 것을 발견한 경우에 인터프리터에 계속 머무르지 않고 컴파일된 코드로 변경한다. 이 작업은 인터프리터에서 시작된 오랫동안 지속되는 루프가 다시는 불리지 않을 경우엔 도움이 되지 않지만, 루프가 끝나지 않고 지속적으로 수행되고 있을 경우에는 큰 도움이 된다.
+
+> Java 5 HotSpot VM이 발표되면서 새로운 기능이 추가되었다. 이 기능은 JVM이 시작될 떄 플랫폼과 시스템 설정을 평가하여 자동으로 garbage collector를 선정하고, 자바 힙 사이즈와 JIT 컴파일러를 선택하는 것이다. 이 기능을 통해서 애플리케이션의 활동과 객체 할당 비율에 따라서 garbage collector가 동적으로 자바 힙 사이즈를 조절하며, New의 Eden과 Survivor, Old 영역의 비율을 자동적으로 조절하는 것을 의미한다. 이 기능은 -XX:+UseParallelGC와 -XX:+UseParallelOldGC에서만 적용되며, 이 기능을 제거하려면 -XX:-UseAdaptiveSizePolicy라는 옵션을 적용하여 끌 수가 있다.
+
+### JRockit의 JIT 컴파일 및 최적화 절차
+![jrockit-1](/images/2019/04/06/jrockit-1.gif "jrockit-1"){: .center-image }
+
+JVM은 각 OS에서 작동할 수 있도록 자바 코드를 입력 값(정확하게는 바이트코드)으로 받아 각종 변환을 거친 후 해당 칩의 아키텍처에서 잘 돌아가는 기계어 코드로 변환되어 수행되는 구조로 되어 있다.
+
+![jrockit-2](/images/2019/04/06/jrockit-2.gif "jrockit-2"){: .center-image }
+
+JRockit은 이와 같이 최적화 단계를 거치도록 되어 있으며, 각각의 단계는 다음의 작업을 수행한다.
+
+- **JRockit runs JIT compilation**<br/>
+자바 애플리케이션을 실행하면 기본적으로는 1번 단계인 JIT 컴파일을 거친 후 실행이 된다. 이 단계를 거친 후 메서드가 수행되면, 그 다음부터는 컴파일된 코드를 호출하기 때문에 처리 성능이 빨라진다.<br/>
+애플리케이션이 시작하는 동안 몇천 개의 새로운 메서드가 수행되며 이로 인해 다른 JVM보다 JRockit JVM이 더 느릴 수 있다. 그리고 이 작업으로 인해 JIT가 메서드를 수행하고 컴파일하는 작업은 오버헤드가 되지만, JIT가 없으면 JVM은 계속 느린 상태로 지속될 것이다. 다시 말해서 JIT를 사용하면 시작할 때의 성능은 느리겠지만, 지속적으로 수행할 때는 더 빠른 처리가 가능하다. 따라서 모든 메서드를 컴파일하고 최적화하는 작업은 JVM 시작 시간을 느리게 만들기 때문에 시작할 때는 모든 메서드를 최적화하지는 않는다.
+
+- **JRockit monitors threads**<br/>
+JRockit에는 \'sampler thread\'라는 스레드가 존재하며 주기적으로 애플리케이션의 스레드를 점검한다. 이 스레드는 어떤 스레드가 동작 중인지 여부와 수행 내역을 관리한다. 이 정보들을 통해서 어떤 메서드가 많이 사용되는지를 확인하여 최적화 대상을 찾는다.
+
+- **JRockit JVM performs optimization**<br/>
+\'sampler thread\'가 식별한 대상을 최적화한다. 이 작업은 백그라운드에서 진행되며 수행중인 애플리케이션에 영향을 주지는 않는다.
+
+### JVM이 시작할 때의 절차는 이렇다
+1. java 명령어 줄에 있는 옵션 파싱:<br/>
+일부 명령은 자바 실행 프로그램에서 적절한 JIT 컴파일러를 선택하는 등의 작업을 하기 위해서 사용하고 다른 명령들은 HotSpot VM에 전달된다.
+2. 자바 힙 사이즈 할당 및 JIT 컴파일러 타입 지정:<br/>
+메모리 크기나 JIT 컴파일러 종류가 명시적으로 지정되지 않은 경우에 자바 실행 프로그램이 시스템의 상황에 맞게 선정한다. 이 과정은 좀 복잡한 단계(HotSpot VM Adaptive Tuning)을 거치니 일단 넘어가자.
+3. CLASSPATH와 LD_LIBRARY_PATH 같은 환경 변수를 지정한다.
+4. 자바의 Main 클래스가 지정되지 않았으면, Jar 파일의 manifest 파일에서 Main 클래스를 확인한다.
+5. JNI의 표준 API인 JNI_CreateJavaVM를 사용하여 새로 생성한 non-primordial이라는 스레드에서 HotSpot VM을 생성한다.
+6. HotSpot VM이 생성되고 초기화되면, Main 클래스가 로딩된 런처에서는 main() 메서드의 속성 정보를 읽는다.
+7. CallStaticVoidMethod는 네이티브 인터페이스를 불러 HotSpot VM에 있는 main() 메서드가 수행된다. 이때 자바 실행 시 Main 클래스 뒤에 있는 값들이 전달된다.
+
+추가로 5.에 있는 자바의 가상 머신(JVM)을 생성하는 JNI_CreateJavaVM 단계에 대해서 더 알아보자. 이 단계에서는 다음의 절차를 거친다.
+
+1. JNI_CreateJavaVM는 동시에 두개의 스레드에서 호출할 수 없고, 오직 하나의 HotSpot VM 인스턴스가 프로세스 내에서 생성될 수 있도록 보장한다. HotSpot VM이 정적인 데이터 구조를 생성하기 때문에 다시 초기화는 불가능해서 오직 하나의 HotSpot VM이 프로세스에서 생성될 수 있다.
+2. JNI 버전이 호환성 있는지 점검하고, GC 로깅을 위한 준비도 완료한다.
+3. OS 모듈들이 초기화된다. 예를 들면 랜덤 번호 생성기, PID 할당 등이 여기에 속한다.
+4. 커맨드 라인 변수와 속성들이 JNI_CreateJavaVM 변수에 전달되고, 나중에 사용하기 위해서 파싱한 후 보관한다.
+5. 표준 자바 시스템 속성(properties)이 초기화된다.
+6. 동기화, 메모리, safepoint 페이지와 같은 모듈들이 초기화된다.
+7. libzip, libhpi, libjava, libthread와 같은 라이브러리들이 로드된다.
+8. 시그널 처리기가 초기화 및 설정된다.
+9. 스레드 라이브러리가 초기화된다.
+10. 출력(output) 스트림 로거가 초기화된다.
+11. JVM을 모니터링하기 위한 에이전트 라이브러리가 설정되어 있으면 초기화 및 시작된다.
+12. 스레드 처리를 위해서 필요한 스레드 상태와 스레드 로컬 저장소가 초기화된다.
+13. HotSpot VM의 \'글로벌 데이터\'들이 초기화된다. 글로벌 데이터에는 이벤트 로그(event log), OS 동기화, 성능 통계 메모리(perfMemory), 메모리 할당자(chunkPool)들이 있다.
+14. HotSpot VM에서 스레드를 생성할 수 있는 상태가 된다. main 스레드가 생성되고, 현재 OS 스레드에 붙는다. 그러나 아직 스레드 목록에 추가되지는 않는다.
+15. 자바 레벨의 동기화가 초기화 및 활성화된다.
+16. 부트 클래스로더, 코드 캐시, 인터프리터, JIT 컴파일러, JNI, 시스템 dictionary, \'글로벌 데이터\' 구조의 집합인 universe 등이 초기화된다.
+17. 스레드 목록에 자바 main 스레드가 추가되고 universe의 상태를 점검한다. HotSpot VM의 중요한 기능을 하는 HotSpot VM Thread가 생성된다. 이 시점에 HotSpot VM의 현재 상태를 JVMTI에 전달한다.
+18. java.lang 패키지에 있는 String, System, Thread, ThreadGroup, Class 클래스와 java.lang의 하위 패키지에 있는 Method, Finalizer 클래스 등이 로딩되고 초기화된다.
+19. HotSpot VM의 시그널 핸들러 스레드가 시작되고 JIT 컴파일러가 초기화되며 HotSpot의 컴파일 브로커 스레드가 시작된다. 그리고 HotSpot VM과 관련된 각종 스레드들이 시작한다. 이때부터 HotSpot VM의 전체 기능이 동작한다.
+20. JNIEnv가 시작되며 HotSpot VM을 시작한 호출자에게 새로운 JNI 요청을 처리할 상황이 되었다고 전달해 준다.
+
+이렇게 복잡한 JNI_CreateJavaVM 시작 단계를 거치고 나머지 단계들을 거치면 JVM이 시작된다.
+
+### JVM이 종료될 때의 절차는 이렇다
+HotSpot VM의 종료는 다음의 DestroyJavaVM 메서드의 종료 절차를 따른다.
+
+1. HotSpot VM이 작동중인 상황에서는 단 하나의 데몬이 아닌 스레드(nondaemon thread)가 수행될 때까지 대기한다.
+2. java.lang 패키지에 있는 Shutdown 클래스의 shutdown() 메서드가 수행된다. 이 메서드가 수행되면 자바 레벨의 shutdown hook이 수행되고, finalization-on-exit이라는 값이 true일 경우에 자바 객체 finalizer를 수행한다.
+3. HotSpot VM 레벨의 shutdown hook을 수행함으로써 HotSpot VM의 종료를 준비한다. 이 작업은 JVM_OnExit() 메서드를 통해서 지정된다. 그리고 HotSpot VM의 profiler, stat sampler, watcher, garbage collector 스레드를 종료시킨다. 이 작업들이 종료되면 JVMTI를 비활성화하며 Signal 스레드를 종료시킨다.
+4. HotSpot의 JavaThread::exit() 메서드를 호출하여 JNI 처리 블록을 해제한다. 그리고 guard pages 스레드 목록에 있는 스레드들을 삭제한다. 이 순간부터는 HotSpot VM에서 자바 코드를 실행하지 못한다.
+5. HotSpot VM 스레드를 종료한다. 이 작업을 수행하면 HotSpot VM에 남아 있는 HotSpot VM 스레드들을 safepoint로 옮기고 JIT 컴파일러 스레드들을 중지시킨다.
+6. JNI, HotSpot VM, JVMTI barrier에 있는 추적(tracing) 기능을 종료시킨다.
+7. 네이티브 스레드에서 수행하고 있는 스레드들을 위해서 HotSpot의 \"vm exited\" 값을 설정한다.
+8. 현재 스레드를 삭제한다.
+9. 입출력 스트림을 삭제하고 PrefMemory 리소스 연결을 해제한다.
+10. JVM 종료를 호출한 호출자로 복귀한다.
+
+### 클래스 로딩 절차도 알고 싶어요
+자바 클래스가 메모리에 로딩되는 절차는 다음과 같다.
+
+1. 주어진 클래스의 이름으로 class path에 있는 바이너리로 된 자바 클래스를 찾는다.
+2. 자바 클래스를 정의한다.
+3. 해당 클래스를 나타내는 java.lang 패키지의 Class 클래스의 객체를 생성한다.
+4. 링크 작업이 수행된다. 이 단계에서 static 필드를 생성 및 초기화하고 메서드 테이블을 할당한다.
+5. 클래스의 초기화가 진행되며 static 블록과 static 필드가 가장 먼저 초기화된다. 당연한 이야기지만 해당 클래스가 초기화 되기 전에 부모 클래스의 초기화가 먼저 이루어진다.
+
+이렇게 나열하니 단계가 복잡해 보이지만, loading -> linking -> initializing 로 기억하면 된다.
+
+### 예외는 JVM에서 어떻게 처리될까?
+JVM은 자바 언어의 제약을 어겼을 때 예외(exception)라는 시그널로 처리한다. HotSpot VM 인터프리터, JIT 컴파일러 및 다른 HotSpot VM 컴포넌트는 예외 처리와 모두 관련되어 있다. 일반적인 예외 처리 경우는 아래 두 가지 경우다.
+
+- 예외를 발생한 메서드에서 잡을 경우
+- 호출한 메서드에 의해서 잡힐 경우
+
+후자의 경우에는 보다 복잡하며 스택을 뒤져서 적당한 핸들러를 찾는 작업을 필요로 한다.
+
+예외는,
+
+- 던져진 바이트 코드에 의해서 초기화될 수 있으며,
+- VM 내부 호출의 결과로 넘어올 수도 있고,
+- JNI 호출로부터 넘어올 수도 있고,
+- 자바 호출로부터 넘어올 수도 있다.
+
+여기서 가장 마지막 경우는 단순히 앞의 세가지 경우의 마지막 단계에 속할 뿐이다.
+
+VM이 예외가 던져졌다는 것을 알아차렸을 때, 해당 예외를 처리하는 가장 가까운 핸들러를 찾기 위해서 HotSpot VM 런타임 시스템이 수행된다. 이 때 핸들러를 찾기 위해서는 다음의 3개 정보가 사용된다.
+
+- 현재 메서드
+- 현재 바이트 코드
+- 예외 객체
+
+만약 현재 메서드에서 핸들러를 찾지 못했을 때는 현재 수행되는 스택 프레임을 통해서 이전 프레임을 찾는 작업을 수행한다. 적당한 핸들러를 찾으면, HotSpot VM 수행 상태가 변경되며, HotSpot VM은 핸들러로 이동하고 자바 코드 수행은 계속된다.
+
+---
+
+# 17. 도대체 GC는 언제 발생할까?
+
+
+
+
+
+
+
+
+
 
 
 
@@ -277,3 +427,5 @@ WAS에서 따로 설정한 바가 없거나 세션 객체의 invalidate() 메서
 - [개발자가 반드시 알아야 할 자바 성능 튜닝 이야기](http://www.yes24.com/Product/Goods/11261731)
 - [Servlet Life Cycle](https://sridharu.wordpress.com/2016/01/31/servlet-life-cycle/)
 - [Closer Look At Android Runtime: DVM vs ART](https://android.jlelse.eu/closer-look-at-android-runtime-dvm-vs-art-1dc5240c3924)
+- [Understanding HotSpot VM Garbage Collectors (GC) in Depth](https://dzone.com/articles/understanding-garbage-collectorsgc-in-depth)
+- [Understanding Just-In-Time Compilation and Optimization](https://docs.oracle.com/cd/E15289_01/JRSDK/underst_jit.htm)
