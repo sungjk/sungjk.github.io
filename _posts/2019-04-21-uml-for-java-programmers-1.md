@@ -6,7 +6,7 @@ author: 김성중
 author-email: ajax0615@gmail.com
 description: 로버트 C. 마틴의 'UML for Java Programmers'를 읽고 정리한 글입니다.
 keywords: Java, 자바, UML
-publish: false
+publish: true
 ---
 
 # 1. 개요
@@ -261,7 +261,7 @@ public class ButtonDiallerAdapter implements ButtonListener {
 \"Phonebook은 PhoneNumber를 여러 개 가진다.\"라고 말할 수도 있지만 일부러 그리 하지 않았다. 자주 사용하는 객체지향(Object Oriented)  동사인 HAS-A와 IS-A 때문에 불행한 오해가 많았다.
 
 **상속(Inheritance)**<br/>
-화살촉을 조심해서 그리지 않으면 상속을 표현하는지 연관을 표현하는지 구분하기 힘들 수 있다.
+화살촉을 조심해서 그리지 않으면 상속을 표현하는지 연관을 표현하는지 구분하기 힘들 수 있다. 그래서 흔히 상속 관계는 세로로, 연관 관계는 가로로 그린다.
 
 ![inheritance-1](/images/2019/04/21/inheritance-1.png "inheritance-1"){: .center-image }
 
@@ -269,30 +269,67 @@ public class ButtonDiallerAdapter implements ButtonListener {
 
 ![inheritance-2](/images/2019/04/21/inheritance-2.png "inheritance-2"){: .center-image }
 
-###
+### 세부사항
 
+**클래스 스테레오타입(Class Stereotypes)**<br/>
 
+- <<interface>>. 이 스테레오타입이 붙은 클래스의 메서드는 모두 추상 메서드이므로, 어떤 메서드도 구현해서는 안 된다. 인스턴스 변수를 가지지 못하고 오직 정적(static) 변수만 가질 수 있다.
 
+![class-stereotype-1](/images/2019/04/21/class-stereotype-1.png "class-stereotype-1"){: .center-image }
 
+- <<utility>>. 클래스의 모든 메서드와 변수들은 정적(static)이다.
 
+![class-stereotype-2](/images/2019/04/21/class-stereotype-2.png "class-stereotype-2"){: .center-image }
 
+**추상 클래스(Abstract classes)**<br/>
+UML에서 추상 클래스나 추상 메서드를 표기하는 방법은 두 가지다. 이름을 이탤릭체로 적거나, {abstract} 프로퍼티를 사용하는 것이다.
 
+![abstract-class](/images/2019/04/21/abstract-class.png "abstract-class"){: .center-image }
 
+**프로퍼티(Properties)**<br/>
+{abstract} 같은 프로퍼티는 어떤 클래스에도 붙일 수 있다. 프로퍼티는 보통 클래스에 속하지 않는 추가 정보를 나타낸다. 프로퍼티는 다음처럼 쉼표(,)로 구분리된 이름-값 쌍으로 적는다.
 
+```
+{author=Martin, date=20020429, file=shape.java, private}
+```
 
+**집합(Aggregation)**<br/>
+집합은 \'부분/전체\' 관계를 내포하는 연관의 특별한 형태다. UML이 집합에 유일하게 제공하는 명확한 규칙은 다음 몇 가지 뿐이다. 전체는 자신의 부분이 될 수 없다. 따라서 \'인스턴스\'들이 집합을 통한 순환 고리를 만들 수는 없다. 어떤 객체가 자기 자신의 부분이 될수 없고, 두 객체가 서로 상대 객체의 부분이 될 수도 없고, 세 객체가 전체/부분 관계의 고리를 만들 수도 없다 등등.
 
+![aggregation](/images/2019/04/21/aggregation.png "aggregation"){: .center-image }
 
+**합성(Composition)**<br/>
+합성은 집합의 특별한 형태다. 자바 프로그램에서는 이 관계가 그다지 유용하지 않다. 반면 C++ 프로그래머에게는 합성 관계가 \'매우\' 유용하다.
 
+**다수성(Multiplicity)**<br/>
+객체는 다른 객체들의 배열이나 벡터를 가질 수 있으며, 같은 종류의 객체라도 배열이 아니라 여러 인스턴스 변수에 따로 가질 수도 있다. 단순한 숫자나 숫자 범위를 사용하면 된다.
 
+![Multiplicity](/images/2019/04/21/multiplicity.png "multiplicity"){: .center-image }
 
+**연관 스테레오타입(Association Stereotypes)**<br/>
 
+- <<create>>. 연관의 원본이 연관의 대상을 생성함을 나타낸다. 전형적인 팩터리(Factory).
+- <<local>>. 원본 클래스가 대상 클래스의 인스턴스를 만들고 그 인스턴스의 참조가 지역 변수에 담길 때 사용한다.
+- <<parameter>>. 원본 클래스의 멤버 함수가 호출될 때 대상 인스턴스가 인자로 넘어옴으로써 원본 클래스가 대상 클래스에 접근할 수 있게 됨을 보여준다.
+- <<delegate>>. 원본 클래스의 멤버 함수가 호출될 때 이 호출을 대상 클래스에 그대로 전달해서 대상 클래스의 멤버 함수를 호출하는 경우 등에 사용된다.
 
+![association-stereotypes](/images/2019/04/21/association-stereotypes.png "association-stereotypes"){: .center-image }
 
+**내부 클래스(Inner Classes)**<br/>
+연관의 가까운 쪽 끝에다가 내부에 십자 표시를 한 원을 덧붙여서 표현한다.
 
+![inner-classes](/images/2019/04/21/inner-classes.png "inner-classes"){: .center-image }
 
+**익명 내부 클래스(Anonymous Inner Classes)**<br/>
+<<anonymous>> 스트레오타입과 자신이 구현하는 인터페이스의 이름을 가지는 중첩된 클래스로 표현한다.
 
+![anonymous-inner-classes](/images/2019/04/21/anonymous-inner-classes.png "anonymous-inner-classes"){: .center-image }
 
+**연관 클래스(Association classes)**<br/>
+연관 클래스는 특정한 연관을 어떻게 구현하는지 보여 준다. 다이어그램에서 연관 클래스는 연관과 점선으로 연결된 보통 클래스로 그린다.
 
+**연관 한정사(Association Qualifiers)**<br/>
+일반적인 자바 참조가 아니라 어떤 종류의 키나 토큰을 통해 연관을 구현할 경우, 연관 한정사(association qualifiers)를 사용한다.
 
 ---
 
