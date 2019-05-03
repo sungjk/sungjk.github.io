@@ -1,11 +1,11 @@
 ---
 layout: entry
-post-category: java
 title: JAVA 프로그래머를 위한 UML - 1
 author: 김성중
 author-email: ajax0615@gmail.com
 description: 로버트 C. 마틴의 'UML for Java Programmers'를 읽고 정리한 글입니다.
 keywords: Java, 자바, UML
+next_url: /2019/04/27/uml-for-java-programmers-2.html
 publish: true
 ---
 
