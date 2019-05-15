@@ -200,5 +200,5 @@ StudentEnrollment 객체를 사용하는 사용자마다 자신이 관심 있는
 ---
 
 # References
-- [UML 실전에서는 이것만 쓴다: JAVA 프로그래머를 위한 UM](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788991268937)
+- [UML 실전에서는 이것만 쓴다: JAVA 프로그래머를 위한 UML](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788991268937)
 - [UML_for_Java_Programmers](https://www.csd.uoc.gr/~hy252/references/UML_for_Java_Programmers-Book.pdf)

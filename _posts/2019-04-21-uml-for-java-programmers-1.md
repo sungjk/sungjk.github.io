@@ -334,5 +334,5 @@ UML에서 추상 클래스나 추상 메서드를 표기하는 방법은 두 가
 ---
 
 # References
-- [UML 실전에서는 이것만 쓴다: JAVA 프로그래머를 위한 UM](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788991268937)
+- [UML 실전에서는 이것만 쓴다: JAVA 프로그래머를 위한 UML](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788991268937)
 - [UML_for_Java_Programmers](https://www.csd.uoc.gr/~hy252/references/UML_for_Java_Programmers-Book.pdf)

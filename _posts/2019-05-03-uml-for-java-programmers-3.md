@@ -144,5 +144,5 @@ STT는 열이 네 개 있는 단순한 테이블이다. 테이블의 행 하나�
 ---
 
 # References
-- [UML 실전에서는 이것만 쓴다: JAVA 프로그래머를 위한 UM](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788991268937)
+- [UML 실전에서는 이것만 쓴다: JAVA 프로그래머를 위한 UML](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788991268937)
 - [UML_for_Java_Programmers](https://www.csd.uoc.gr/~hy252/references/UML_for_Java_Programmers-Book.pdf)
