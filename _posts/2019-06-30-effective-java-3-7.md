@@ -82,7 +82,7 @@ public enum Operation {
 
 열거 타입 생성자에 넘겨지는 인수들의 타입도 컴파일타임에 추론된다. 따라서 열거 타입 생성자 안의 람다는 열거 타입의 인스턴스 멤버에 접근할 수 없다(인스턴스는 람다에 만들어지기 때문이다). 람다에서의 this 키워드는 바깥 인스턴스를 가리킨다. 반면 익명 클래스의 this는 익명 클래스의 인스턴스 자신을 가리킨다. 그래서 함수 객체가 자신을 참조해야 한다면 반드시 익명 클래스를 써야 한다.
 
-람다도 익명 클래스처럼 직렬화 형태로 구현별로 다를 수 있다. 따라서 **람다를 직렬화하는 일은 극힘 삼가야 한다.**
+람다도 익명 클래스처럼 직렬화 형태로 구현별로 다를 수 있다. 따라서 **람다를 직렬화하는 일은 극히 삼가야 한다.**
 
 ---
 
@@ -112,7 +112,7 @@ map.merge(key, 1, Integer::sum);
 ---
 
 # 44. 표준 함수형 인터페이스를 사용하라
-과거에는 상위 클래스의 기본 메서드를 재정의해 원하는 동작을 구현하는 템플릿 메서드 패턴을 사용했다면, 이를 대체하는 현대적인 해법은 같은 효과의 함수 객체를 받는 정적 팩ㅌ너리나 생성자를 제공하는 것이다.
+과거에는 상위 클래스의 기본 메서드를 재정의해 원하는 동작을 구현하는 템플릿 메서드 패턴을 사용했다면, 이를 대체하는 현대적인 해법은 같은 효과의 함수 객체를 받는 정적 팩터리나 생성자를 제공하는 것이다.
 
 LinkedHashMap을 생각해보자. 이 클래스의 protected 메서드인 removeEldestEntry를 재정의하면 캐시로 사용할 수 있다. 맵에 새로운 키를 추가하는 put 메서드는 이 메서드를 호출하여 true가 반환되면 맵에서 가장 오래된 원소를 제거한다. 예컨대 removeEldestEntry를 다음처럼 재정의하면 맵에 원소가 100개가 될 때까지 커지다가, 그 이상이 되면 새로운 키가 더해질 때마다 가장 오래된 원소를 하나씩 제거한다. 즉, 가장 최근 원소 100개를 유지한다.
 
@@ -204,44 +204,109 @@ static Stream<BigInteger> primes() {
 
 메서드 이름 primes는 스트림의 원소가 소수임을 말해준다. 스트림을 반환하는 메서드 이름은 이처럼 원소의 정체를 알려주는 복수 명사로 쓰기를 강력히 추천한다.
 
+---
 
+# 46. 스트림에서는 부작용 없는 함수를 사용하라
+스트림 패러다임의 핵심은 계산을 일련의 변환(transformation)으로 재구성하는 부분이다. 이때 각 변환 단계는 가능한 한 이전 단계의 결과를 받아 처리하는 순수 함수여야 한다. 순수 함수란 오직 입력만이 결과에 영향을 주는 함수를 말한다. 다른 가변 상태를 참조하지 않고, 함수 스스로도 다른 상태를 변경하지 않는다.
 
+```java
+// 스트림 코드를 가장한 반복적 코드
+Map<String, Long> freq = new HashMap<>();
+try (Stream<String> words = new Scanner(file).tokens()) {
+  words.forEach(word -> {
+    freq.merge(word.toLowerCase(), 1L, Long::sum);
+  });
+}
 
+// 스트림을 제대로 활용해 빈도표를 초기화한다.
+Map<String, Long> freq;
+try (Stream<String> words = new Scanner(file).tokens()) {
+  freq = words
+    .collect(groupingBy(String::toLowerCase(), counting()));
+}
+```
 
+**forEach 연산은 스트림 계산 결과를 보고할 때만 사용하고, 계산하는 데는 쓰지 말자.**
 
+스트림 파이프라인 프로그래밍의 핵심은 부작용 없는 함수 객체에 있다. 스트림뿐 아니라 스트림 관련 객체에 건네지는 모든 함수 객체가 부작용이 없어야 한다. 종단 연산 중 forEach는 스트림이 수행한 계산 결과를 보고할 때만 이용해야 한다. 계산 자체에는 이용하지 말자. 스트림을 올바로 사용하려면 수집기를 잘 알아둬야 한다. 가장 중요한 수집기 팩터리는 toList, toSet, toMap, groupingBy, joining이다.
 
+```java
+// 빈도표에서 가장 흔한 단어 10개를 뽑아내는 파이프라인
+List<String> topTen = freq.keySet().stream()
+  .sorted(comparing(freq::get).reversed())
+  .limit(10)
+  .collect(toList());
 
+// toMap 수집기를 사용하여 문자열을 열거 타입 상수에 매핑한다.
+private static final Map<String, Operation> stringToEnum =
+  Stream.of(values()).collect(toMap(Object::toString, e -> e));
 
+// 각 키와 해당 키의 특정 원소를 연관 짓는 맵을 생성하는 수집기
+Map<Artist, Album> topHits = albums.collect(
+  toMap(Album::artist, a -> a, maxBy(comparing(Album::sales))));
 
+// 마지막에 쓴 값을 취하는 수집기
+toMap(keyMapper, valueMapper, (oldVal, newVal) -> newVal)
+```
 
+---
 
+# 47. 반환 타입으로는 스트림보다 컬렉션이 낫다
+Stream 인터페이스는 Iterable 인터페이스가 정의한 추상 메서드를 전부 포함할 뿐만 아니라, Iterable 인터페이스가 정의한 방식대로 동작한다. 그럼에도 for-each로 스트림을 반복할 수 없는 까닭은 바로 Stream이 Iterable을 확장(extends)하지 않아서다.
 
+스트림만 반환하는 API가 반환한 값을 for-each로 반복하길 원하는 프로그래머가 감수해야 할 부분이다.
 
+반대로, API가 Iterable만 반환하면 이를 스트림 파이프라인에서 처리하려는 프로그래머가 성을 낼 것이다. 자바는 이를 위한 어댑터도 제공하지 않지만, 손쉽게 구현할 수 있다.
 
+```java
+public static <E> Stream<E> streamOf(Iterable<E> iterable) {
+  return StreamSupport.stream(iterable.spliterator(), false);
+}
+```
 
+객체 시퀀스를 반환하는 메서드를 작성하는데, 이 메서드가 오직 스트림 파이프라인에서만 쓰일 걸 안다면 마음 놓고 스트림을 반환하게 해주자. 반대로 반환된 객체들이 반복문에서 쓰일 걸 안다면 Iterable을 반환하자.
 
+Collection 인터페이스는 Iterable의 하위 타입이고 stream 메서드도 제공하니 반복과 스트림을 동시에 지원한다. 따라서 **원소 시퀀스를 반환하는 공개 API의 반환 타입에는 Collection이나 그 하위 타입을 쓰는게 일반적으로 최선이다.**
 
+**단지 컬렉션을 반환한다는 이유로 덩치 큰 시퀀스를 메모리에 올려서는 안 된다.**
 
+---
 
+# 48. 스트림 병렬화는 주의해서 적용하라
+환경이 아무리 좋더라도 **데이터 소스가 Stream.iterate거나 중간 연산으로 limit을 쓰면 파이프라인 병렬화로는 성능 개선을 기대할 수 없다.** 파이프라인 병렬화는 limit을 다룰 때 CPU 코어가 남는다면 원소를 몇 개 더 처리한 제한된 개수 이후의 결과를 버려도 아무런 해가 없다고 가정한다.
 
+대체로 **스트림의 소스가 ArrayList, HashMap, HashSet, ConcurrentHashMap의 인스턴스거나 배열, int 범위, long 범위일 때 병렬화의 효과가 가장 좋다.** 이 자료구조들은 모두 데이터를 원하는 크기로 정확하고 손쉽게 나눌 수 있어서 일을 다수의 스레드에 분배하기에 좋다는 특징이 있다. 또 다른 중요한 공통점은 원소들을 순차적으로 실행할 때의 참조 지역성(locality of reference)이 뛰어나다는 것이다. 참조 지역성이 낮으면 스레드는 데이터가 주 메모리에서 캐시 메모리로 전송되어 오기를 기다리며 대부분 시간을 멍하니 보내게 된다. 따라서 참조 지역성은 다량의 데이터를 처리하는 벌크 연산을 병렬화할 때 아주 중요한 요소로 작용한다.
 
+종단 연산 중 병렬화에 가장 적합한 것은 축소(reduction)다. 축소는 파이프라인에서 만들어진 모든 원소를 하나로 합치는 작업으로, Stream의 reduce 메서드 중 하나, 혹은 min, max, count, sum 같이 완성된 형태로 제공되는 메서드 중 하나를 선택해 수행한다. anyMatch, allMatch, nonMatch처럼 조건에 맞으면 바로 반환되는 메서드도 병렬화에 적합하다. 반면, 가변 축소(mutable reduction)를 수행하는 Stream의 collect 메서드는 병렬화에 적합하지 않다. 컬렉션들을 합치는 부담이 크기 때문이다.
 
+**스트림을 잘못 병렬화하면 (응답 불가를 포함해) 성능이 나빠질 뿐만 아니라 결과 자체가 잘못되거나 예상 못한 동작이 발생할 수 있다.**
 
+스트림 병렬화는 오직 성능 최적화 수단임을 기억해야 한다. 다른 최적화와 마찬가지로 변경 전후로 반드시 성능을 테스트하여 병렬화를 사용할 가치가 있는지 확인해야 한다.
 
+**조건이 잘 갖춰지면 parallel 메서드 호출 하나로 거의 프로세서 코어 수에 비례하는 성능 향상을 만끽할 수 있다.**
 
+```java
+// 1. 소수 계산 스트림 파이프라인 - 병렬화에 적합하다.
+static long pi(long n) {
+  return LongStream.rangeClsed(2, n)
+    .mapToObj(BigInteger::valueOf)
+    .filter(i -> i.isProbablePrime(50))
+    .count();
+}
 
+// 2. 소수 계산 스틀미 파이프라인 - 병렬화 버전
+static long pi(long n) {
+  return LongStream.rangeClsed(2, n)
+    .parallel()
+    .mapToObj(BigInteger::valueOf)
+    .filter(i -> i.isProbablePrime(50))
+    .count();
+}
+```
 
+1의 코드로 pi(10^8)을 계산하는데 31초가 걸렸지만, 2의 코드로는 9.2초로 단축됐다. 하지만 n이 크다면 레머의 공식(Lehmer's Formula)라는 효율적인 알고리즘을 사용하면 된다.
 
+---
 
-
-
-
-
-
-
-
-
-
-
-
-###
+# Reference
+- [Effective Java 3/E](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788966262281&orderClick=LAG&Kc=)
