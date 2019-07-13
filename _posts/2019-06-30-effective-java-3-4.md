@@ -54,5 +54,121 @@ public static final Thing[] values() {
 
 ---
 
+# 16. public 클래스에서는 public 필드가 아닌 접근자 메서드를 사용하라
+
+**패키지 바깥에서 접근할 수 있는 클래스라면 접근자를 제공** 함으로써 클래스 내부 표현 방식을 언제든 바꿀 수 있는 유연성을 얻을 수 있다.
+
+```java
+// 접근자와 변경자(mutator) 메서드를 활용해 데이터를 캡슐화한다.
+class Point {
+  private double x;
+  private double y;
+
+  public Point(double x, double y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  public double getX() { return x; }
+  public double getY() { return y; }
+
+  public void setX(double x) { this.x = x; }
+  public void setY(double y) { this.y = y; }
+}
+```
+
+하지만 **package-private 클래스 혹은 private 중첩 클래스라면 데이터 필드를 노출한다 해도 하등의 문제가 없다.** 이 방식은 클래스 선언 면에서나 이를 사용하는 클라이언트 코드 내부 표현에 묶이기는 하나, 클라이언트도 어차피이 클래스를 포함하는 패키지 안에서만 동작하는 코드일 뿐이다. 따라서 패키지 바깥 코드는 전혀 손대지 않고도 데이터 표현 방식을 바꿀 수 있다. private 중첩 클래스의 경우라면 수정 범위가 더 좁아져서 이 클래스를 포함하는 외부 클래스까지로 제한된다.
+
+---
+
+# 17. 변경 가능성을 최소화하라
+불변 클래스는 가변 클래스보다 설계하고 구현하고 사용하기 쉬우며, 오류가 생길 여지도 적고 훨씬 안전하다. 클래스를 불변으로 만들려면 다음 다섯 가지 규칙을 따르면 된다.
+
+- **객체의 상태를 변경하는 메서드(변경자)를 제공하지 않는다.**
+- **클래스를 확장할 수 없도록 한다.** 하위 클래스에서 부주의하게 혹은 나쁜 의도로 객체의 상태를 변하게 만드는 사태를 막아준다.
+- **모든 필드를 final로 선언한다.** 시스템이 강제하는 수단을 이용해 설계자의 의도를 명확히 드러내는 방법이다. 새로 생성된 인스턴스를 동기화 없이 다른 스레드로 건네도 문제없이 동작하게끔 보장하는 데도 필요하다.
+- **모든 필드를 private으로 선언한다.** 필드가 참조하는 가변 객체를 클라이언트에서 직접 접근해 수정하는 일을 막아준다. 기술적으로 기본 타입 필드나 불변 객체를 참조하는 필드를 public final로만 선언해도 불변 객체가 되지만, 이렇게 하면 다음 릴리스에서 내부 표현을 바꾸지 못하므로 권하지는 않는다.
+- **자신 외에는 내부의 가변 컴포넌트에 접근할 수 없도록 한다.** 클래스에 가변 객체를 참조하는 필드가 하나라도 있다면 클라이언트에서 그 객체의 참조를 얻을 수 없도록 해야 한다.
+
+```java
+// 불변 복소수 클래스
+public final class Complex {
+  private final double re;
+  private final double im;
+
+  public Complex(double re, double im) {
+    this.re = re;
+    this.im = im;
+  }
+
+  public Complex plus(Complex c) {
+    return new Complex(re + c.re, im + c.im);
+  }
+
+  public Complex minus(Complex c) {
+    return new Complex(re - c.re, im - c.im);
+  }
+
+  public Complex times(Complex c) {
+    return new Complex(re * c.re - im * c.im, re * c.im + im * c.re);
+  }
+
+  public Complex dividedBy(Complex c) {
+    double tmp = c.re * c.re + c.im * c.im;
+    return new Complex((re * c.re + im * c.im) / (tmp, im * c.re - re * c.im) / tmp);
+  }
+
+  ...
+}
+```
+
+사칙연산 메서드(plus, minus, times, dividedBy)들이 인스턴스 자신은 수정하지 않고 새로운 Complex 인스턴스를 만들어 반환하는 모습에 주목하자. 이처럼 피연산자에 함수를 적용해 그 결과를 반환하지만, 피연산잔자 자체는 그대로인 프로그래밍 패턴을 함수형 프로그래밍이라 한다. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
 # Reference
 - [Effective Java 3/E](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9788966262281&orderClick=LAG&Kc=)
