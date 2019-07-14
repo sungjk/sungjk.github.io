@@ -122,7 +122,157 @@ public final class Complex {
 }
 ```
 
-사칙연산 메서드(plus, minus, times, dividedBy)들이 인스턴스 자신은 수정하지 않고 새로운 Complex 인스턴스를 만들어 반환하는 모습에 주목하자. 이처럼 피연산자에 함수를 적용해 그 결과를 반환하지만, 피연산잔자 자체는 그대로인 프로그래밍 패턴을 함수형 프로그래밍이라 한다. 
+사칙연산 메서드(plus, minus, times, dividedBy)들이 인스턴스 자신은 수정하지 않고 새로운 Complex 인스턴스를 만들어 반환하는 모습에 주목하자. 이처럼 피연산자에 함수를 적용해 그 결과를 반환하지만, 피연산잔자 자체는 그대로인 프로그래밍 패턴을 함수형 프로그래밍이라 한다.
+
+함수형 프로그래밍에 익숙하지 않다면 조금 부자연스러워 보일 수도 있지만, 이 방식으로 프로그래밍하면 코드에서 불변이 되는 영역의 비율이 높아지는 장점을 누릴 수 있다. **불변 객체는 단순하다.** 모든 생성자가 클래스 불변식(class invariant)를 보장한다면 그 클래스를 사용하는 프로그래머가 다른 노력을 들이지 않더라도 영원히 불변으로 남는다.
+
+**불변 객체는 근본적으로 스레드 안전하며 따로 동기화할 필요 없다.** 불변 객체에 대해서는 그 어떤 스레드도 다른 스레드에 영향을 줄 수 없으니 **불변 객체는 안심하고 공유할 수 있다.**
+
+**불변 객체는 자유롭게 공유할 수 있음은 물론, 불변 객체끼리는 내부 데이터를 공유할 수 있다.** 예컨대 BigInteger 클래스는 내부에서 갑의 부호(sign)와 크기(magnitude)를 따로 표현한다. 부호에는 int 변수를, 크기(절댓값)에는 int 배열을 사용하는 것이다. 한편 negate 메서드는 크기가 같고 부호만 반대인 새로운 BigInteger를 사용하는데, 이때 배열은 비록 가변이지만 복사하지 않고 원본 인스턴스와 공유해도 된다.
+
+**객체를 만들 때 다른 불변 객체들을 구성요소로 사용하면 이점이 많다.** 값이 바뀌지 않는 구성요소들로 이뤄진 객체라면 그 구조가 아무리 복잡하더라도 불변식을 유지하기 훨씬 수월하기 떄문이다.
+
+**불변 객체는 그 자체로 실패 원자성을 제공한다.** 상태가 절대 변하지 않으니 잠깐이라도 불일치 상태에 빠질 가능성이 없다.
+
+**불변 클래스에도 단점은 있다. 값이 다르면 반드시 독립된 객체로 만들어야 한다는 것이다.** 값의 가짓수가 많다면 이들을 모두 만드는 데 큰 비용을 치러야 한다. 이 문제에 대처하는 방법은 두 가지다. 첫 번째는 흔히 쓰일 다단계 연산(multistep operation)들을 예측하여 기본 기능으로 제공하는 방법이다. 이러한 다단계 연산을 기본으로 제공한다면 더 이상 각 단계마다 객체를 생성하지 않아도 된다.
+
+클라이언트들이 원하는 복잡한 연산들을 정확히 예측할 수 있다면 package-private의 가변 동반 클래스만으로 충분하다. 그렇지 않다면 이 클래스를 public으로 제공하는 게 최선이다.
+
+클래스가 불변임을 보장하려면 자신을 상속하지 못하게 해야 함을 기억하는가? 자신을 상속하지 못하게 하는 가장 쉬운 방법은 final 클래스로 선언하는 것이지만, 더 유연한 방법이 있다. 모든 생성자를 private 혹은 package-private으로 만들고 public 정ㅈ거 팩터리를 제공하는 방법이다.
+
+```java
+// 생성자 대신 정적 팩터리를 사용한 불변 클래스
+public class Complex {
+  private final double re;
+  private final double im;
+
+  private Complex(double re, double im) {
+    this.re = re;
+    this.im = im;
+  }
+
+  public static Complex valueOf(double re, double im) {
+    return new Complex(re, im);
+  }
+
+  ...
+}
+```
+
+바깥에서 볼 수 없는 package-private 구현 클래스를 원하는 만큼 만들어 활용할 수 있으니 훨씬 유연하다. 패키지 바깥의 클라이언트에서 바라본 이 불변 객체는 사실상 final이다. public이나 protected 생성자가 없으니 다른 패키지에서는 이 클래스를 확장하는 게 불가능하기 때문이다. 정적 팩터리 방식은 다수의 구현 클래스를 활용한 유연성을 제공하고, 이에 더해 다음 릴리스에서 객체 캐싱 기능을 추가해 성능을 끌어올릴 수도 있다.
+
+게터(getter)가 있다고 해서 무조건 세터(setter)를 만들지는 말자. **클래스는 꼭 필요한 경우가 아니라면 불변이어야 한다.** 불변 클래스는 장점이 많으며, 단점이라곤 특정 상황에서의 잠재적 성능 저하뿐이다. Complex 같은 단순한 값 객체는 항상 불변으로 만들자. String과 BigInteger처럼 무거운 값 객체도 불변으로 만들 수 있는지 고심해야 한다. 성능 때문에 어쩔 수 없다면 불변 클래스와 쌍을 이루는 가변 동반 클래스를 public 클래스로 제공하도로고 하자.
+
+한편, 모든 클래스를 불변으로 만들 수는 없다. **불변으로 만들 수 없는 클래스라도 변경할 수 있는 부분을 최소한으로 줄이자.** 객체가 가질 수 있는 상태의 수를 줄이면 그 객체을 예측하기 쉬워지고 오류가 생길 가능성이 줄어든다. 그러니 꼭 변경해야 할 필드를 뺀 나머지 모두를 final로 선언하자. **다른 합당한 이유가 없다면 모든 필드는 private final이어야 한다.**
+
+**생성자는 불변식 설정이 모두 완료된, 초기화가 완벽히 끝난 상태의 객체를 생성해야 한다.** 확실한 이유가 없다면 생성자와 정적 팩터리 외에는 그 어떤 초기화 메서드도 public으로 제공해서는 안 된다.
+
+---
+
+# 18. 상속보다는 컴포지션을 사용하라
+상속은 코드를 재사용하는 강력한 수단이지만, 항상 최선은 아니다. 상위 클래스와 하위 클래스를 모두 같은 프로그래머가 통제하는 패키지 안에서라면 안전한 방법이다. 확장할 목적으로 설계되었고 문서화도 잘 된 클래스도 마찬가지로 안전하다. 하지만 일반적인 구체 클래스를 패키지 경계를 넘어, 즉 다른 패키지의 구체 클래스를 상속(클래스가 다른 클래스를 확장하는 구현 상속)하는 일은 위험하다.
+
+**메서드 호출과 달리 상속은 캡슐화를 깨뜨린다.** 다르게 말하면, 상위 클래스가 어떻게 구현되느냐에 따라 하위 클래스의 동작에 이상이 생길 수 있다.
+
+구체적인 예를 살펴보자. HashSet의 성능을 높이도록 처음 생성된 이후 원소가 몇 개 더해졌는지 알 수 있게 add와 addAll을 재정의했다.
+
+```java
+// 잘못된 예 - 상속을 잘못 사용했다!
+public class InstrumentedHashSet<E> extends HashSet<E> {
+  // 추가된 원소의 수
+  private int addCount = 0;
+
+  public InstrumentedHashSet() {}
+
+  public InstrumentedHashSet(int initCap, float loadFactor) {
+    super(initCap, loadFactor);
+  }
+
+  @Override public boolean add(E d) {
+    addCount++;
+    return super.add(e);
+  }
+
+  @Override public boolean addAll(Collection<? extends E> c) {
+    addCount += c.size();
+    return super.addAll(c);
+  }
+
+  public int getAddCount() {
+    return addCount;
+  }
+}
+```
+
+자바 9부터 지원하는 정적 팩터리 메서드인 List.of로 리스트를 생성해서 addAll을 해보겠다.
+
+```java
+InstrumentedHashSet<String> s = new InstrumentedHashSet<>();
+s.addAll(List.of("틱", "탁탁", "펑"));
+```
+
+리스트를 추가하고 getAddCount 메서드를 호출하면 3을 반환하리라 기대하겠지만, 실제로는 6을 반환한다. InstrumentedHashSet의 addAll은 각 원소를 add 메서드를 호출해 추가하는데, 이떄 불리는 add는 InstrumentedHashSet에 재정의한 메서드다. 따라서 addCount에 값이 중복해서 더해져, 최종값이 6으로 늘어난 것이다.
+
+addAll 메서드를 주어진 컬렉션을 순회하며 원소 하나당 add 메서드를 한 번만 호출하는 형태로 재정의할 수도 있다. 이 방식은 HashSet의 addAll을 더 이상 호출하지 않으니 addAll이 add를 사용하는지와 상관없이 결과가 옳다는 점에서 조금은 나은 해법이다. 하지만 상위 클래스의 메서드 종작을 다시 구현하는 이 방식은 어렵고, 시간도 더 들고, 자칫 오류를 내거나 성능을 떨어뜨릴 수도 있다. 또한 하위 클래스에서는 접근할 수 없는 private 필드를 써야 하는 상황이라면 이 방식으로는 구현 자체가 불가능하다.
+
+다행히 이상의 문제를 모두 피해가는 묘안이 있다. 기존 클래스를 확장하는 대신, 새로운 클래스를 만들고 private 필드로 기존 클래스의 인스턴스를 참조하게 하자. 기존 클래스가 새로운 클래스의 구성요소로 쓰인다는 뜻에서 이러한 설계를 컴포지션(composition; 구성)이라 한다. 새 클래스의 인스턴스 메서드들은 (private 필드로 참조하는) 기존 클래스의 대응하는 메서드를 호출해 그 결과를 반환한다. 이 방식을 전달(forwarding)이라 하며, 새 클래스의 메서드들을 전달 메서드(forwarding method)라 부른다. 그 결과 새로운 클래스는 기존 클래스의 내부 구현 방식의 영향에서 벗어나며, 심지어 기존 클래스에 새로운 메서드가 추가되더라도 전혀 영향받지 않는다. 구체적인 예시를 위해 InstrumentedHashSet을 컴포지션과 전달 방식으로 다시 구현한 코드를 준비했다.
+
+```java
+// 래퍼 클래스 - 상속 대신 컴포지션을 사용했다.
+public class InstrumentedSet<E> extends ForwardingSet<E> {
+  private int addCount = 0;
+
+  public InstrumentedHashSet(Set<E> s) {
+    super(s);
+  }
+
+  @Override public boolean add(E d) {
+    addCount++;
+    return super.add(e);
+  }
+
+  @Override public boolean addAll(Collection<? extends E> c) {
+    addCount += c.size();
+    return super.addAll(c);
+  }
+
+  public int getAddCount() {
+    return addCount;
+  }
+}
+
+// 재사용할 수 있는 전달 클래스
+public class ForwardingSet<E> implements Set<E> {
+  private final Set<E> s;
+
+  public ForwardingSet(Set<E> s) { this.s = s; }
+
+  public void clear() { s.clear(); }
+  public boolean contains(Object o) { return s.contains(o); }
+  public boolean isEmpty() { return s.isEmpty(); }
+  ...
+}
+```
+
+Set 인터페이스를 구현했고, Set의 인스턴스를 인수로 받는 생성자를 하나 제공한다. 임의의 Set에 계측 기능을 덧씌워 새로운 Set으로 만드는 것이 이 클래스의 핵심이다.
+
+```java
+Set<Instant> times = new InstrumentedSet<>(new TreeSet<>(cmp));
+Set<E> s = new InstrumentedSet<>(new HashSet<>(INIT_CAPACITY));
+
+static void walk(Set<Dog> dogs) {
+  InstrumentedSet<Dog> iDogs = new InstrumentedSet<>(dogs);
+  ... // 이 메서드에서는 dogs 대신 iDogs를 사용한다.
+}
+```
+
+다른 Set 인스턴스를 감싸고(wrap) 있다는 뜻에서 InstrumentedSet 같은 클래스를 래퍼 클래스라 하며, 다른 Set에 계측 기능을 덧씌운다는 뜻에서 데코레이터 패턴(Decorator pattern)이라고 한다. 래퍼 클래스는 단점이 한 가지, 래퍼 클래스가 콜백(callback) 프레임워크와는 어울리지 않는다는 점만 주의하면 된다.
+
+상속은 반드시 하위 클래스가 상위 클래스의 \'진짜\' 하위 타입인 상황에서만 쓰여야 한다. 다르게 말하면, 클래스 B가 클래스 A와 is-a 관계일 때만 클래스 A를 상속해야 한다. 클래스 A를 상속하는 클래스 B를 작성하려 한다면 \"B가 정말 A인가?\"라고 자분해보자.
+
+---
+
+# 19. 상속을 고려해 설계하고 문서화하라. 그러지 않았다면 상속을 금지하라.
 
 
 
