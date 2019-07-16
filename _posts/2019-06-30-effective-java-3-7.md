@@ -1,10 +1,11 @@
 ---
 layout: entry
+post-category: java
 title: Effective Java 3 - 람다와 스트림
 author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java 3판의 7장(람다와 스트림)을 정리한 글입니다.
-keywords: Java, 자바
+keywords: Java, 자바, Effective Java, 이팩티브 자바
 publish: true
 ---
 
