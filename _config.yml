@@ -8,6 +8,8 @@ kramdown:
   input: GFM
   hard_wrap: false
 
+title: "Jeremy's Blog"
+description: "Jeremy's Blog: Things I've learned."
 home_url: "https://sungjk.github.io"
 author: "Jeremy"
 author-email: "ajax0615@gmail.com"
@@ -17,7 +19,7 @@ sass:
     sass_dir: css
 
 trawler_mode: true
-gems:
+plugins:
   - jekyll-paginate
   - jekyll-feed
 feed:
