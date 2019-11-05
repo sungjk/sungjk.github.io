@@ -6,6 +6,7 @@ author: 김성중
 author-email: ajax0615@gmail.com
 description: Effective Java 3판의 4장(클래스와 인터페이스)을 정리한 글입니다.
 keywords: Java, 자바, Effective Java, 이팩티브 자바
+next_url: /2019/06/30/effective-java-3-4-2.html
 publish: true
 ---
 
