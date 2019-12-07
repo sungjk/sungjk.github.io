@@ -5,6 +5,7 @@ author: 김성중
 author-email: ajax0615@gmail.com
 description: 클린 아키텍처(Clean Architecture)를 읽고 정리한 글 입니다.
 keywords: 클린 아키텍처, Clean Architecture
+next_url: /2019/11/05/clean-architecture-2.html
 publish: true
 ---
 
