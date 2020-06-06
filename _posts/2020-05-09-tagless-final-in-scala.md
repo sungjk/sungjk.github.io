@@ -3,7 +3,6 @@ layout: entry
 title: Tagless Final in Scala Example
 author: 김성중
 author-email: ajax0615@gmail.com
-description: TODO
 keywords: scala
 publish: true
 ---
