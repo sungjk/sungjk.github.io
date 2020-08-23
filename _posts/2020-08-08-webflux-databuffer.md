@@ -113,7 +113,7 @@ fun createDataBuffer(filename: String): DataBuffer {
 ```
 
 ### BodyInserters.fromDataBuffers
-[fromDataBuffers](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/reactive/function/BodyInserters.html#fromDataBuffers-T-) 메서드는 인자로 주어진 Publisher\<DataBuffer\>를 HTTP Request body에 쓰기(write)위한 Inserter를 리턴한다. Publisher가 무엇인지에 대한 설명은 다음 [링크](http://0.0.0.0:4000/2020/06/06/reactive-streams.html)를 참조하면 좋겠다.
+[fromDataBuffers](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/reactive/function/BodyInserters.html#fromDataBuffers-T-) 메서드는 인자로 주어진 Publisher\<DataBuffer\>를 HTTP Request body에 쓰기(write)위한 Inserter를 리턴한다. Publisher가 무엇인지에 대한 설명은 다음 [링크](https://sungjk.github.io/2020/06/06/reactive-streams.html)를 참조하면 좋겠다.
 
 ```kotlin
 val dataBuffers: Flux<DataBuffer> = Flux.just(createDataBuffer("foo.jpg"))
