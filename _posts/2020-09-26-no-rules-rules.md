@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: no-rules-rules
 title: 규칙 없음 - No Rules Rules
 author: 김성중
 author-email: ajax0615@gmail.com
