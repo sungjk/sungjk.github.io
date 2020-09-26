@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: getting-out-of-the-box
 title: 상자 밖에 있는 사람
 author: 김성중
 author-email: ajax0615@gmail.com
