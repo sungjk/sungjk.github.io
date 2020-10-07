@@ -46,6 +46,7 @@ Alfread의 입력창은 기본적으로 파일과 웹에서 검색할 수 있는
 4. 검색 결과는 기본적으로 Alfred의 캐시에 저장된 목록을 보여주므로 IDE로 특정 프로젝트를 열었더라도 바로 안보일 수 있습니다. 이때는 환경 변수값(Workflow Environment Variables)을 조정해주시면 됩니다. 자세한 설명은 [이 곳](https://github.com/bchatard/alfred-jetbrains#workflow-environment-variables)를 참고하시면 됩니다.
    - ![Alfred Jetbrains](/images/2020/10/07/alfred-jetbrains-3.png "Alfred Jetbrains"){: .center-image }
    - ![Alfred Jetbrains](/images/2020/10/07/alfred-jetbrains-4.png "Alfred Jetbrains"){: .center-image }
+4. 캐시 목록 확인하기: `$ cat ~/Library/Caches/com.runningwithcrayons.Alfred/Workflow\ Data/fr.chatard.jetbrains.workflow/cache.json`
 
 ---
 
