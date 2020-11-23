@@ -80,7 +80,53 @@ default 메서드의 경우는 메서드를 직접 구현하겠다고 컴파일�
 ---
 
 # 3. 함수형 프로그래밍
+자바 8에서는 인터페이스에 하나의 메서드만 정의한 것을 함수형 인터페이스라고 부른다.
+
+```java
+// 함수형 인터페이스
+public interface TravelInfoFilter {
+  public boolean isMatched(TravelInfoVO TravelInfo);
+}
+
+...
+
+// 외부에서 전달된 조건으로 검색
+public List<TravelInfoVO> searchTravelInfo(TravelInfoFilter searchCondition) {
+  List<TravelInfoVO> returnValue = new ArrayList<>();
+
+  for (TravelInfoVO travelInfo : travelInfoList) {
+    if (searchCondition.isMatched(travelInfo)) {
+      returnValue.add(travelInfo);
+    }
+  }
+  return returnValue;
+}
+
+...
+
+public static void main(String[] args) {
+  ...
+  // 조회 조건을 외부로 분리
+  List<TravelInfoVO> searchTravel = travelSearch.searchTravelInfo(new TravelInfoFilter() {
+    @Override
+    public boolean isMatched(TravelInfoVO travelInfo) {
+      return travelInfo.getCountry().equals("vietnam");
+    }
+  });
+}
+```
+
+searchTravelInfo 메서드만 보면 isMatched에 내부적으로 어떤 조건을 구현해 놓았는지 알지 못하지만 그 결과값에 따라 true/false 값을 확인할 수 있으므로 외부에서 들어오는 다양한 조건에 대해 처리가 가능하다.
+
+### 메서드 참조
+람다 표현식을 사용하면 익명 클래스의 소스 코드 중복성은 해결할 수 있지만, 소스 코드의 재사용이라는 측면에서는 활용도가 떨어진다. 이 경우 람다 표현식을 하나의 함수로 선언하고 이 함수를 다른 곳에서 활용하면 재사용성을 높일 수 있다.
+
+---
+
+# 4. 람다와 함수형 인터페이스
+
 TODO
+
 
 ---
 
