@@ -280,7 +280,9 @@ Map<String, List<String>> anagrams = newHashMap();
 ---
 
 # 규칙 28. 한정적 와일드카드를 써서 API 유연성을 높여라
-일련의 원소들을 인자로 받아 차례로 스택에 집어넣는 메서드를 추가하는 pushAll 메서드를 정의했다. Integer 형의 intVal로 push(intVal)을 호출하면 제대로 동작할 것이다. Integer는 Number의 하위 자료형(subtype)이기 때문이다. 그러니 논리적으로 보자면 아래의 코드는 문제가 없어야 할 것이지만, 실제로 해 보면 에러가 발생한다. 앞서 설명한 대로, 형인자 자료형은 불변(invariant)이기 때문이다.
+매개변수화 타입은 불공변(invariant)이다. 즉, 서로 다른 타입 Type1과 Type2가 있을 때 List\<Type1\>은 List\<Type2\>의 하위 타입도 상위 타입도 아니다. 직관적이진 않겠지만 List\<String\>은 List\<Object\>의 하위 타입이 아니라는 뜻이다. List\<Object\>에는 어떤 객체든 넣을 수 있지만 List\<String\>에는 문자열만 넣을 수 있다. 즉, List\<String\>은 List\<Object\>가 하는 일을 제대로 수행하지 못하니 하위 타입이 될 수 없다(리스코프 치환 원칙에 어긋남).
+
+불공변 방식보다 유연한 무언가를 Stack의 public API를 예시로 알아보자.
 
 ```java
 public class Stack<E> {
@@ -289,7 +291,11 @@ public class Stack<E> {
   public E pop();
   public boolean isEmpty();
 }
+```
 
+일련의 원소들을 인자로 받아 차례로 스택에 집어넣는 메서드를 추가하는 pushAll 메서드를 정의했다. Integer 형의 intVal로 push(intVal)을 호출하면 제대로 동작할 것이다. Integer는 Number의 하위 자료형(subtype)이기 때문이다. 그러니 논리적으로 보자면 아래의 코드는 문제가 없어야 할 것이지만, 실제로 해 보면 에러가 발생한다. 매개변수화 타입이 불공변이기 때문이다.
+
+```java
 // 와일드카드 자료형을 사용하지 않는 pushAll 메서드 - 문제가 있다.
 public void pushAll(Iterable<E> src) {
   for (E e : src)
@@ -301,10 +307,10 @@ Iterable<Integer> integers = ... ;
 numberStack.pushAll(integers);  // 에러 발생
 ```
 
-자바는 이런 상황을 해결하기 위해, 한정적 와일드카드 자료형(bounded wildcard type)이라는 특별한 형인자 자료형을 제공한다. 따라서, pushAll의 인자 자료형을 \"E의 Iterable\"이 아니라 \"E의 하위 자로형의 Iterable\"이라고 명시할 방법이 필요한데, 와일드카드 자료형을 써서 Iterable\<? extends E\>라고 하면 된다는 것이다.
+자바는 이런 상황을 해결하기 위해, 한정적 와일드카드 타입(bounded wildcard type)이라는 특별한 매개변수화 타입을 지원한다. pushAll의 입력 매개변수 타입은 \'E의 Iterable\'이 아니라 \'E의 하위 타입의 Iterable\'이어야 하며, 와일드카드 타입 Iterable\<? extends E\>가 정확히 이런 뜻이다.
 
 ```java
-// E 객체 생산자 역할을 하는 인자에 대한 와일드카드 자료형
+// E의 producer 역할을 하는 인자에 대한 와일드카드 타입 적용
 public void pushAll(Iterable<? extends E> src) {
   for (E e : src)
     push(e);
@@ -325,19 +331,32 @@ Collection<Object> objects = ... ;
 numberStack.popAll(objects);  // pushAll의 첫 번째 버전과 같은 오류 발생
 ```
 
-Collection\<Object\>가 Collection\<Number\>의 하위 자료형이 아니라는 오류가 난다. 이는 popAll의 인자 자료형을 \"E의 컬렉션\"이 아니라 \"E의 상위 자료형(supertype)의 컬렉션\"이라고 명시하면 된다.
+Collection\<Object\>가 Collection\<Number\>의 하위 타입이 아니라는 오류가 난다. 이는 popAll의 입력 매개변수의 타입이 \'E의 Collection\'이 아니라 \'E의 상위타입의 Collection\'이어야 한다. 와일드카드 타입을 사용한 Collection\<? super E\>가 정확히 이런 의미다.
 
 ```java
-// E의 소비자 구실을 하는 인자에 대한 와일드카드 자료형
+// E의 소비자 구실을 하는 인자에 대한 와일드카드 타입 적용
 public void popAll(Collection<? super E> dst) {
   while (!isEmpty())
     dst.add(pop());
 }
 ```
 
-여기서 배울 교훈은 명확하다. 유연성을 최대화하려면, 객체 생산자(producer)나 소비자(consumer) 구실을 하는 메서드 인자의 자료형은 와일드카드 자료형으로 하라는 것이다.
+**유연성을 극대화하려면 원소의 생산자나 소비자용 입력 매개변수에 와일드카드 타입을 사용하라.** 한편, 입력 매개변수가 생산자와 소비자 역할을 동시에 한다면 와일드카드 타입을 써도 좋을게 없다. 다음 공식을 외워두면 와일드카드 타입을 써야하는지 기억하는 데 도움이 될 것이다.
 
-어떤 와일드카드를 쓸지 암기하기 어렵다면, PECS (Produce - Extends, Consumer - Super) 약어를 활용하자. 다시 말해서, 인자가 T 생성자라면 \<? extends T\>라고 하라는 것이다. PECS는 와일드카드 자료형을 사용할 때 지켜야 할 기본적 원칙을 훌륭히 표현하는 약어다.
+> 펙스(PECS): producer-extends, consumer-super
+
+즉, 매개변수 타입 T가 생산자라면 \<? extends T\>를 사용하고, 소비자라면 \<? super T\>를 사용하라. Stack 예에서 pushAll의 src 매개변수는 Stack이 사용할 인스턴스 E를 생산하므로 Iterable\<? extends E\>를 사용하는 것이고, popAll의 dst 매개변수는 Stack으로부터 인스턴스 E를 소비하므로 dst의 타입은 Colleciton\<? super E\>이다.
+
+```java
+// 나쁜 예
+public Chooser(Collection<T> choices)
+
+// 좋은 예
+// T 타입의 값을 생산하기만 하니, T를 확장하는 와일드카드 타입을 사용해 선언
+public Chooser(Collection<? extends T> choices)
+```
+
+Chooser를 와일드카드 타입을 사용해 변경하면, Choose\<Number\>의 생성자에 List\<Integer\>를 넘겼을때 나쁜 예의 생성자로는 컴파일조차 되지 않겠지만, 한정적 와일드카드 타입으로 좋은 예의 생성자에서는 문제가 사라진다.
 
 ---
 
