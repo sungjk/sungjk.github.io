@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: wild-sheep-chase
 title: 양을 쫓는 모험
 author: 김성중
 author-email: ajax0615@gmail.com
