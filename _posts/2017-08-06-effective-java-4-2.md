@@ -345,7 +345,7 @@ public void popAll(Collection<? super E> dst) {
 
 > 펙스(PECS): producer-extends, consumer-super
 
-즉, 매개변수 타입 T가 생산자라면 \<? extends T\>를 사용하고, 소비자라면 \<? super T\>를 사용하라. Stack 예에서 pushAll의 src 매개변수는 Stack이 사용할 인스턴스 E를 생산하므로 Iterable\<? extends E\>를 사용하는 것이고, popAll의 dst 매개변수는 Stack으로부터 인스턴스 E를 소비하므로 dst의 타입은 Colleciton\<? super E\>이다.
+즉, 매개변수 타입 T가 생산자라면 \<? extends T\>를 사용하고, 소비자라면 \<? super T\>를 사용하라. Stack 예에서 pushAll의 src 매개변수는 Stack이 사용할 인스턴스 E를 생산하므로 Iterable\<? extends E\>를 사용하는 것이고, popAll의 dst 매개변수는 Stack으로부터 인스턴스 E를 소비하므로 dst의 타입은 Collection\<? super E\>가 되는 것이다.
 
 ```java
 // 나쁜 예
