@@ -48,7 +48,7 @@ Alfread의 입력창은 기본적으로 파일과 웹에서 검색할 수 있는
    - ![Alfred Jetbrains](/images/2020/10/07/alfred-jetbrains-4.png "Alfred Jetbrains"){: .center-image }
 4. 캐시 목록 확인하기: `$ cat ~/Library/Caches/com.runningwithcrayons.Alfred/Workflow\ Data/fr.chatard.jetbrains.workflow/cache.json`
 
-### JetBrains 업데이트 후 에러가 발생할때
+### 업데이트 후 에러가 발생한다면?
 
 ```
 // node_modules 설치 위치 확인
