@@ -1,7 +1,7 @@
 ---
 layout: entry
 post-category: alfred
-title: 귀차니즘을 해결해주는 Alfred 꿀팁
+title: 귀차니즘을 해결해주는 Alfred
 author: 김성중
 author-email: ajax0615@gmail.com
 description: 귀차니즘을 해결해주는 macOS 필수 앱
