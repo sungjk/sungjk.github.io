@@ -49,18 +49,25 @@ Mac에는 정말 유용한 앱들이 많은데, 그 중에서 귀차니즘을 �
   $ cat ~/Library/Caches/com.runningwithcrayons.Alfred/Workflow\ Data/fr.chatard.jetbrains.workflow/cache.json
   ```
 
-### ⚠️ IDE 업데이트 후 에러가 발생한다면?
+### IDE 업데이트 후 에러가 발생한다면?
+먼저 npm 모듈 삭제 후 재설치를 해본다.
 
-```
-# node_modules 설치 위치 확인
+```js
 $ ll /usr/local/lib/node_modules
-
-# @bchatard 모듈 제거
 $ rm -rf /usr/local/lib/node_modules/@bchatard
-
-# npm 의존성 제거 후 재설치
 $ npm uninstall -g @bchatard/alfred-jetbrains
 $ npm install -g @bchatard/alfred-jetbrains
+```
+
+### Can't find application path for IntelliJIdea.
+IntelliJIdea 버전을 2020.3으로 업데이트하고 나서 위 에러 메시지가 계속 발생해서 [문의](https://github.com/bchatard/alfred-jetbrains/issues/184#issuecomment-748650617)를 하였고, product.js에서 regex를 다음과 같이 업데이트하니 해결하였다.
+
+```js
+// product.js path 확인
+$ ll /usr/local/lib/node_modules/@bchatard/alfred-jetbrains/src/product.js
+
+// product.js 128번 라인을 아래 코드로 수정
+const pattern = new RegExp('open -(n)?a "(.*)"( --args)?');
 ```
 
 ---
