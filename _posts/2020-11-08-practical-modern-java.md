@@ -227,10 +227,97 @@ cal::getTime; // 메서드 참조 구문. cal 변수를 참조한다.
 ---
 
 # 5. 스트림 API
-TODO
+스트림 API의 주된 목적은 람다 표현식과 메서드 참조 등의 기능과 결합해서 매우 복잡하고 어려운 데이터 처리 작업을 쉽게 조회하고 필터링하고 변환하고 처리할 수 있도록 하는 것이다.
 
+### 스트림 인터페이스
+스트림에서 가장 기본이 되는 인터페이스는 BaseStream이다.
+
+```
+<T, S extends BaseStream<T, S>>
+- T: 스트림에서 처리할 데이터의 타입
+- S: BaseStream을 구현한 스트림 구현체
+```
+
+여기서 S 타입으로 지정한 타입은 AutoCloseable 인터페이스의 close 메서드를 반드시 구현해야 한다.
+
+- **Intermediate operation**: 리턴 타입이 Stream인 메서드들은 리턴 결과를 이용해서 ㄷ이터를 중간에 변형 혹은 필터링한 후 다시 Stream 객체를 만들어서 결과를 리턴한다.
+- **Terminal operation**: 리턴 타입이 없는 void형 메서드들은 주로 Stream을 이용해서 데이터를 최종적으로 소비한다.
+- **Immutable**: 중간 연산 작업과 함꼐 병렬 처리가 가능하기 때문에 데이터의 정합성을 확보하기 위함이다.
+
+DoubleStream, IntStream, LongStream 인터페이스를 이용하면 데이터가 자동으로 박싱/언박싱되지 않기 때문에 처리 속도가 빨라진다.
+
+### 스트림 객체 생성
+컬렉션 프레임워크의 최상위 인터페이스인 java.util 패키지의 Collection 인터페이스를 살펴보면 자바 8 버전부터 아래 default 메서드가 추가되었다.
+
+```
+default Stream<E> stream()
+```
+
+| 리턴 타입 | 메서드 | 설명 |
+| void &nbsp;&nbsp;&nbsp;&nbsp; | accept(T t) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | 스트림 빌더에 데이터를 추가하기 위한 메서드다. |
+| Stream.Builder<T> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | add(T t) | 스트림 빌더에 데이터를 추가하기 위한 메서드.<br/> 기존에 추가한 데이터와 현재 추가한 데이터가 포함된 Stream.Builder 객체를 리턴한다. |
+| Stream<T> | build() | Stream.Builder 객체에 데이터를 추가하는 작업을 종료한다. |
+
+### 주요 스트림 연산 상세
+**distinct 메서드는 성능을 저하시킬 수 있다**<br/>
+병렬 처리를 목적으로 스트림을 생성하면 distinct 메서드는 성능이 떨어진다. 데이터 중복을 제거하기 위해 여러 스레드에 분산해 놓은 데이터를 동기화해서 비교해야 하기 때문. 따라서 중복 제거를 위해 distinct 메서드를 쓰고 싶다면 병렬 스트림보다는 순차 스트림을 이용하는 것이 더 빠르다.
+
+**중복 제거가 안 될 수도 있다**<br/>
+스트림 항목의 중복 여부를 확인하기 위해 equals 메서드가 내부적으로 호출된다는 것을 기억해야 한다. 정확한 equals 결과를 얻기 위해서는 equals 메서드 외에도 hashCode 메서드도 오버라이드해야 한다.
+
+distinctByKey 메서드는 스트림의 개수만큼 반복 호출되는 것이 아니라 한 번만 실행되며, distinctByKey의 리턴 객체인 Predicate 객체의 test 메서드가 반복적으로 호출된다. 그러므로 다음의 메서드는 오직 한 번 실행되며 filter를 위한 조건을 생성하는 역할만 수행한다.
+
+```java
+public static <T> Predicate<T> distinctByKey(Function<? super T, ?> key) {
+  Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+  return t -> seen.putIfAbsent(key.apply(t), Boolean.TRUE) == null;
+}
+```
+
+limit의 경우 스트림의 데이터 중 정수값만큼 데이터의 개수를 제한해서 새로운 스트림 객체로 리턴한다.
+
+skip 메서드는 주어진 입력 파라미터의 값만큼 데이터를 건너뛰라는 이미다.
+
+### 데이터 정렬
+값이 서로 동일한지 여부를 판단하기 위해서는 equals 메서드를 사용하고, 객체의 크고 작음을 판단하기 위해서는 Comparable 인터페이스를 구현해야 한다.
+
+```java
+sorted(Comparator<? super T> comparator)
+```
+
+- Comparable 인터페이스를 구현하지 않은 객체를 정렬할 때
+- 역순으로 정렬하고 싶을때
+- 정렬하고자 하는 객체의 키 값을 다르게 하고 싶을 때
+
+클래스에 Comparable 인터페이스를 이요해서 compareTo 메서드를 정의하면 오직 하나의 정렬 규칙을 만들 수 있지만 sorted 메서드에 Comparator를 이용할 경우 개발자가 원하는 다양한 조합을 적용할 수 있다.
+
+```java
+int compare(T o1, T o2)
+```
+
+- 첫 번째 파라미터가 값이 클 경우: 음수를 리턴한다.
+- 두 번쨰 파라미터가 값이 클 경우: 0 혹은 양수를 리턴한다.
+
+### 컬렉션으로 변환
+컬렉션 프레임워크로 변경하기 위한 메서드는 스트림 인터페이스에서 두 개가 제공되고 있다.
+
+```java
+collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner)
+collect(Collector<? super T, A, R> collector)
+```
+
+- T: 리듀스 연산의 입력 항목으로 사용하는 데이터 타입
+- A: 리듀스 연산의 변경 가능한 누적값으로 사용하는 데이터 타입
+- R: 리듀스 연산의 최종 결과 데이터 타입
 
 ---
+
+# 6. 병렬 프로그래밍
+TODO
+
+---
+
+##
 
 ### References
 - [Practical 모던 자바](http://www.yes24.com/Product/Goods/92529658)
