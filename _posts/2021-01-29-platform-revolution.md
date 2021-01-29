@@ -1,10 +1,12 @@
 ---
 layout: entry
+post-category: platform-revolution
 title: 플랫폼 레볼루션
 author: 김성중
 author-email: ajax0615@gmail.com
 description: 4차 산업혁명 시대를 지배할 플랫폼 비즈니스의 모든 것
 keywords: 플랫폼 레볼루션, 플랫폼, Platform Revolution
+thumbnail-image: /images/profile/platform-revolution.png
 publish: true
 ---
 
