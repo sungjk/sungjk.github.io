@@ -1,11 +1,12 @@
 ---
 layout: entry
+post-category: refactoring
 title: 리팩터링 1 - Refactoring 1
 author: 김성중
 author-email: ajax0615@gmail.com
 description: 마틴 파울러의 리팩터링 2판(코드 구조를 체계적으로 개선하여 효율적인 리팩터링 구현하기)
 keywords: 리팩터링, 리팩토링, refactoring
-thumbnail-image: /images/profile/refactoring.jpg
+thumbnail-image: /images/profile/refactoring.png
 publish: true
 ---
 
@@ -344,5 +345,5 @@ describe('province', function() {
 ---
 
 ### Reference
-- [리팩터링 2판](http://www.yes24.com/Product/Goods/89649360)
+- [리팩터링 2판: 코드 구조를 체계적으로 개선하여 효율적인 리팩터링 구현하기](http://www.yes24.com/Product/Goods/89649360)
 - [martinfowler.com](https://martinfowler.com/)
