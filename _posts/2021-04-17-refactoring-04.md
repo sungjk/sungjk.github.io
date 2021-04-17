@@ -7,6 +7,7 @@ author-email: ajax0615@gmail.com
 description: 마틴 파울러의 리팩터링 2판(코드 구조를 체계적으로 개선하여 효율적인 리팩터링 구현하기)
 keywords: 리팩터링, 리팩토링, refactoring
 thumbnail-image: /images/profile/refactoring.png
+next_url: /2021/04/17/refactoring-05.html
 publish: true
 ---
 
