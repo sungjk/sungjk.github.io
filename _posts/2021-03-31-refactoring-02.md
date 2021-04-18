@@ -277,10 +277,21 @@ orders.filter(o => o.priority.higherThan(new Priority("normal")))
 ### 7.4 임시 변수를 질의함수로 바꾸기(Replace Temp with Query)
 ```javascript
 // Before
-
+const basePrice = this._quantity * this._itemPrice;
+if (basePrice > 1000)
+  return basePrice * 0.95;
+else
+  return basePrice * 0.98;
 
 // After
+get basePrice() {this._quantity * this._itemPrice;}
 
+...
+
+if (this.basePrice > 1000)
+  return this.basePrice * 0.95;
+else
+  return this.basePrice * 0.98;
 ```
 - 임시 변수를 사용하면 값을 계산하는 코드가 반복되는 걸 줄이고 (변수 이름을 통해) 값의 의미를 설명할 수도 있어서 유용하다. 그런데 한 걸음 더 나아가 아예 함수로 만들어 사용하는 편이 나을 때가 많다.
 - 긴 함수를 한 부분을 별도 함수로 추출하고자 할 때 먼저 변수들을 각각의 함수로 만들면 일이 수월해진다.
