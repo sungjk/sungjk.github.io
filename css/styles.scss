@@ -610,6 +610,15 @@ img {
   border-color: $btn-border-color;
 }
 
+.karrotpay-btn a {
+  display: block;
+  max-height: 100%;
+}
+
+.karrotpay-btn img {
+  max-width: 100%;
+}
+
 /* blog ends */
 
 /* about */
@@ -835,9 +844,6 @@ img {
   }
   .posts .post-description {
     margin-right: 0;
-  }
-  .back-btn a {
-    padding: 20px 25%;
   }
   .pagination .previous {
     float: left;
