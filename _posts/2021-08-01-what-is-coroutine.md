@@ -3,7 +3,7 @@ layout: entry
 title: 코루틴(Coroutine)
 author: 김성중
 author-email: ajax0615@gmail.com
-description: 코루틴 알아보기
+description: Computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed.
 keywords: 코루틴, coroutine
 publish: true
 ---
