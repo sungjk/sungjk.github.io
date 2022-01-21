@@ -1,9 +1,9 @@
 ---
 layout: entry
-title: M1 맥북에서 gRPC osx-aarch_64 바이너리 받아오기
+title: M1 맥북에서 gRPC osx-aarch_64 바이너리 문제 해결하기
 author: 김성중
 author-email: ajax0615@gmail.com
-description: M1 맥북에서 gRPC osx-aarch_64 바이너리 받아오는 방법
+description: M1 맥북에서 gRPC osx-x86_64 바이너리를 받아오는 방법 알아보기
 keywords: m1, grpc, osx-aarch_64, amd, arm
 publish: true
 ---
