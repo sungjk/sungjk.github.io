@@ -2,7 +2,7 @@
 layout: entry
 post-category: marketing
 title: 마케터의 일
-author: marketing
+author: 김성중
 author-email: ajax0615@gmail.com
 description: 마케터는 어떤 고민과 생각을 하는지 잘 담아낸 책
 keywords: marketing
