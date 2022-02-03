@@ -3,7 +3,7 @@ layout: entry
 title: Mocks Aren't Stubs
 author: 김성중
 author-email: ajax0615@gmail.com
-description: Mock 객체는 behavior verification을 가능하게 하는 테스트 객체의 한 형태이다.
+description: Mock 객체는 behavior verification을 도와주는 테스트 객체의 한 형태이다.
 keywords: test, mock, stub, behavior verification
 publish: true
 ---
