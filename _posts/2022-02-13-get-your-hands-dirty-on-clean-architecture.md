@@ -1,5 +1,6 @@
 ---
 layout: entry
+post-category: clean-architecture
 title: 만들면서 배우는 클린 아키텍처
 author: 김성중
 author-email: ajax0615@gmail.com
