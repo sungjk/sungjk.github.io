@@ -169,6 +169,39 @@ Circuit Breaker 자체는 가치가 있지만 Circuit Breaker를 사용하는 �
 
 ---
 
+# Resilience4j - CircuitBreaker
+JVM 애플리케이션에서 fault tolerance library로 많이 사용되는 Resilience4j도 CircuitBreaker 기능을 지원한다. Resilience4j의 CircuitBreaker는 CLOSED, OPEN 및 HALF_OPEN의 세 가지 정상 상태와 DISABLED 및 FORCED_OPEN 두 가지 특수한 상태가 있는 유한 상태 머신(finite state machine)으로 구현되었다.
+
+![resilience4j-circuit-breaker-state](/images/2022/11/12/resilience4j-circuit-breaker-state.png "resilience4j-circuit-breaker-state"){: .center-image }
+
+기능을 사용하기 위해 관련된 설정들을 찾다보면 서로 사용하는 방식이 많이 다른데다가, 실제로 적용할 백엔드 서비스의 유형에 따라 설정에 포함시켜야 할 속성이나 값이 크게 달라질 수 있다. 어떤 설정이 있나 찾아보니 현재 대부분 Sliding Window(Count-based, Time-based) 방식을 사용하나, 과거에는 Ring Buffer 방식으로도 사용한 점이 보여서 좀 더 알아보았다.
+
+### Sliding Window
+[Sliding Window](https://www.geeksforgeeks.org/window-sliding-technique/)은 네트워크에서 패킷을 전송하는 방식 중 하나인데 그냥 알고리즘 중 하나다. CircuitBreaker는 Sliding Window를 사용해서 호출 결과를 저장하고 집계하는데, 호출수를 기반으로한 방식(count-based sliding window)과 시간 기반으로 하는 방식(time-based sliding window) 중에 선택할 수 있다. 카운트 기반으로한 방식은 마지막 N개의 호출 결과를 집계하고, 시간 기반으로 한 방식은 마지막 N초의 호출 결과를 집계한다.
+
+**Count-based sliding window**<br/>
+카운트 기반 방식은 내부적으로 N개의 호출을 기록할 수 있도록 원형 배열을 사용한다. window size가 10이면 원형 배열에는 항상 10개의 측정값이 있다. sliding window는 총 집계를 점진적으로 업데이트한다. 새 호출 결과가 기록되면 총 집계가 업데이트된다. 가장 오래된 내용이 제거되면 총 집계에서 차감되고 버킷이 리셋된다(Subtract-on-Evict). 스냅샷을 검색하는 시간은 상수값인 O(1)인데, 스냅샷을 조회하는 시점에 이미 계산되어 있고 window size와 상관없기 때문이다. 이 구현은 메모리 소비면에서도 O(n)이어야 한다.
+
+**Time-based sliding window**<br/>
+시간 기반으로 한 방식은 N 부분 집계(버킷)의 원형 배열로 구현된다. window size가 10초인 경우 원형 배열에는 항상 10개의 버킷이 있다. 각 버킷은 특정 시간(epoch second)에 발생한 모든 호출 결과를 집계한다(Partial aggregation). 원형 배열의 헤드 버킷은 현재 시간(current epoch second)에 발생한 호출 결과를 저장한다. 다른 버킷은 이전 초의 호출 결과를 저장한다. 총 집계는 새로운 호출 결과가 기록될 때 점진적으로 업데이트된다. 가장 오래된 버킷이 제거되면 해당 버킷의 부분 총 집계(Partial total aggregation)가 전체 집계에서 차감되고 버킷이 리셋된다(Subtract-on-Evict). 부분 집계(Partial aggragation)는 실패한 호출 수, 느린 호출 수, 총 호출 수를 계산하기 위한 3개의 Integer 값과 모든 호출의 기간(duration)을 저장하는 long 값으로 구성된다.
+
+### Ring Buffer(~v0.17.0)
+CLOSED 상태에서 Ring Bit Buffer를 사용해서 함수 호출의 성공과 실패 상태를 저장한다. 성공한 건 0 bit로 저장되고 실패한 건 1 bit로 저장된다. 그리고 고정된 사이즈의 Buffer 크기를 설정할 수 있다. 내부적으로 BitSet과 유사한 자료 구조를 사용해서 Boolean Array에 비해 메모리도 적게 사용된다. BitSet은 Long[] Array를 사용해서 비트를 저장한다. 이 말은 즉, BitSet은 1024 호출의 상태를 저장하기 위해 16개의 긴(64bit) 값 배열만 있으면 된다는 뜻이다.
+
+다음은 버퍼 사이즈가 12인 Ring Buffer 다이어그램이다.
+
+![ring-buffer](/images/2022/11/12/ring-buffer.png "ring-buffer"){: .center-image }
+
+Ring Bit Buffer가 가득 차있어야 실패율을 계산할 수 있다. 예를 들어, Ring Buffer 사이즈가 10이면 실패율을 계산하기 전에 최소 10개의 호출이 있어야 한다. 9개의 호출만 있는 경우, 9개의 호출이 모두 실패하더라도 CircuitBreaker는 열리지 않는다.
+
+실패율이 설정해 둔 임계치를 초과하면 CircuitBreaker의 상태가 CLOSED에서 OPEN으로 전환된다. 이 다음부터는 일정 시간동안 호출되는 요청이 차단되는데, 이 때 차단된 요청에 대해 CallNotPermittedException을 발생시킨다.
+
+일정 시간이 경과한 후 CircuitBreaker 상태는 OPEN에서 HALF_OPEN으로 전환되는데, 이 때 미리 설정해놓은 수만큼의 호출을 허용해서 백엔드를 여전히 사용할 수 없는지 또는 다시 사용할 수 있게 되었는지 확인한다. 그리고 다른 Ring Bit Buffer를 사용하여 HALF_OPEN 상태에서 실패율을 평가한다. 실패율이 설정해놓은 임계치를 초과하면 상태가 OPEN으로 다시 변경된다. 실패율이 임계치 이하면 상태가 다시 CLOSED로 전환된다.
+
+---
+
 ### 참고
 - [Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html)
 - [DependencyCommand](https://netflixtechblog.com/fault-tolerance-in-a-high-volume-distributed-system-91ab4faae74a)
+- [Resilience4j(v2.0.0)](https://resilience4j.readme.io/docs/circuitbreaker#create-and-configure-a-circuitbreaker)
+- [Resilience4j(v0.17.0)](https://resilience4j.readme.io/v0.17.0/docs/circuitbreaker)
