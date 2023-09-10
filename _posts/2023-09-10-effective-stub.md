@@ -564,6 +564,10 @@ test("송금 성공(Using Mock)") {
 
 그럼 매번 테스트를 작성할 때마다 테스트에 맞는 Stub Class를 정의하는게 아니라, 모든 테스트에서 일관되게 사용할 수 있으면서 실제 객체처럼 동작하는 클래스를 구현하면 된다. 우리가 테스트할 대상의 의존성은 TransferHistoryRepository, BankPort, EmailPort 이므로 각각 실제 객체처럼 동작하는 Stub 클래스를 구현해 보자.
 
+**TransferHistoryRepositoryStub:**
+
+TransferHistoryRepository는 어떤 역할과 책임을 가지고 있을까? 송금 기록을 관리하기 위한 인터페이스니까 `save()` 메서드를 통해서 송금 기록을 저장하고 `findById()` 메서드를 이용해서 송금 기록을 조회할 수 있는 기능을 제공하면 된다. 아마 실제 구현은 데이터베이스나 어딘가에 영속성을 가진 형태로 저장이 될건데, 여기서는 이와 비슷한 행동을 하도록 어딘가에 저장하고 조회할 수 있는 기능을 제공하면 된다. ID를 Key로 하고 송금 결과를 Value로 저장하는 HashMap을 메모리에 선언해놓고 저장과 조회를 구현하면 충분해 보인다.
+
 ```kotlin
 open class TransferHistoryRepositoryStub : TransferHistoryRepository {
     private var historyMap: MutableMap<Long, TransferHistory> = mutableMapOf()
@@ -576,8 +580,17 @@ open class TransferHistoryRepositoryStub : TransferHistoryRepository {
         return history
     }
 }
+```
 
-open class BankPortStub : BankPort {
+**BankPortStub:**
+
+BankPort는 어떤 역할을 가지고 있을까? 계좌의 잔액을 조회하고 출금과 입금 기능을 제공한다. 위에서 구현한 TransferHistoryRepositoryStub와 마찬가지로 은행 계좌별 잔액을 관리하는 HashMap 하나를 메모리에 선언해서 입출금에 따른 계좌 잔액을 관리하면 우리가 원하는 기능들을 충분히 제공할 수 있다. 그런데 출금과 입금 기능은 항상 성공 값만을 리턴하는게 아니기 때문에 실패의 상황도 다룰 수 있어야 한다. 이런 상황도 지원할 수 있도록 BankPortStub의 생성자에 예외가 발생할 경우를 가정해서 throwable을 전달하고, 출금과 입금시 예외가 있으면 실패 결과를 리턴하도록 설정하면 된다.
+
+```kotlin
+open class BankPortStub(
+    // 실패 테스트를 하고 싶으면 Stub 객체를 생성할 때 예외를 전달한다.
+    private val throwable: Throwable? = null,
+) : BankPort {
     // 은행 계좌별 잔액
     private var bankAccountMap: MutableMap<Pair<String, String>, Long> = mutableMapOf()
 
@@ -590,17 +603,29 @@ open class BankPortStub : BankPort {
         if (amount > currentBalance) {
             return BankPort.Result("failure", "잔액 부족")
         }
+        if (throwable != null) {
+            return BankPort.Result("failure", throwable.message)
+        }
         bankAccountMap[Pair(bankCode, accountNumber)] = currentBalance - amount
         return BankPort.Result("success")
     }
 
     override fun deposit(bankCode: String, accountNumber: String, amount: Long): BankPort.Result {
+        if (throwable != null) {
+            return BankPort.Result("failure", throwable.message)
+        }
         val currentBalance = bankAccountMap[Pair(bankCode, accountNumber)] ?: 0L
         bankAccountMap[Pair(bankCode, accountNumber)] = currentBalance + amount
         return BankPort.Result("success")
     }
 }
+```
 
+**EmailPortStub:**
+
+EmailPortStub는 어떨까? 이메일을 발송하는 역할을 한다. 실제로 이메일이 어떤 형태로 발송이 됐는지, 잘 발송됐는지도 관심을 가져야할까? 아니다. 실제로 이메일이 어떤 형태로 잘 발송됐는지는 EmailPortStub가 아니라, EmailPort를 구현해서 프러덕션에서 사용될 EmailSmtpPort를 테스트할 때 검증하면 된다. 여기서 EmailPortStub에게 기대하는건, 이메일이 몇 번 발송 됐는지 검증하는 정도가 전부다. 만약 발송 횟수 외에 다른 검증이 필요하다면 EmailPortStub에 기대하는 동작을 추가하면 된다.
+
+```kotlin
 class EmailPortStub : EmailPort {
     private var emailCount = 0
 
