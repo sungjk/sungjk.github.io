@@ -2,7 +2,7 @@
 layout: entry
 title: 효율적인 테스트를 위한 Stub 객체 사용법
 author-email: ajax0615@gmail.com
-description: Stub 객체를 활용하는 방법을 알아봅니다.
+description: 구현에 의존하지 않은 테스트 코드를 작성하기 위해 Mock 객체를 사용하지 않고 Stub 객체를 활용하는 방법에 대해 알아봅니다.
 keywords: Test, Testing, Stub, Mock, Test Double, 테스트
 publish: true
 ---
