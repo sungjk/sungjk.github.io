@@ -90,15 +90,15 @@ val isGithubAction = System.getenv("GITHUB_ACTIONS") == "true"
 
 buildCache {
     local {
-        // 항상 로컬 캐시 사용
-        isEnabled = true
+        // CI는 로컬 캐시 비활성화
+        isEnabled = !isGithubAction
     }
 
     remote<com.github.burrunan.s3cache.AwsS3BuildCache> {
         region = "your-aws-region"
         bucket = "your-aws-s3-bucket"
         prefix = "gradle/build/$YourProjectName/"
-        // 로컬은 pull만, CI는 push 허용
+        // 로컬은 pull-only, CI만 push 허용
         isPush = isGithubAction
         lookupDefaultAwsCredentials = true
     }
