@@ -8,7 +8,7 @@ thumbnail-image: /images/profile/the-innovators-dilemma.png
 publish: true
 ---
 
-![The innovator's dilemma](/images/2026/05/IMG_1876.heic "The innovator's dilemma"){: .center-image }
+![The innovator's dilemma](/images/2026/05/13/IMG_1876.png "The innovator's dilemma"){: .center-image }
 
 책을 읽으면서 계속 떠올랐던 건, 기존 강자들은 보통 가장 약한 부분이 아니라, 가장 잘하던 방식 때문에 무너진다는 점이 흥미로웠다.
 
